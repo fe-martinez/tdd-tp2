@@ -1,0 +1,63 @@
+export type Value = number | boolean | string;
+
+export interface ConstantCondition {
+  type: 'CONSTANT';
+  value: Value;
+}
+
+export interface VariableCondition {
+  type: 'VARIABLE';
+  name: string;
+}
+
+export interface WalletCondition {
+  type: 'WALLET';
+  symbol: string;
+}
+
+export interface CallCondition {
+  type: 'CALL';
+  name: string;
+  arguments: Condition[] | DataCondition;
+}
+
+export interface DataCondition {
+  type: 'DATA';
+  symbol: string;
+  since: number;
+  until: number;
+  default?: Condition[];
+}
+
+export type Condition = ConstantCondition | VariableCondition | WalletCondition | CallCondition;
+
+export interface BuyMarketAction {
+  type: 'BUY_MARKET';
+  symbol: string;
+  amount: Condition;
+}
+
+export interface SellMarketAction {
+  type: 'SELL_MARKET';
+  symbol: string;
+  amount: Condition;
+}
+
+export interface SetVariableAction {
+  type: 'SET_VARIABLE';
+  name: string;
+  value: Condition;
+}
+
+export type Action = BuyMarketAction | SellMarketAction | SetVariableAction;
+
+export interface Rule {
+  name: string;
+  condition: Condition;
+  action: Action[];
+}
+
+export interface RuleSet {
+  variables: { [name: string]: Value };
+  rules: Rule[];
+}

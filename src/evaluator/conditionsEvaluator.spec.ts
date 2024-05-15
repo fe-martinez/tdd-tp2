@@ -1,4 +1,4 @@
-import { evaluateCondition } from "./conditions";
+import { evaluateCondition } from "./conditionsEvaluator";
 import { Condition } from "./types";
 
 jest.mock('./operations', () => ({

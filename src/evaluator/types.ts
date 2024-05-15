@@ -1,22 +1,24 @@
+import { ConditionType } from "./conditionTypeEnum";
+
 export type Value = number | boolean | string;
 
 export interface ConstantCondition {
-  type: 'CONSTANT';
+  type: ConditionType.CONSTANT;
   value: Value;
 }
 
 export interface VariableCondition {
-  type: 'VARIABLE';
+  type: ConditionType.VARIABLE;
   name: string;
 }
 
 export interface WalletCondition {
-  type: 'WALLET';
+  type: ConditionType.WALLET;
   symbol: string;
 }
 
 export interface CallCondition {
-  type: 'CALL';
+  type: ConditionType.CALL;
   name: string;
   arguments: Condition[] | DataCondition;
 }

@@ -1,16 +1,17 @@
 import { Condition, DataCondition, Value } from "./types";
 import { getOperation } from "./operations"
+import { ConditionType } from "./conditionTypeEnum";
 
 
 export function evaluateCondition(condition: Condition, variables: { [name: string]: Value }): Value {
     switch (condition.type) {
-        case 'CONSTANT':
+        case ConditionType.CONSTANT:
             return evaluateConstant(condition.value);
-        case 'VARIABLE':
+        case ConditionType.VARIABLE:
             return evaluateVariable(condition.name, variables);
-        case 'WALLET':
+        case ConditionType.WALLET:
             return evaluateWallet(condition.symbol);
-        case 'CALL':
+        case ConditionType.CALL:
             return evaluateCall(condition.name, condition.arguments, variables);
         default:
             throw new Error(`Unsupported condition type`);

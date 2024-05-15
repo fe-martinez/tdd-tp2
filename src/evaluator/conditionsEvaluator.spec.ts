@@ -1,5 +1,6 @@
 import { evaluateCondition } from "./conditionsEvaluator";
 import { Condition } from "./types";
+import { ConditionType } from "./conditionTypeEnum";
 
 jest.mock('./operations', () => ({
   getOperation: jest.fn().mockImplementation((name) => {
@@ -13,13 +14,13 @@ jest.mock('./operations', () => ({
 
 describe('evaluateCondition', () => {
   it('should evaluate a CONSTANT condition', () => {
-    const condition: Condition = { type: 'CONSTANT', value: 42 };
+    const condition: Condition = { type: ConditionType.CONSTANT, value: 42 };
     const result = evaluateCondition(condition, {});
     expect(result).toBe(42);
   });
 
   it('should evaluate a VARIABLE condition', () => {
-    const condition: Condition = { type: 'VARIABLE', name: 'x' };
+    const condition: Condition = { type: ConditionType.VARIABLE, name: 'x' };
     const variables = { x: 42 };
     const result = evaluateCondition(condition, variables);
     expect(result).toBe(42);
@@ -27,11 +28,11 @@ describe('evaluateCondition', () => {
 
   it('should evaluate a CALL condition', () => {
     const condition: Condition = {
-      type: 'CALL',
+      type: ConditionType.CALL,
       name: '==',
       arguments: [
-        { type: 'CONSTANT', value: 20 },
-        { type: 'CONSTANT', value: 20 }
+        { type: ConditionType.CONSTANT, value: 20 },
+        { type: ConditionType.CONSTANT, value: 20 }
       ]
     };
     const result = evaluateCondition(condition, {});
@@ -45,32 +46,32 @@ describe('evaluateCondition', () => {
 
   it('should evaluate a CALL condition with nested arguments', () => {
     const condition: Condition = {
-      type: 'CALL',
+      type: ConditionType.CALL,
       name: '+',
       arguments: [
         {
-          type: 'CALL',
+          type: ConditionType.CALL,
           name: '+',
           arguments: [
             {
-              type: 'CALL',
+              type: ConditionType.CALL,
               name: '+',
               arguments: [
-                { type: 'CONSTANT', value: 10 },
-                { type: 'CONSTANT', value: 5 }
+                { type: ConditionType.CONSTANT, value: 10 },
+                { type: ConditionType.CONSTANT, value: 5 }
               ]
             },
             {
-              type: 'CALL',
+              type: ConditionType.CALL,
               name: '+',
               arguments: [
-                { type: 'CONSTANT', value: 20 },
-                { type: 'CONSTANT', value: 30 }
+                { type: ConditionType.CONSTANT, value: 20 },
+                { type: ConditionType.CONSTANT, value: 30 }
               ]
             }
           ]
         },
-        { type: 'CONSTANT', value: 50 }
+        { type: ConditionType.CONSTANT, value: 50 }
       ]
     };
     const result = evaluateCondition(condition, {});
@@ -79,11 +80,11 @@ describe('evaluateCondition', () => {
 
   it('should evaluate a false CALL condition correctly', () => {
     const condition: Condition = {
-      type: 'CALL',
+      type: ConditionType.CALL,
       name: '==',
       arguments: [
-        { type: 'CONSTANT', value: 10 },
-        { type: 'CONSTANT', value: 20 }
+        { type: ConditionType.CONSTANT, value: 10 },
+        { type: ConditionType.CONSTANT, value: 20 }
       ]
     };
     const result = evaluateCondition(condition, {});
@@ -92,32 +93,32 @@ describe('evaluateCondition', () => {
 
   it('should throw an error for a CALL condition with an undefined operation', () => {
     const condition: Condition = {
-      type: 'CALL',
+      type: ConditionType.CALL,
       name: 'undefined',
       arguments: [
-        { type: 'CONSTANT', value: 10 },
-        { type: 'CONSTANT', value: 20 }
+        { type: ConditionType.CONSTANT, value: 10 },
+        { type: ConditionType.CONSTANT, value: 20 }
       ]
     };
     expect(() => evaluateCondition(condition, {})).toThrow();
   });
 
   it('should handle a CALL condition with no arguments', () => {
-    const condition: Condition = { type: 'CALL', name: '+', arguments: [] };
+    const condition: Condition = { type: ConditionType.CALL, name: '+', arguments: [] };
     const result = evaluateCondition(condition, {});
     expect(result).toBe(0);
   });
 
   it('should handle a CALL condition with more than two arguments', () => {
     const condition: Condition = {
-      type: 'CALL',
+      type: ConditionType.CALL,
       name: '+',
       arguments: [
-        { type: 'CONSTANT', value: 1 },
-        { type: 'CONSTANT', value: 2 },
-        { type: 'CONSTANT', value: 3 },
-        { type: 'CONSTANT', value: 4 },
-        { type: 'CONSTANT', value: 5 },
+        { type: ConditionType.CONSTANT, value: 1 },
+        { type: ConditionType.CONSTANT, value: 2 },
+        { type: ConditionType.CONSTANT, value: 3 },
+        { type: ConditionType.CONSTANT, value: 4 },
+        { type: ConditionType.CONSTANT, value: 5 },
       ],
     };
     const result = evaluateCondition(condition, {});

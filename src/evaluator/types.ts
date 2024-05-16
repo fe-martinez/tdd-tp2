@@ -20,18 +20,18 @@ export interface WalletCondition {
 export interface CallCondition {
   type: ConditionType.CALL;
   name: string;
-  arguments: Condition[] | DataCondition;
+  arguments: Condition[];
 }
 
 export interface DataCondition {
-  type: 'DATA';
+  type: ConditionType.DATA;
   symbol: string;
   since: number;
   until: number;
   default?: Condition[];
 }
 
-export type Condition = ConstantCondition | VariableCondition | WalletCondition | CallCondition;
+export type Condition = ConstantCondition | VariableCondition | WalletCondition | CallCondition | DataCondition;
 
 export interface BuyMarketAction {
   type: 'BUY_MARKET';

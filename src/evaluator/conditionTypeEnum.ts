@@ -3,4 +3,5 @@ export enum ConditionType {
     VARIABLE = 'VARIABLE',
     WALLET = 'WALLET',
     CALL = 'CALL',
+    DATA = 'DATA'
 }

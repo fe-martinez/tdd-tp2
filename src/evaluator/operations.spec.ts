@@ -12,6 +12,7 @@ describe('getOperation', () => {
         const operation = getOperation('DISTINCT');
         expect(operation([1, 1, 1])).toBe(false);
         expect(operation([1, 2, 3])).toBe(true);
+        expect(operation([1])).toBe(true);
     });
 
     it('should perform the sum (+) operation correctly', () => {

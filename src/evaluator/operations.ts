@@ -16,12 +16,16 @@ const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
 };
 
+const lessThan = (args: Value[]): boolean =>
+  {return true}
+
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {
     '==': equal,
     'DISTINCT': distinct,
     '+': sum,
-    '>': greaterThan
+    '>': greaterThan,
+    '<': lessThan
   };
 
   const operation = operations[name] || defaultOperation;

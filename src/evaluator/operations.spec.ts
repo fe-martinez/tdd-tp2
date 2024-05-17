@@ -22,17 +22,13 @@ describe('getOperation', () => {
         expect(operation([-1, 0, 1])).toBe(0);
         expect(operation([1])).toBe(1);
     });
-
-    it('should throw an error for undefined operation', () => {
-        const operation = getOperation('undefined');
-        expect(() => operation([1, 2, 3])).toThrow();
-    });
     it('should perform the greater than (>) operation correctly', () => {
         const operation = getOperation('>');
         expect(operation([1, 2, 3])).toBe(true);
         expect(operation([3, 2, 1])).toBe(false);
         expect(operation([1, 2, 1])).toBe(false);
         expect(operation([1, 1, 1])).toBe(false);
+        expect(operation([1])).toBe(true);
     })
     it('should perform the less than (<) operation correctly', () => {      
         const operation = getOperation('<');
@@ -69,4 +65,8 @@ describe('getOperation', () => {
         expect(() => operation([])).toThrow();
         expect(() => operation([1])).toThrow();
     })
+    it('should throw an error for undefined operation', () => {
+        const operation = getOperation('undefined');
+        expect(() => operation([1, 2, 3])).toThrow();
+    });
 });

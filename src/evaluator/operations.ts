@@ -54,7 +54,7 @@ const multiply = (args: Value[]): number =>
   : (() => { throw new Error('Invalid number of arguments') })();
 
 const min = (args: Value[]): number => {
-  return Math.min(args[0] as number, args[1] as number)
+  return Math.min(...(args as number[]));
 }
 
 const defaultOperation = (...args: Value[]): never => {

@@ -43,9 +43,10 @@ const subtract = (args: Value[]): number =>
   ? (args[0] as number) - (args[1] as number)
   : (() => { throw new Error('Invalid number of arguments') })();
 
-const divide = (args: Value[]): number => {
-  return (args[0] as number) / (args[1] as number)
-}
+const divide = (args: Value[]): number =>
+  args.length === 2
+  ? (args[0] as number) / (args[1] as number)
+  : (() => { throw new Error('Invalid number of arguments') })();
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');

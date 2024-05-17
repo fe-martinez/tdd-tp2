@@ -28,6 +28,12 @@ const lessOrEqualThan = (args: Value[]): boolean =>
 const negate = (args: Value[]): number =>
   args.length === 1 ? -(args[0] as number) : NaN;
 
+const subtract = (args: Value[]): number => {
+  if (args.length === 2 ){
+    return (args[0] as number) - (args[1] as number);
+  }
+  return 0
+}
 
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {
@@ -39,6 +45,7 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     '>=': greaterOrEqualThan,
     '<=': lessOrEqualThan,
     'NEGATE': negate,
+    '-': subtract,
   };
 
   const operation = operations[name] || defaultOperation;

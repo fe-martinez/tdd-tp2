@@ -20,6 +20,7 @@ describe('getOperation', () => {
         expect(operation([1, 2, 3])).toBe(6);
         expect(operation([4, 5, 6])).toBe(15);
         expect(operation([-1, 0, 1])).toBe(0);
+        expect(operation([1])).toBe(1);
     });
 
     it('should throw an error for undefined operation', () => {

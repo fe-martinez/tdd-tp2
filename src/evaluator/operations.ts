@@ -78,7 +78,10 @@ const last = (args: Value[]): Value =>
   : (() => { throw new Error('Invalid number of arguments') })();
 
 const not = (args: Value[]): boolean =>
-  !args[0] as boolean;
+  args.length > 0
+  ?
+  !args[0] as boolean
+  : (() => { throw new Error('Invalid number of arguments') })();
 
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {

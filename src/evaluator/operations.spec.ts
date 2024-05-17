@@ -93,6 +93,7 @@ describe('getOperation', () => {
     it('should perform the min operation correctly', () => {
         const operation = getOperation('MIN');
         expect(operation([1, 2])).toBe(1);
+        expect(operation([4, 5, 2])).toBe(2);
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

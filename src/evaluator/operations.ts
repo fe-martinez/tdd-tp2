@@ -78,7 +78,7 @@ const last = (args: Value[]): Value =>
   : (() => { throw new Error('Invalid number of arguments') })();
 
 const not = (args: Value[]): boolean =>
-  args.length > 0
+  args.length === 1
   ?
   !args[0] as boolean
   : (() => { throw new Error('Invalid number of arguments') })();

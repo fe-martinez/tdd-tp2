@@ -90,6 +90,10 @@ describe('getOperation', () => {
         expect(operation([8])).toBe(8);
         expect(() => operation([])).toThrow();
     })
+    it('should perform the min operation correctly', () => {
+        const operation = getOperation('MIN');
+        expect(operation([1, 2])).toBe(1);
+    })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');
         expect(() => operation([1, 2, 3])).toThrow();

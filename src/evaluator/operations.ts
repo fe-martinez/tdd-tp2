@@ -53,6 +53,10 @@ const multiply = (args: Value[]): number =>
   ? (args as number[]).reduce((acc, val) => acc * val, 1)
   : (() => { throw new Error('Invalid number of arguments') })();
 
+const min = (args: Value[]): number => {
+  return Math.min(args[0] as number, args[1] as number)
+}
+
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
 };
@@ -70,6 +74,7 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     '-': subtract,
     '/': divide,
     '*': multiply,
+    'MIN': min,
   };
 
   const operation = operations[name] || defaultOperation;

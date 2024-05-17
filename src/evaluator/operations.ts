@@ -7,7 +7,9 @@ const distinct = (args: Value[]): boolean =>
   new Set(args).size === args.length
 
 const sum = (args: Value[]): number =>
-  (args as number[]).reduce((acc, val) => acc + val, 0)
+  args.length > 0
+  ? (args as number[]).reduce((acc, val) => acc + val, 0)
+  : (() => { throw new Error('Invalid number of arguments') })();
 
 const greaterThan = (args: Value[]): boolean =>
   args.length > 0

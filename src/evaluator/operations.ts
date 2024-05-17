@@ -67,6 +67,9 @@ const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
 };
 
+const first = (args: Value[]): Value =>
+  0
+
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {
     '==': equal,
@@ -82,6 +85,8 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     '*': multiply,
     'MIN': min,
     'MAX': max,
+    'FIRST': first,
+
   };
 
   const operation = operations[name] || defaultOperation;

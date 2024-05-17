@@ -104,6 +104,10 @@ describe('getOperation', () => {
         expect(operation([4, 5, 2])).toBe(5);
         expect(() => operation([])).toThrow();
     })
+    it('should return the first element of the array', () => { 
+        const operation = getOperation('FIRST');
+        expect(operation([0])).toBe(0);
+    })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');
         expect(() => operation([1, 2, 3])).toThrow();

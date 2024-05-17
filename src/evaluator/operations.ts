@@ -28,8 +28,12 @@ const lessOrEqualThan = (args: Value[]): boolean =>
 const negate = (args: Value[]): number =>
   args.length === 1 ? -(args[0] as number) : NaN;
 
-const subtract = (args: Value[]): number =>
-  args.length === 2 ? (args[0] as number) - (args[1] as number) : (args.slice(1) as number[]).reduce((acc, val) => acc - val, args[0] as number);
+const subtract = (args: Value[]): number => {
+  if (args.length < 2) {
+    throw new Error('Not enough arguments');
+  }
+  return args.length === 2 ? (args[0] as number) - (args[1] as number) : (args.slice(1) as number[]).reduce((acc, val) => acc - val, args[0] as number);
+};
 
 
 export const getOperation = (name: string): ((args: Value[]) => Value) => {

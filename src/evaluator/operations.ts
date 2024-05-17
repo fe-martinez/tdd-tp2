@@ -10,8 +10,7 @@ const sum = (args: Value[]): number =>
   (args as number[]).reduce((acc, val) => acc + val, 0);
 
 const greaterThan = (args: Value[]): boolean =>
-{  return true
-}
+  args.every((value, i, arr) => i === 0 || (value as number) > (arr[i - 1] as number));
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');

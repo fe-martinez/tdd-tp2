@@ -55,5 +55,6 @@ describe('getOperation', () => {
     it('should perform the negate operation correctly', () => {
         const operation = getOperation('NEGATE');
         expect(operation([1])).toBe(-1);
+        expect(operation([2])).toBe(-2);
     })
 });

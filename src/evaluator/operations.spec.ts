@@ -45,4 +45,11 @@ describe('getOperation', () => {
         expect(operation([1, 2, 1])).toBe(false);
         expect(operation([1, 1, 1])).toBe(true);
     })
+    it('should perform the less or equal than (<=) operation correctly', () => {
+        const operation = getOperation('<=');
+        expect(operation([1, 2, 3])).toBe(false);
+        expect(operation([3, 2, 1])).toBe(true);
+        expect(operation([1, 2, 1])).toBe(false);
+        expect(operation([1, 1, 1])).toBe(true);
+    })
 });

@@ -68,8 +68,10 @@ const defaultOperation = (...args: Value[]): never => {
 };
 
 const first = (args: Value[]): Value =>
-  args[0]
-
+  args.length > 0
+  ? args[0]
+  : (() => { throw new Error('Invalid number of arguments') })();
+  
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {
     '==': equal,

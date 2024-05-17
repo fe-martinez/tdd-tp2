@@ -17,7 +17,7 @@ const defaultOperation = (...args: Value[]): never => {
 };
 
 const lessThan = (args: Value[]): boolean =>
-  {return true}
+  args.every((value, i, arr) => i === 0 || (value as number) < (arr[i - 1] as number));
 
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {

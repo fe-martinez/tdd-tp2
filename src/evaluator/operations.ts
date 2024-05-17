@@ -68,7 +68,7 @@ const defaultOperation = (...args: Value[]): never => {
 };
 
 const first = (args: Value[]): Value =>
-  0
+  args[0]
 
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {

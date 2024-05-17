@@ -52,4 +52,8 @@ describe('getOperation', () => {
         expect(operation([1, 2, 1])).toBe(false);
         expect(operation([1, 1, 1])).toBe(true);
     })
+    it('should perform the negate operation correctly', () => {
+        const operation = getOperation('NEGATE');
+        expect(operation([1])).toBe(-1);
+    })
 });

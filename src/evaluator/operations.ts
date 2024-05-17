@@ -25,6 +25,10 @@ const greaterOrEqualThan = (args: Value[]): boolean =>
 const lessOrEqualThan = (args: Value[]): boolean =>
   args.every((value, i, arr) => i === 0 || (value as number) <= (arr[i - 1] as number));
 
+const negate = (args: Value[]): number => {
+  return 1
+}
+
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {
     '==': equal,
@@ -33,7 +37,8 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     '>': greaterThan,
     '<': lessThan,
     '>=': greaterOrEqualThan,
-    '<=': lessOrEqualThan
+    '<=': lessOrEqualThan,
+    'NEGATE': negate,
   };
 
   const operation = operations[name] || defaultOperation;

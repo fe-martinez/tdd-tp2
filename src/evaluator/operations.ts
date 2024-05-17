@@ -48,9 +48,10 @@ const divide = (args: Value[]): number =>
   ? (args[0] as number) / (args[1] as number)
   : (() => { throw new Error('Invalid number of arguments') })();
 
-const multiply = (args: Value[]): number => {
-  return (args as number[]).reduce((acc, val) => acc * val, 1);
-}
+const multiply = (args: Value[]): number => 
+  args.length > 0
+  ? (args as number[]).reduce((acc, val) => acc * val, 1)
+  : (() => { throw new Error('Invalid number of arguments') })();
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');

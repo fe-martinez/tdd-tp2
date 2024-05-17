@@ -119,6 +119,7 @@ describe('getOperation', () => {
     it('should perform the not operation correctly', () => {
         const operation = getOperation('NOT');
         expect(operation([true])).toBe(false);
+        expect(operation([false])).toBe(true);
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

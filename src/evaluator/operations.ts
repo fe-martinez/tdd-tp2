@@ -4,7 +4,9 @@ const equal = (args: Value[]): boolean =>
   args.every((value, i, arr) => i === 0 || value === arr[i - 1])
 
 const distinct = (args: Value[]): boolean =>
-  new Set(args).size === args.length
+  args.length > 0
+  ? new Set(args).size === args.length
+  : (() => { throw new Error('Invalid number of arguments') })();
 
 const sum = (args: Value[]): number =>
   args.length > 0

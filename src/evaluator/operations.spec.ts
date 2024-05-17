@@ -114,6 +114,7 @@ describe('getOperation', () => {
         const operation = getOperation('LAST');
         expect(operation([0])).toBe(0);
         expect(operation([1, 2, 3])).toBe(3);
+        expect(() => operation([])).toThrow();
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

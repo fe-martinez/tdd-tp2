@@ -80,6 +80,8 @@ describe('getOperation', () => {
         const operation = getOperation('/');
         expect(operation([1, 2])).toBe(0.5);
         expect(() => operation([4, 1, 2])).toThrow();
+        expect(() => operation([])).toThrow();
+        expect(() => operation([1])).toThrow();
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

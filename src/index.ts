@@ -31,3 +31,9 @@ function connectToBinanceWebSocket() {
 }
 
 connectToBinanceWebSocket();
+
+// wss://stream.binance.com:9443/ws/<symbol>@bookTicker
+
+// ej: wss://stream.binance.com:9443/ws/adausdt@bookTicker
+
+//Usar redis para guardar y que se borre?

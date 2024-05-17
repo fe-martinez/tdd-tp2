@@ -24,4 +24,9 @@ describe('getOperation', () => {
         const operation = getOperation('undefined');
         expect(() => operation([1, 2, 3])).toThrow();
     });
+    it('should perform the greater than (>) operation correctly', () => {
+        const operation = getOperation('>');
+        expect(operation([1, 2, 3])).toBe(true);
+        expect(operation([3, 2, 1])).toBe(false);
+    })
 });

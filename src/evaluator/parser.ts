@@ -2,7 +2,7 @@ import fs from 'fs';
 import { Condition, Rule, RuleSet, DataCondition, CallCondition } from './types';
 import { ConditionType } from './conditionTypeEnum';
 
-export function parseRules(filePath: string ): RuleSet {
+export function parseRules(filePath: string): RuleSet {
     const rulesData = fs.readFileSync(filePath, 'utf8');
     const ruleSet: RuleSet = JSON.parse(rulesData);
     return ruleSet;

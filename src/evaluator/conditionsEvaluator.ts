@@ -30,8 +30,8 @@ function evaluateVariable(name: string, variables: { [name: string]: Value }): V
     return value;
 }
 
+//TO-DO: Logic to fetch wallet balance for the specified symbol
 function evaluateWallet(symbol: string): Value {
-    // Logic to fetch wallet balance for the specified symbol
     return false;
 }
 

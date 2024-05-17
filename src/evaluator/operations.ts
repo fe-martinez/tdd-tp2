@@ -9,6 +9,10 @@ const distinct = (args: Value[]): boolean =>
 const sum = (args: Value[]): number =>
   (args as number[]).reduce((acc, val) => acc + val, 0);
 
+const greaterThan = (args: Value[]): boolean =>
+{  return true
+}
+
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
 };

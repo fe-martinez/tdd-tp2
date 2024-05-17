@@ -43,6 +43,9 @@ const subtract = (args: Value[]): number =>
   ? (args[0] as number) - (args[1] as number)
   : (() => { throw new Error('Invalid number of arguments') })();
 
+const divide = (args: Value[]): number => {
+  return 0
+}
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
@@ -59,6 +62,7 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     '<=': lessOrEqualThan,
     'NEGATE': negate,
     '-': subtract,
+    '/': divide,
   };
 
   const operation = operations[name] || defaultOperation;

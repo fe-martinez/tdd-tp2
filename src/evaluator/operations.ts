@@ -1,19 +1,19 @@
 import { Value } from './types';
 
 const equal = (args: Value[]): boolean =>
-  args.every((value, i, arr) => i === 0 || value === arr[i - 1]);
+  args.every((value, i, arr) => i === 0 || value === arr[i - 1])
 
 const distinct = (args: Value[]): boolean =>
-  new Set(args).size === args.length;
+  new Set(args).size === args.length
 
 const sum = (args: Value[]): number =>
-  (args as number[]).reduce((acc, val) => acc + val, 0);
+  (args as number[]).reduce((acc, val) => acc + val, 0)
 
 const greaterThan = (args: Value[]): boolean =>
-  args.every((value, i, arr) => i === 0 || (value as number) > (arr[i - 1] as number));
+  args.every((value, i, arr) => i === 0 || (value as number) > (arr[i - 1] as number))
 
 const lessThan = (args: Value[]): boolean =>
-  args.every((value, i, arr) => i === 0 || (value as number) < (arr[i - 1] as number));
+  args.every((value, i, arr) => i === 0 || (value as number) < (arr[i - 1] as number))
 
 const greaterOrEqualThan = (args: Value[]): boolean =>
   args.length > 0

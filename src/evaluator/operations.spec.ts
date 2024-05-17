@@ -78,7 +78,7 @@ describe('getOperation', () => {
     })
     it('should perform the divide operation correctly', () => {
         const operation = getOperation('/');
-        expect(operation([1, 2])).toBe(1);
+        expect(operation([1, 2])).toBe(0.5);
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

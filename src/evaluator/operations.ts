@@ -58,9 +58,10 @@ const min = (args: Value[]): number =>
   ? Math.min(...(args as number[]))
   : (() => { throw new Error('Invalid number of arguments') })();
 
-const max = (args: Value[]): number => {
-  return Math.max(...(args as number[]));
-}
+const max = (args: Value[]): number =>
+  args.length > 0
+  ? Math.max(...(args as number[]))
+  : (() => { throw new Error('Invalid number of arguments') })();
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');

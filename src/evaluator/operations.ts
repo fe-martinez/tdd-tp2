@@ -12,10 +12,6 @@ const sum = (args: Value[]): number =>
 const greaterThan = (args: Value[]): boolean =>
   args.every((value, i, arr) => i === 0 || (value as number) > (arr[i - 1] as number));
 
-const defaultOperation = (...args: Value[]): never => {
-  throw new Error('Unsupported operation');
-};
-
 const lessThan = (args: Value[]): boolean =>
   args.every((value, i, arr) => i === 0 || (value as number) < (arr[i - 1] as number));
 
@@ -35,6 +31,9 @@ const subtract = (args: Value[]): number => {
   return args.length === 2 ? (args[0] as number) - (args[1] as number) : (args.slice(1) as number[]).reduce((acc, val) => acc - val, args[0] as number);
 };
 
+const defaultOperation = (...args: Value[]): never => {
+  throw new Error('Unsupported operation');
+};
 
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {

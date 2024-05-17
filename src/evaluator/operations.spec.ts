@@ -121,6 +121,7 @@ describe('getOperation', () => {
         expect(operation([true])).toBe(false);
         expect(operation([false])).toBe(true);
         expect(() => operation([])).toThrow();
+        expect(() => operation([false, true])).toThrow();        
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

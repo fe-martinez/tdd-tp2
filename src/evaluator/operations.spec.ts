@@ -21,6 +21,7 @@ describe('getOperation', () => {
         expect(operation([4, 5, 6])).toBe(15);
         expect(operation([-1, 0, 1])).toBe(0);
         expect(operation([1])).toBe(1);
+        expect(() => operation([])).toThrow();
     });
     it('should perform the greater than (>) operation correctly', () => {
         const operation = getOperation('>');

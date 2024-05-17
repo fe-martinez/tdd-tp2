@@ -1,7 +1,9 @@
 import { Value } from './types';
 
 const equal = (args: Value[]): boolean =>
-  args.every((value, i, arr) => i === 0 || value === arr[i - 1])
+  args.length > 0
+  ? args.every((value, i, arr) => i === 0 || value === arr[i - 1])
+  : (() => { throw new Error('Invalid number of arguments') })();
 
 const distinct = (args: Value[]): boolean =>
   args.length > 0

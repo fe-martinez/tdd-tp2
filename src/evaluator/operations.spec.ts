@@ -86,6 +86,7 @@ describe('getOperation', () => {
     it('should perform the multiply operation correctly', () => {
         const operation = getOperation('*');
         expect(operation([1, 2])).toBe(2);
+        expect(operation([4, 1, 2])).toBe(8);
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

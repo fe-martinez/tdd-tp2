@@ -107,6 +107,7 @@ describe('getOperation', () => {
     it('should return the first element of the array', () => { 
         const operation = getOperation('FIRST');
         expect(operation([0])).toBe(0);
+        expect(operation([1, 2, 3])).toBe(1);
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

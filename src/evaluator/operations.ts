@@ -77,6 +77,9 @@ const last = (args: Value[]): Value =>
   ? args[args.length - 1]
   : (() => { throw new Error('Invalid number of arguments') })();
 
+const not = (args: Value[]): boolean =>
+  false
+
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {
     '==': equal,
@@ -94,6 +97,7 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     'MAX': max,
     'FIRST': first,
     'LAST': last,
+    'NOT': not,
   };
 
   const operation = operations[name] || defaultOperation;

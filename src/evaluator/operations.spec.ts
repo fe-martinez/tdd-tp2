@@ -116,6 +116,10 @@ describe('getOperation', () => {
         expect(operation([1, 2, 3])).toBe(3);
         expect(() => operation([])).toThrow();
     })
+    it('should perform the not operation correctly', () => {
+        const operation = getOperation('NOT');
+        expect(operation([true])).toBe(false);
+    })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');
         expect(() => operation([1, 2, 3])).toThrow();

@@ -25,11 +25,11 @@ const negate = (args: Value[]): number =>
   args.length === 1 ? -(args[0] as number) : NaN;
 
 const subtract = (args: Value[]): number => {
-  if (args.length < 2) {
-    throw new Error('Not enough arguments');
+  if (args.length === 2) {
+    return (args[0] as number) - (args[1] as number)
   }
-  return args.length === 2 ? (args[0] as number) - (args[1] as number) : (args.slice(1) as number[]).reduce((acc, val) => acc - val, args[0] as number);
-};
+  throw new Error('Invalid number of arguments');
+}
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');

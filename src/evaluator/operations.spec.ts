@@ -110,6 +110,10 @@ describe('getOperation', () => {
         expect(operation([1, 2, 3])).toBe(1);
         expect(() => operation([])).toThrow();
     })
+    it('should return the last element of the array', () => {
+        const operation = getOperation('LAST');
+        expect(operation([0])).toBe(0);
+    })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');
         expect(() => operation([1, 2, 3])).toThrow();

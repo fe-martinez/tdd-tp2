@@ -16,7 +16,9 @@ const lessThan = (args: Value[]): boolean =>
   args.every((value, i, arr) => i === 0 || (value as number) < (arr[i - 1] as number));
 
 const greaterOrEqualThan = (args: Value[]): boolean =>
-  args.every((value, i, arr) => i === 0 || (value as number) >= (arr[i - 1] as number));
+  args.length > 0
+  ? args.every((value, i, arr) => i === 0 || (value as number) >= (arr[i - 1] as number))
+  : (() => { throw new Error('Invalid number of arguments') })();
 
 const lessOrEqualThan = (args: Value[]): boolean =>
   args.length > 0

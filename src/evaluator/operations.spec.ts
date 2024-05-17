@@ -100,6 +100,7 @@ describe('getOperation', () => {
     it('should perform the max operation correctly', () => {
         const operation = getOperation('MAX');
         expect(operation([8])).toBe(8);
+        expect(operation([1, 2])).toBe(2);
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

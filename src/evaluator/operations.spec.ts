@@ -29,11 +29,14 @@ describe('getOperation', () => {
         expect(operation([1, 2, 3])).toBe(true);
         expect(operation([3, 2, 1])).toBe(false);
         expect(operation([1, 2, 1])).toBe(false);
+        expect(operation([1, 1, 1])).toBe(false);
     })
     it('should perform the less than (<) operation correctly', () => {      
         const operation = getOperation('<');
-        expect(operation([1, 2, 3])).toBe(true);
-        expect(operation([3, 2, 1])).toBe(false);
+        expect(operation([1, 2, 3])).toBe(false);
+        expect(operation([3, 2, 1])).toBe(true);
         expect(operation([1, 2, 1])).toBe(false);
+        expect(operation([1, 1, 1])).toBe(false);
     })
+   
 });

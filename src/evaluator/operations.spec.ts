@@ -63,5 +63,7 @@ describe('getOperation', () => {
         const operation = getOperation('-');
         expect(operation([1, 2])).toBe(-1);
         expect(operation([4, 1, 2])).toBe(1);
+        expect(() => operation([])).toThrow();
+        expect(() => operation([1])).toThrow();
     })
 });

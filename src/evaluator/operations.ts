@@ -49,7 +49,7 @@ const divide = (args: Value[]): number =>
   : (() => { throw new Error('Invalid number of arguments') })();
 
 const multiply = (args: Value[]): number => {
-  return (args[0] as number) * (args[1] as number)
+  return (args as number[]).reduce((acc, val) => acc * val, 1);
 }
 
 const defaultOperation = (...args: Value[]): never => {

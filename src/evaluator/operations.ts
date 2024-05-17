@@ -21,7 +21,8 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {
     '==': equal,
     'DISTINCT': distinct,
-    '+': sum
+    '+': sum,
+    '>': greaterThan
   };
 
   const operation = operations[name] || defaultOperation;

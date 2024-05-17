@@ -62,5 +62,6 @@ describe('getOperation', () => {
     it('should perform the subtract operation correctly', () => {
         const operation = getOperation('-');
         expect(operation([1, 2])).toBe(-1);
+        expect(operation([4, 1, 2])).toBe(1);
     })
 });

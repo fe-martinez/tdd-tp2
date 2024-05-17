@@ -25,9 +25,9 @@ const greaterOrEqualThan = (args: Value[]): boolean =>
 const lessOrEqualThan = (args: Value[]): boolean =>
   args.every((value, i, arr) => i === 0 || (value as number) <= (arr[i - 1] as number));
 
-const negate = (arg: Value[]): number => {
-  return -arg[0] as number;
-}
+const negate = (args: Value[]): number =>
+  args.length === 1 ? -(args[0] as number) : NaN;
+
 
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {

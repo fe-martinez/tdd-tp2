@@ -57,5 +57,6 @@ describe('getOperation', () => {
         expect(operation([1])).toBe(-1);
         expect(operation([2])).toBe(-2);
         expect(operation([-2])).toBe(2);
+        expect(operation([-2, 1])).toBe(NaN);
     })
 });

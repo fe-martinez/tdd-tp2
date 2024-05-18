@@ -130,6 +130,7 @@ describe('getOperation', () => {
         expect(operation([false, true])).toBe(false);
         expect(operation([false, false])).toBe(false);
         expect(operation([true, true, true])).toBe(true);
+        expect(operation([true, true, false])).toBe(false);
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

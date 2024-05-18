@@ -104,7 +104,6 @@ const stddev = (args: Value[]): number => {
   return Math.sqrt(variance);
 };
 
-
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
 };

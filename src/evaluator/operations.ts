@@ -80,7 +80,10 @@ const not = (args: Value[]): boolean =>
   : (() => { throw new Error('Invalid number of arguments') })();
 
 const and = (args: Value[]): boolean =>
-  args.every(val => typeof val === 'boolean' ? val : false);
+  args.length > 0
+  ? args.every(val => typeof val === 'boolean' ? val : false)
+  : (() => { throw new Error('Invalid number of arguments') })();
+
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');

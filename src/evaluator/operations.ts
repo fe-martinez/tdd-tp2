@@ -63,25 +63,28 @@ const max = (args: Value[]): number =>
   ? Math.max(...(args as number[]))
   : (() => { throw new Error('Invalid number of arguments') })();
 
-const defaultOperation = (...args: Value[]): never => {
-  throw new Error('Unsupported operation');
-};
-
 const first = (args: Value[]): Value =>
   args.length > 0
   ? args[0]
   : (() => { throw new Error('Invalid number of arguments') })();
-
+  
 const last = (args: Value[]): Value =>
   args.length > 0
   ? args[args.length - 1]
   : (() => { throw new Error('Invalid number of arguments') })();
-
+  
 const not = (args: Value[]): boolean =>
   args.length === 1
   ?
   !args[0] as boolean
   : (() => { throw new Error('Invalid number of arguments') })();
+
+const and = (args: Value[]): boolean =>
+  true
+
+const defaultOperation = (...args: Value[]): never => {
+  throw new Error('Unsupported operation');
+};
 
 export const getOperation = (name: string): ((args: Value[]) => Value) => {
   const operations: Record<string, (args: Value[]) => Value> = {
@@ -101,6 +104,7 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     'FIRST': first,
     'LAST': last,
     'NOT': not,
+    'AND': and,
   };
 
   const operation = operations[name] || defaultOperation;

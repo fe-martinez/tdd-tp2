@@ -84,6 +84,10 @@ const and = (args: Value[]): boolean =>
   ? args.every(val => typeof val === 'boolean' ? val : false)
   : (() => { throw new Error('Invalid number of arguments') })();
 
+const or = (args: Value[]): boolean =>
+  args.length === 0
+  ? (() => { throw new Error('Invalid number of arguments') })()
+  : false
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
@@ -108,6 +112,7 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     'LAST': last,
     'NOT': not,
     'AND': and,
+    'OR': or,
   };
 
   const operation = operations[name] || defaultOperation;

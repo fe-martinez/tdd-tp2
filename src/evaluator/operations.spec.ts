@@ -123,7 +123,7 @@ describe('getOperation', () => {
         expect(() => operation([])).toThrow();
         expect(() => operation([false, true])).toThrow();        
     })
-    it('should return true for the and operation', () => {
+    it('should perform the and operation correctly', () => {
         const operation = getOperation('AND');
         expect(operation([true, true])).toBe(true);
         expect(operation([true, false])).toBe(false);
@@ -133,6 +133,10 @@ describe('getOperation', () => {
         expect(operation([true, true, false])).toBe(false);
         expect(operation([true])).toBe(true);
         expect(() => operation([false, true])).toThrow();        
+    })
+    it('should perform the or operation correctly', () => {
+        const operation = getOperation('OR');
+        expect(() => operation([])).toThrow();
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

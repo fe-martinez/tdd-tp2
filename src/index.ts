@@ -1,5 +1,6 @@
 import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
 import { connectToBinanceWebSocket, getUri } from './evaluator/binanceConnection';
+import { sendMessage } from './evaluator/notificationSender';
 
 //Esto no sé por qué no funciona, es lo que debería permitirnos obtener las reglas del archivo rules.json
 function getPairsFromFile(filePath: string): any {
@@ -14,4 +15,6 @@ function getPairsFromFile(filePath: string): any {
 let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
 
 let URI = getUri(pairs);
-connectToBinanceWebSocket(URI);
+//connectToBinanceWebSocket(URI);
+
+sendMessage('Hola Mundo!');

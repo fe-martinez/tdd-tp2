@@ -156,7 +156,7 @@ describe('getOperation', () => {
         expect(operation([5, 5, 5])).toBe(0);
         expect(operation([5])).toBe(0);
         expect(operation([1, 2, 3])).toBeCloseTo(0.816496580927726);
-
+        expect(() => operation([])).toThrow();
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

@@ -1,33 +1,17 @@
-import WebSocket from 'ws';
+import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
+import { connectToBinanceWebSocket, getUri } from './evaluator/binanceConnection';
 
-function connectToBinanceWebSocket() {
-  const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
-
-  ws.on('open', () => {
-    console.log('Conexión WebSocket abierta con Binance');
-  });
-
-  ws.on('message', (data: Buffer) => {
-    const textDecoder = new TextDecoder();
-    const arrayBuffer = Uint8Array.from(data).buffer;
-    const jsonString = textDecoder.decode(arrayBuffer);
-  
-    try {
-      const message = JSON.parse(jsonString);
-      const eventType = message.e;
-      const symbol = message.s;
-      const price = message.p;
-      const quantity = message.q;
-  
-      console.log(`Nuevo evento ${eventType} para el símbolo ${symbol} con precio ${price} y cantidad ${quantity}`);
-    } catch (error) {
-      console.error('Error al analizar los datos JSON:', error);
-    }
-  });
-
-  ws.on('error', (error) => {
-    console.error('Error en la conexión WebSocket:', error);
-  });
+//Esto no sé por qué no funciona, es lo que debería permitirnos obtener las reglas del archivo rules.json
+function getPairsFromFile(filePath: string): any {
+  let ruleSet = parseRules('/home/claram97/tdd/tdd-tp2/src/evaluator/rules.json');
+  console.log(ruleSet)
+  let pairs = collectPairsFromRuleSet(ruleSet);
+  console.log(pairs)
 }
 
-connectToBinanceWebSocket();
+//let pairs = getPairsFromFile('/home/claram97/tdd/tdd-tp2/src/evaluator/rules.json');
+
+let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
+
+let URI = getUri(pairs);
+connectToBinanceWebSocket(URI);

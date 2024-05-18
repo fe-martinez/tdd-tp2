@@ -87,7 +87,7 @@ const and = (args: Value[]): boolean =>
 const or = (args: Value[]): boolean =>
   args.length === 0
   ? (() => { throw new Error('Invalid number of arguments') })()
-  : false
+  : args.some(val => typeof val === 'boolean' ? val : false);
 
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');

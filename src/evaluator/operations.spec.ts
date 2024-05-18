@@ -139,6 +139,7 @@ describe('getOperation', () => {
         expect(() => operation([])).toThrow();
         expect(operation([false, false])).toBe(false);
         expect(operation([false, false, false])).toBe(false);
+        expect(operation([false])).toBe(false);
         
     })
     it('should throw an error for undefined operation', () => {

@@ -147,6 +147,7 @@ describe('getOperation', () => {
     it('should perform the average operation correctly', () => {
         const operation = getOperation('AVERAGE');
         expect(operation([1, 3])).toBe(2);
+        expect(operation([1, 2, 3])).toBe(2);
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

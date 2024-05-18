@@ -137,6 +137,8 @@ describe('getOperation', () => {
     it('should perform the or operation correctly', () => {
         const operation = getOperation('OR');
         expect(() => operation([])).toThrow();
+        expect(operation([false, false])).toBe(false);
+        
     })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');

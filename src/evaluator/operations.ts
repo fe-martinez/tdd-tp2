@@ -95,9 +95,12 @@ const average = (args: Value[]): number =>
   : sum(args) / args.length;
 
 const stddev = (args: Value[]): number => {
-  const mean = sum(args) / args.length;
-  return mean
-}
+  const mean = average(args as Value[]);
+  const squaredDiffs = (args as number[]).map(val => Math.pow(val - mean, 2));
+  const variance = squaredDiffs.reduce((acc, val) => acc + val, 0) / squaredDiffs.length;
+  return Math.sqrt(variance);
+};
+
 
 
 const defaultOperation = (...args: Value[]): never => {

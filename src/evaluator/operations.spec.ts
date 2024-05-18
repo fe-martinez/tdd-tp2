@@ -151,6 +151,11 @@ describe('getOperation', () => {
         expect(operation([2])).toBe(2);
         expect(() => operation([])).toThrow();
     })
+    it('should perform the stddev operation correctly', () => {
+        const operation = getOperation('STDDEV');
+        expect(operation([5, 5, 5])).toBe(5);
+        
+    })
     it('should throw an error for undefined operation', () => {
         const operation = getOperation('undefined');
         expect(() => operation([1, 2, 3])).toThrow();

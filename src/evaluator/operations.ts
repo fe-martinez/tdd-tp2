@@ -93,7 +93,13 @@ const average = (args: Value[]): number =>
   args.length === 0
   ? (() => { throw new Error('Invalid number of arguments') })()
   : sum(args) / args.length;
-  
+
+const stddev = (args: Value[]): number => {
+  const mean = sum(args) / args.length;
+  return mean
+}
+
+
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
 };
@@ -119,6 +125,7 @@ export const getOperation = (name: string): ((args: Value[]) => Value) => {
     'AND': and,
     'OR': or,
     'AVERAGE': average,
+    'STDDEV': stddev,
   };
 
   const operation = operations[name] || defaultOperation;

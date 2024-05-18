@@ -90,7 +90,9 @@ const or = (args: Value[]): boolean =>
   : args.some(val => typeof val === 'boolean' ? val : false);
 
 const average = (args: Value[]): number =>
-  sum(args) / args.length;
+  args.length === 0
+  ? (() => { throw new Error('Invalid number of arguments') })()
+  : sum(args) / args.length;
   
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');

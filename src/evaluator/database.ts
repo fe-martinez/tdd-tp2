@@ -2,23 +2,29 @@ import * as memjs from 'memjs';
 
 export const memcachedClient = memjs.Client.create();
 
-//export default memcachedClient;
+export interface Data {
+    bestBidPrice: string;
+    bestAskPrice: string;
+}  
 
-export async function setCache(key: string, value: string, expires: number) {
-    const received  = await memcachedClient.set(key, Buffer.from(value), { expires });
+export async function setCache(key: string, value: Data, expires: number) {
+    const serializedValue = JSON.stringify(value);
+    const received  = await memcachedClient.set(key, Buffer.from(serializedValue), { expires });
     if (!received) {
         console.error('Error al establecer el valor en Memcached:');
     } else {
-        console.log(`Valor establecido en Memcached: ${key} = ${value}`);
+        console.log(`Valor establecido en Memcached: ${key} = ${serializedValue}`);
     }
 }
 
-export async function getCache(key: string) {
+export async function getCache(key: string) : Promise<Data> {
     const  value  = await memcachedClient.get(key);
     if (value.value != null) {
         console.log(`Valor obtenido de Memcached: ${key} = ${value.value.toString()}`);
+        let data: Data = JSON.parse(value.value.toString());
+        return data;
     } else {
-        console.log(`Valor no encontrado en Memcached para la clave: ${key}`);
+        throw new Error(`Valor no encontrado en Memcached para la clave: ${key}`);
     }
 }
 

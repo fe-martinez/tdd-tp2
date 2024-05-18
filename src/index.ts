@@ -1,6 +1,6 @@
 import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
 import { connectToBinanceWebSocket, getUri } from './evaluator/binanceConnection';
-import { getCache, memcachedClient, setCache } from './evaluator/database';
+import { Data, getCache, memcachedClient, setCache } from './evaluator/database';
 
 process.on('SIGINT', async () => {
   console.log('Cerrando la aplicación...');
@@ -8,11 +8,19 @@ process.on('SIGINT', async () => {
   process.exit();
 });
 
-async function program() {
+async function program(data: Data) {
   console.log('Inicio del programa');
-  await setCache('BTC/USDT', '60000', 1000);
+  await setCache('BTC/USDT', data, 3600);
+  try {
   await getCache('BTC/USDT');
   await getCache('Hola');
+  
+  } catch(error) {
+    console.log("*********")
+    console.log("ERROR:")
+    console.log(error)
+    console.log("*********")
+  }
   console.log('Fin del programa');
 }
 
@@ -31,4 +39,11 @@ let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
 let URI = getUri(pairs);
 //connectToBinanceWebSocket(URI);
 
-program();  
+//Después le pongo otro nombre pero sería lo que se va a guardar en la bdd
+
+let data: Data = {
+  bestBidPrice: '60000',
+  bestAskPrice: '70000'
+};
+
+program(data);  

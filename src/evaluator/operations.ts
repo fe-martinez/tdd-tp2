@@ -105,7 +105,6 @@ const stddev = (args: Value[]): number => {
 };
 
 
-
 const defaultOperation = (...args: Value[]): never => {
   throw new Error('Unsupported operation');
 };

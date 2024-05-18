@@ -13,6 +13,55 @@ function getEndpointURI(pairs: string[]): string {
   URI = URI.slice(0, -1);
   return URI;
 }
+
+function openConnection(ws: WebSocket) {
+  ws.on('open', () => {
+    console.log('Conexión WebSocket abierta con Binance');
+  }); 
+}
+
+function errorConnection(ws: WebSocket) {
+  ws.on('error', (error) => {
+    console.error('Error en la conexión WebSocket:', error);
+  });
+}
+
+function getOrderBook(jsonString: string) : OrderBook {
+  const message = JSON.parse(jsonString);
+  const orderBook: OrderBook = {
+    updateID: message.u,
+    symbol: message.s,
+    bestBidPrice: message.b,
+    bestBidQuantity: message.B,
+    bestAskPrice: message.a,
+    bestAskQuantity: message.A
+  };
+  return orderBook;
+}
+
+function handleMessage(ws: WebSocket) {
+  ws.on('message', (data: Buffer) => {
+    const textDecoder = new TextDecoder();
+    const arrayBuffer = Uint8Array.from(data).buffer;
+    const jsonString = textDecoder.decode(arrayBuffer);
+  
+    try {
+      let orderBook = getOrderBook(jsonString)      
+      console.log(`Nuevo evento para el símbolo ${orderBook.symbol} con ID de actualización ${orderBook.updateID}, mejor precio de oferta ${orderBook.bestBidPrice} y cantidad ${orderBook.bestBidQuantity}, mejor precio de venta ${orderBook.bestAskPrice} y cantidad ${orderBook.bestAskQuantity}`);
+    } catch (error) {
+      console.error('Error al analizar los datos JSON:', error);
+    }
+  });
+}
+interface OrderBook {
+  updateID: number;
+  symbol: string;
+  bestBidPrice: string;
+  bestBidQuantity: string;
+  bestAskPrice: string;
+  bestAskQuantity: string;
+}
+
 // {
   //   "u":400900217,     // order book updateId
   //   "s":"BNBUSDT",     // symbol
@@ -26,33 +75,9 @@ function connectToBinanceWebSocket(pairs: string[]) {
   let URI = getEndpointURI(parsedPairs);
   const ws = new WebSocket(URI);
 
-  ws.on('open', () => {
-    console.log('Conexión WebSocket abierta con Binance');
-  });  
-  
-  ws.on('message', (data: Buffer) => {
-    const textDecoder = new TextDecoder();
-    const arrayBuffer = Uint8Array.from(data).buffer;
-    const jsonString = textDecoder.decode(arrayBuffer);
-  
-    try {
-      const message = JSON.parse(jsonString);
-      const updateID = message.u;
-      const symbol = message.s;
-      const bestBidPrice = message.b;
-      const bestBidQuantity = message.B;
-      const bestAskPrice = message.a;
-      const bestAskQuantity = message.A;
-  
-      console.log(`Nuevo evento para el símbolo ${symbol} con ID de actualización ${updateID}, mejor precio de oferta ${bestBidPrice} y cantidad ${bestBidQuantity}, mejor precio de venta ${bestAskPrice} y cantidad ${bestAskQuantity}`);
-    } catch (error) {
-      console.error('Error al analizar los datos JSON:', error);
-    }
-  });
-
-  ws.on('error', (error) => {
-    console.error('Error en la conexión WebSocket:', error);
-  });
+  openConnection(ws);
+  handleMessage(ws);
+  errorConnection(ws);
 }
 
 // let ruleSet = parseRules('/home/claram97/tdd/tdd-tp2/src/evaluator/rules.json');

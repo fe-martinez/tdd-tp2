@@ -1,4 +1,4 @@
-import { Action, BuyMarketAction, SellMarketAction, SetVariableAction } from "../evaluator/types";
+import { Action, BuyMarketAction, SellMarketAction, SetVariableAction } from "../model/types";
 import { ConditionEvaluator } from "./conditionEvaluator";
 
 function executeAction(action: Action, conditionEvaluator: ConditionEvaluator): void {

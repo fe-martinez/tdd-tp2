@@ -23,15 +23,15 @@ export class ConditionEvaluator {
     private compileCondition(condition: Condition): Function {
         switch (condition.type) {
             case ConditionType.CONSTANT:
-                return () => this.compileConstantCondition(condition);
+                return this.compileConstantCondition(condition);
             case ConditionType.VARIABLE:
-                return () => this.compileVariableCondition(condition);
+                return this.compileVariableCondition(condition);
             case ConditionType.WALLET:
-                return () => this.evaluateWallet(condition.symbol);
+                return this.evaluateWallet(condition.symbol);
             case ConditionType.CALL:
-                return () => this.compileCallCondition(condition);
+                return this.compileCallCondition(condition);
             case ConditionType.DATA:
-                return () => this.evaluateDataCondition(condition);
+                return this.evaluateDataCondition(condition);
             default:
                 throw new Error(`Unsupported condition type: ${condition}`);
         }
@@ -40,7 +40,7 @@ export class ConditionEvaluator {
     private compileConstantCondition(condition: ConstantCondition): Function {
         return () => condition.value;
     }
-
+    
     private compileVariableCondition(condition: VariableCondition): Function {
         return () => {
             const value = this.variables[condition.name];
@@ -48,8 +48,13 @@ export class ConditionEvaluator {
                 throw new Error(`Variable '${condition.name}' is not defined.`);
             }
             return value;
-        };
+        }
     }
+
+    private evaluateWallet(symbol: string): Function {
+        return () => 0;
+    }
+    
 
     private compileCallCondition(condition: CallCondition): Function {
         const args = Array.isArray(condition.arguments) ? condition.arguments : [condition.arguments];
@@ -57,22 +62,22 @@ export class ConditionEvaluator {
         const operation = getOperation(condition.name);
         return () => {
             const args = compiledArgs.map(fn => fn());
+            console.log(args);
+            console.log(operation)
             return operation(args);
         }
     }
 
-    private evaluateDataCondition(condition: DataCondition): Value[] {
-        const historicalData = this.getHistoricalData(condition.symbol, condition.since, condition.until);
-        if (historicalData.length === 0 && condition.default) {
-            return condition.default.map(value => this.compileCondition(value)());
-        } else if (historicalData.length === 0) {
-            throw new Error('No historical data available and no default value provided.');
+    private evaluateDataCondition(condition: DataCondition): Function {
+        return () => {
+            const historicalData = this.getHistoricalData(condition.symbol, condition.since, condition.until);
+            if (historicalData.length === 0 && condition.default) {
+                return condition.default.map(value => this.compileCondition(value)());
+            } else if (historicalData.length === 0) {
+                throw new Error('No historical data available and no default value provided.');
+            }
+            return historicalData;
         }
-        return historicalData;
-    }
-
-    private evaluateWallet(symbol: string): Value {
-        return 0;
     }
 
     private getHistoricalData(symbol: string, since: number, until: number): Value[] {
@@ -84,7 +89,7 @@ export class ConditionEvaluator {
         if (!rule) {
             throw new Error(`Rule '${ruleName}' is not defined.`);
         }
-        return rule.condition()();
+        return rule.condition();
     }
 
     public returnAllRuleNames(): string[] {
@@ -101,6 +106,10 @@ export class ConditionEvaluator {
 
     public setVariable(name: string, value: Value): void {
         this.variables[name] = value;
+    }
+
+    public getVariable(name: string): Value {
+        return this.variables[name];
     }
 
 }

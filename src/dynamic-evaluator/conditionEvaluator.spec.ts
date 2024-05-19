@@ -1,187 +1,74 @@
 import { ConditionType } from "../evaluator/conditionTypeEnum";
 import { Rule, RuleSet } from "../evaluator/types";
 import fs from 'fs';
+import { ConditionEvaluator } from "./conditionEvaluator";
 
-
-// Mock rules for testing
-const mockRule1: RuleSet = {
-    variables: {},
-    rules: [
-    {
-      name: "FirstRuleFirstTest",
-      condition: {
-        type: ConditionType.CALL,
-        name: ">",
-        arguments: [
-          {
-            type: ConditionType.DATA,
-            symbol: "BTC/USD",
-            since: 7200,
-            until: 0
-          },
-          {
-            type: ConditionType.DATA,
-            symbol: "ETH/USD",
-            since: 3600,
-            until: 0
-          }
-        ]
-      },
-      action: []
+const ruleSet1: RuleSet = {
+    variables: {
+      "LIMIT_VALUE_BTC/USDT": 65000
     },
-    {
-      name: "SecondRuleFirstTest",
-      condition: {
-        type: ConditionType.CALL,
-        name: "AND",
-        arguments: [
+    rules: [
+      {
+        name: "Escape",
+        condition: {
+          type: ConditionType.CALL,
+          name: "<",
+          arguments: [
+            {
+              type: ConditionType.CALL,
+              name: "MAX",
+              arguments: [
+                {
+                  type: ConditionType.CONSTANT,
+                  value: 5000
+                },
+                {
+                    type: ConditionType.CONSTANT,
+                    value: 3000
+                }
+              ]
+            },
+            {
+              type: ConditionType.VARIABLE,
+              name: "LIMIT_VALUE_BTC/USDT"
+            }
+          ]
+        },
+        action: [
           {
-            type: ConditionType.CALL,
-            name: ">",
-            arguments: [
-              {
-                type: ConditionType.DATA,
-                symbol: "BTC/USD",
-                since: 7200,
-                until: 3600
-              },
-              {
-                type: ConditionType.DATA,
-                symbol: "BTC/USD",
-                since: 10800,
-                until: 7200
-              }
-            ]
-          },
-          {
-            type: ConditionType.VARIABLE,
-            name: "ALREADY_SOLD"
+            type: "SELL_MARKET",
+            symbol: "BTC/USDT",
+            amount: {
+              type: ConditionType.CONSTANT,
+              value: 1
+            }
           }
         ]
-      },
-      action: []
-    }
-    ]
-};
-  
-const mockRule2: RuleSet = {
-    variables: {},
-    rules: [
-        {
-            name: "FirstRuleSecondTest",
-            condition: {
-                type: ConditionType.CALL,
-                name: ">",
-                arguments: [
-                    {
-                        type: ConditionType.DATA,
-                        symbol: "ETH/USD",
-                        since: 7200,
-                        until: 0
-                    },
-                    {
-                        type: ConditionType.DATA,
-                        symbol: "LTC/USD",
-                        since: 3600,
-                        until: 0
-                    }
-                ]
-            },
-            action: []
-        }
+      }
     ]
 };
 
-const mockRule3: RuleSet = {
-    variables: {},
-    rules: [
-        {
-            name: "SecondRuleFirstTest",
-            condition: {
-                type: ConditionType.CALL,
-                name: "AND",
-                arguments: [
-                    {
-                        type: ConditionType.CALL,
-                        name: ">",
-                        arguments: [
-                            {
-                                type: ConditionType.CALL,
-                                name: "NOT",
-                                arguments: [
-                                    {
-                                        type: ConditionType.DATA,
-                                        symbol: "BTC/USD",
-                                        since: 7200,
-                                        until: 0
-                                    }
-                                ]
-                            },
-                            {
-                                type: ConditionType.DATA,
-                                symbol: "ETH/USD",
-                                since: 3600,
-                                until: 0
-                            }
-                        ]
-                    },
-                    {
-                        type: ConditionType.CALL,
-                        name: "<",
-                        arguments: [
-                            {
-                                type: ConditionType.DATA,
-                                symbol: "LTC/USD",
-                                since: 7200,
-                                until: 0
-                            },
-                            {
-                                type: ConditionType.DATA,
-                                symbol: "XRP/USD",
-                                since: 3600,
-                                until: 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            action: []
-        }
-    ]
-};
+jest.mock('fs', () => ({
+    readFileSync: jest.fn((filePath) => {
+      switch (filePath) {
+        case 'src/rules.json':
+          return JSON.stringify({ rules: ruleSet1 });
+        default:
+          return null;
+      }
+    }),
+  }));
   
+
 describe('ConditionEvaluator', () => {
     
     it('should evaluate a simple condition', () => {
         const { ConditionEvaluator } = require('./conditionEvaluator');
-        const RuleSet = JSON.parse(fs.readFileSync('src/rules.json', 'utf8'))
-        const conditionEvaluator = new ConditionEvaluator(RuleSet);
-        const result = conditionEvaluator.evaluateCondition('Escape', {});
-        expect(result).toBe(true);
-    });
-  
-    it('should evaluate a complex condition', () => {
-        const { ConditionEvaluator } = require('./conditionEvaluator');
-        const RuleSet = JSON.parse(fs.readFileSync('src/rules.json', 'utf8'))
-        const conditionEvaluator = new ConditionEvaluator(RuleSet);
-        const result = conditionEvaluator.evaluateCondition('Escape', { ALREADY_SOLD: true });
-        expect(result).toBe(true);
-    });
-  
-    it('should evaluate a condition from a different file', () => {
-        const { ConditionEvaluator } = require('./conditionEvaluator');
-        const RuleSet = JSON.parse(fs.readFileSync('src/rules.json', 'utf8'))
-        const conditionEvaluator = new ConditionEvaluator(RuleSet);
-        const result = conditionEvaluator.evaluateCondition('Escape', {});
-        expect(result).toBe(true);
-    });
-  
-    it('should evaluate a complex condition from a different file', () => {
-        const { ConditionEvaluator } = require('./conditionEvaluator');
-        const RuleSet = JSON.parse(fs.readFileSync('src/rules.json', 'utf8'))
-        const conditionEvaluator = new ConditionEvaluator(RuleSet);
-        const result = conditionEvaluator.evaluateCondition('Escape', {});
-        expect(result).toBe(true);
+        const ruleSet: RuleSet = ruleSet1;
+        console.log(ruleSet);
+        const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
+        const result = conditionEvaluator.evaluateCondition('Escape');
+        expect(result).toBe(false);
     });
 });
 

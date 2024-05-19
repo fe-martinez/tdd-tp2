@@ -79,12 +79,12 @@ export class ConditionEvaluator {
         return [80000];
     }
 
-    public evaluateCondition(conditionName: string): Value {
-        const compiledCondition = this.compiledConditions[conditionName];
-        if (!compiledCondition) {
-            throw new Error(`Condition '${conditionName}' is not present in the RuleSet.`);
+    public evaluateCondition(ruleName: string): boolean {
+        const rule = this.ruleMap[ruleName];
+        if (!rule) {
+            throw new Error(`Rule '${ruleName}' is not defined.`);
         }
-        return compiledCondition();
+        return rule.condition()();
     }
 
     public returnAllRuleNames(): string[] {

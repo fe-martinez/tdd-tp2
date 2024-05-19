@@ -41,10 +41,6 @@ function isDataCondition(argument: Condition): argument is DataCondition {
     return argument.type === ConditionType.DATA;
 }
 
-function isDataCondition(argument: Condition): argument is DataCondition {
-    return argument.type === ConditionType.DATA;
-}
-
 function handleCallCondition(condition: CallCondition, pairs: string[]) {
     console.log("Condition arguments:", JSON.stringify(condition.arguments, null, 2));
     

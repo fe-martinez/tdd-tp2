@@ -1,6 +1,6 @@
 import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
 import { connectToBinanceWebSocket, getUri } from './evaluator/binanceConnection';
-import { Data, getCache, memcachedClient, saveInCache, setCache } from './evaluator/database';
+import { Data, getCache, memcachedClient, setCache } from './evaluator/database';
 
 process.on('SIGINT', async () => {
   console.log('Cerrando la aplicación...');
@@ -13,29 +13,28 @@ async function set() {
   let data: Data = {
     bestBidPrice: '60000',
     bestAskPrice: '70000',
-    time: new Date().toISOString()
   };
   
   let data2: Data = {
     bestBidPrice: '5000',
     bestAskPrice: '7000',
-    time: new Date().toISOString()
   };
   
   let data3: Data = {
     bestBidPrice: '300',
     bestAskPrice: '400',
-    time: new Date().toISOString()
   };
-
-  await setCache('BTC/USDT', [data], 3600);
-  await setCache('BTC/USDT', [data2], 3600);
-  await setCache('BTC/USDT', [data3], 3600);
-  let result = await getCache('BTC/USDT');
+  var time1 = new Date().toISOString();
+  await setCache('BTC/USDT ' + time1, data, 3600);
+  var time2 = new Date().toISOString();
+  await setCache('BTC/USDT ' + time2, data2, 3600);
+  var time3 = new Date().toISOString();
+  await setCache('BTC/USDT ' + time3, data3, 3600);
+  let result = await getCache('BTC/USDT ' + time3);
   console.log(result);
 }
 
-async function program(data: Data[]) {
+async function program(data: Data) {
   console.log('Inicio del programa');
   await setCache('BTC/USDT', data, 3600);
   // try {
@@ -72,17 +71,14 @@ let URI = getUri(pairs);
 let data: Data = {
   bestBidPrice: '60000',
   bestAskPrice: '70000',
-  time: new Date().toISOString()
+  //time: new Date().toISOString()
 };
 
 let data2: Data = {
   bestBidPrice: '5000',
   bestAskPrice: '7000',
-  time: new Date().toISOString()
+  //time: new Date().toISOString()
 };
 
-
-let data_array = [data];
-let data_array2 = [data2];
-//program(data_array);  
+//program(data);  
 set();

@@ -1,5 +1,5 @@
 import { evaluateCondition } from "./conditionsEvaluator";
-import { Action, RuleSet, Value } from "./types";
+import { Action, RuleSet, Value } from "../model/types";
 
 export function evaluateRules (ruleSet: RuleSet) {
     for (const rule of ruleSet.rules) {

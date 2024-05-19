@@ -1,6 +1,6 @@
 import { evaluateCondition } from "./conditionsEvaluator";
-import { Condition } from "./types";
-import { ConditionType } from "./conditionTypeEnum";
+import { Condition } from "../model/types";
+import { ConditionType } from "../model/conditionTypeEnum";
 
 jest.mock('./operations', () => ({
   getOperation: jest.fn().mockImplementation((name) => {

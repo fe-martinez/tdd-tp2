@@ -33,6 +33,7 @@ export interface DataCondition {
 
 export type Condition = ConstantCondition | VariableCondition | WalletCondition | CallCondition | DataCondition;
 
+
 export interface BuyMarketAction {
   type: 'BUY_MARKET';
   symbol: string;

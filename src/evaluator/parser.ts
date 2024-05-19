@@ -23,7 +23,7 @@ export function extractExchangePairs(rule: Rule): string[] {
     return pairs;
 }
 
-function traverse(condition: Condition, pairs: string[]) {
+export function traverse(condition: Condition, pairs: string[]) {
     if (condition.type === ConditionType.CALL) {
         handleCallCondition(condition as CallCondition, pairs);
     }
@@ -35,6 +35,10 @@ function handleArgument(argument: Condition, pairs: string[]): void {
     } else {
         traverse(argument, pairs);
     }
+}
+
+function isDataCondition(argument: Condition): argument is DataCondition {
+    return argument.type === ConditionType.DATA;
 }
 
 function isDataCondition(argument: Condition): argument is DataCondition {
@@ -54,7 +58,7 @@ function handleCallCondition(condition: CallCondition, pairs: string[]) {
     }
 }
 
-function handleDataCondition(condition: DataCondition, pairs: string[]) {
+export function handleDataCondition(condition: DataCondition, pairs: string[]) {
     if ('symbol' in condition) {
         pairs.push(condition.symbol);
     }

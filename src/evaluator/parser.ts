@@ -25,33 +25,20 @@ export function extractExchangePairs(rule: Rule): string[] {
 
 export function traverse(condition: Condition, pairs: string[]) {
     if (condition.type === ConditionType.CALL) {
-        handleCallCondition(condition as CallCondition, pairs);
+        handleCallCondition(condition, pairs);
+    }else {
+        throw new Error(`Unknown condition type: ${condition.type}`);
     }
 }
 
-function handleArgument(argument: Condition, pairs: string[]): void {
-    if (isDataCondition(argument)) {
-        handleDataCondition(argument as DataCondition, pairs);
-    } else {
-        traverse(argument, pairs);
-    }
-}
-
-function isDataCondition(argument: Condition): argument is DataCondition {
-    return argument.type === ConditionType.DATA;
-}
-
-function handleCallCondition(condition: CallCondition, pairs: string[]) {
-    console.log("Condition arguments:", JSON.stringify(condition.arguments, null, 2));
-    
-    if (Array.isArray(condition.arguments)) {
-        condition.arguments.forEach(arg => {
-            handleArgument(arg, pairs);
-        });
-    } else {
-        const arg = condition.arguments as Condition;
-        handleArgument(arg, pairs);
-    }
+export function handleCallCondition(condition: CallCondition, pairs: string[]) {
+    condition.arguments.forEach(arg => {
+        if (arg.type === ConditionType.DATA) {
+            handleDataCondition(arg as DataCondition, pairs);
+        } else {
+            traverse(arg, pairs);
+        }
+    });
 }
 
 export function handleDataCondition(condition: DataCondition, pairs: string[]) {

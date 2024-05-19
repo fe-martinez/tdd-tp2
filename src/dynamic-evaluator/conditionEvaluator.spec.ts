@@ -1,6 +1,5 @@
-import { ConditionType } from "../evaluator/conditionTypeEnum";
-import { Rule, RuleSet } from "../evaluator/types";
-import fs from 'fs';
+import { ConditionType } from "../model/conditionTypeEnum";
+import { Rule, RuleSet } from "../model/types";
 import { ConditionEvaluator } from "./conditionEvaluator";
 import { executeRuleSet } from "./rulesEvaluator";
 

@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import { getEndpointURI, getOrderBook, parsePairs } from './binanceParser';
-import { RuleSet } from './types'; 
-import { evaluateRules } from './rulesEvaluator'; 
+import { RuleSet } from '../model/types'; 
+import { evaluateRules } from '../evaluator/rulesEvaluator'; 
 
 function openConnection(ws: WebSocket) {
   ws.on('open', () => {

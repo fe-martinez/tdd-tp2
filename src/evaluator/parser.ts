@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { Condition, Rule, RuleSet, DataCondition, CallCondition, Value } from './types';
-import { ConditionType } from './conditionTypeEnum';
+import { Condition, Rule, RuleSet, DataCondition, CallCondition, Value } from '../model/types'
+import { ConditionType } from '../model/conditionTypeEnum';
 
 export function parseRules(filePath: string): RuleSet {
     const rulesData = fs.readFileSync(filePath, 'utf8');
@@ -25,7 +25,7 @@ export function extractExchangePairs(rule: Rule): string[] {
 
 export function traverse(condition: Condition, pairs: string[]) {
     if (condition.type === ConditionType.CALL) {
-        handleCallCondition(condition, pairs);
+        handleCallCondition(condition as CallCondition, pairs);
     }else {
         throw new Error(`Unknown condition type: ${condition.type}`);
     }

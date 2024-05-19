@@ -1,5 +1,5 @@
-import { Action, BuyMarketAction, CallCondition, Condition, ConstantCondition, DataCondition, RuleSet, SellMarketAction, SetVariableAction, Value, VariableCondition } from "../evaluator/types";
-import { ConditionType } from "../evaluator/conditionTypeEnum";
+import { Action, BuyMarketAction, CallCondition, Condition, ConstantCondition, DataCondition, RuleSet, SellMarketAction, SetVariableAction, Value, VariableCondition } from "../model/types";
+import { ConditionType } from "../model/conditionTypeEnum";
 import { getOperation } from "../evaluator/operations";
 
 export class ConditionEvaluator {

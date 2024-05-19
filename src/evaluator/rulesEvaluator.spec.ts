@@ -1,6 +1,6 @@
 import { evaluateRules, executeAction } from './rulesEvaluator';
-import { Condition,  Action, RuleSet, Value } from './types';
-import {  ConditionType } from './conditionTypeEnum';
+import { Condition,  Action, RuleSet, Value } from '../model/types';
+import {  ConditionType } from '../model/conditionTypeEnum';
 
 describe('rulesEvaluator', () => {
   describe('evaluateRules', () => {

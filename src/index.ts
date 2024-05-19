@@ -1,5 +1,5 @@
 import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
-import { connectToBinanceWebSocket, getUri } from './evaluator/binanceConnection';
+import { connectToBinanceWebSocket, getUri } from './data/binanceConnection';
 
 //Esto no sé por qué no funciona, es lo que debería permitirnos obtener las reglas del archivo rules.json
 // function getPairsFromFile(filePath: string): any {

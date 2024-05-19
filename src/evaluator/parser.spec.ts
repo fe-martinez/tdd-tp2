@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { parseRules, collectPairsFromRuleSet, extractExchangePairs } from './parser';
-import { RuleSet, Rule, Condition, CallCondition, DataCondition } from './types';
-import {  ConditionType } from './conditionTypeEnum';
+import { RuleSet, Rule, Condition, CallCondition, DataCondition } from '../model/types';
+import {  ConditionType } from '../model/conditionTypeEnum';
 jest.mock('fs');
 
 describe('parser.ts', () => {

@@ -1,6 +1,6 @@
 import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
 import { connectToBinanceWebSocket, getUri } from './evaluator/binanceConnection';
-import { Data, getCache, memcachedClient, setCache } from './evaluator/database';
+import { Data, getCache, memcachedClient, setCache } from './data/database';
 
 process.on('SIGINT', async () => {
   console.log('Cerrando la aplicación...');

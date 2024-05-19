@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Condition, Rule, RuleSet, DataCondition, CallCondition } from './types';
+import { Condition, Rule, RuleSet, DataCondition, CallCondition, Value } from './types';
 import { ConditionType } from './conditionTypeEnum';
 
 export function parseRules(filePath: string): RuleSet {
@@ -12,9 +12,9 @@ export function collectPairsFromRuleSet(ruleSet: RuleSet): string[] {
     const pairs: string[] = [];
     ruleSet.rules.forEach(rule => {
         const rulePairs = extractExchangePairs(rule);
-        pairs.push(...rulePairs)
-    })
-    return pairs
+        pairs.push(...rulePairs);
+    });
+    return pairs;
 }
 
 export function extractExchangePairs(rule: Rule): string[] {

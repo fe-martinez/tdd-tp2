@@ -1,32 +1,23 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const ws_1 = __importDefault(require("ws"));
-function connectToBinanceWebSocket() {
-    const ws = new ws_1.default('wss://stream.binance.com:9443/ws/btcusdt@trade');
-    ws.on('open', () => {
-        console.log('Conexión WebSocket abierta con Binance');
-    });
-    ws.on('message', (data) => {
-        const textDecoder = new TextDecoder();
-        const arrayBuffer = Uint8Array.from(data).buffer;
-        const jsonString = textDecoder.decode(arrayBuffer);
-        try {
-            const message = JSON.parse(jsonString);
-            const eventType = message.e;
-            const symbol = message.s;
-            const price = message.p;
-            const quantity = message.q;
-            console.log(`Nuevo evento ${eventType} para el símbolo ${symbol} con precio ${price} y cantidad ${quantity}`);
-        }
-        catch (error) {
-            console.error('Error al analizar los datos JSON:', error);
-        }
-    });
-    ws.on('error', (error) => {
-        console.error('Error en la conexión WebSocket:', error);
-    });
+const parser_1 = require("./evaluator/parser");
+const binanceConnection_1 = require("./evaluator/binanceConnection");
+//Esto no sé por qué no funciona, es lo que debería permitirnos obtener las reglas del archivo rules.json
+// function getPairsFromFile(filePath: string): any {
+//   let ruleSet = parseRules('/home/claram97/tdd/tdd-tp2/src/evaluator/rules.json');
+//   console.log(ruleSet)
+//   let pairs = collectPairsFromRuleSet(ruleSet);
+//   console.log(pairs)
+// }
+// creo q asi deberia funcionar
+function getPairsFromFile(filePath) {
+    let ruleSet = (0, parser_1.parseRules)(filePath);
+    console.log(ruleSet);
+    let pairs = (0, parser_1.collectPairsFromRuleSet)(ruleSet);
+    console.log(pairs);
+    return { pairs, ruleSet };
 }
-connectToBinanceWebSocket();
+let { pairs, ruleSet } = getPairsFromFile('/Users/paulabruck/Desktop/FIUBA/Tecnicas_De_Diseño/tdd-tp2/src/evaluator/rules.json');
+//let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
+let URI = (0, binanceConnection_1.getUri)(pairs);
+(0, binanceConnection_1.connectToBinanceWebSocket)(URI, ruleSet);

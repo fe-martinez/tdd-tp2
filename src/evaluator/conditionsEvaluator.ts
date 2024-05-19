@@ -1,6 +1,6 @@
-import { Condition, DataCondition, Value } from "./types";
+import { Condition, DataCondition, Value } from "../model/types";
 import { getOperation } from "./operations"
-import { ConditionType } from "./conditionTypeEnum";
+import { ConditionType } from "../model/conditionTypeEnum";
 
 
 export function evaluateCondition(condition: Condition, variables: { [name: string]: Value }): Value {

@@ -1,27 +1,55 @@
 import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
 import { connectToBinanceWebSocket, getUri } from './evaluator/binanceConnection';
-import { Data, getCache, memcachedClient, setCache } from './evaluator/database';
+import { Data, getCache, memcachedClient, saveInCache, setCache } from './evaluator/database';
 
 process.on('SIGINT', async () => {
   console.log('Cerrando la aplicación...');
-  memcachedClient.quit();
+  await memcachedClient.flush(); // Limpiamos la cache antes de cerrar la aplicación
+  await memcachedClient.quit();
   process.exit();
 });
 
-async function program(data: Data) {
+async function set() {
+  let data: Data = {
+    bestBidPrice: '60000',
+    bestAskPrice: '70000',
+    time: new Date().toISOString()
+  };
+  
+  let data2: Data = {
+    bestBidPrice: '5000',
+    bestAskPrice: '7000',
+    time: new Date().toISOString()
+  };
+  
+  let data3: Data = {
+    bestBidPrice: '300',
+    bestAskPrice: '400',
+    time: new Date().toISOString()
+  };
+
+  await setCache('BTC/USDT', [data], 3600);
+  await setCache('BTC/USDT', [data2], 3600);
+  await setCache('BTC/USDT', [data3], 3600);
+  let result = await getCache('BTC/USDT');
+  console.log(result);
+}
+
+async function program(data: Data[]) {
   console.log('Inicio del programa');
   await setCache('BTC/USDT', data, 3600);
-  try {
-  await getCache('BTC/USDT');
-  await getCache('Hola');
+  // try {
+  // await getCache('BTC/USDT');
+  // //await getCache('Hola');
   
-  } catch(error) {
-    console.log("*********")
-    console.log("ERROR:")
-    console.log(error)
-    console.log("*********")
-  }
-  console.log('Fin del programa');
+  // } catch(error) {
+  //   console.log("*********")
+  //   console.log(error)
+  //   console.log("*********")
+  // }
+  // console.log('Fin del programa');
+  //await memcachedClient.flush();
+  await memcachedClient.quit();
 }
 
 //Esto no sé por qué no funciona, es lo que debería permitirnos obtener las reglas del archivo rules.json
@@ -43,7 +71,18 @@ let URI = getUri(pairs);
 
 let data: Data = {
   bestBidPrice: '60000',
-  bestAskPrice: '70000'
+  bestAskPrice: '70000',
+  time: new Date().toISOString()
 };
 
-program(data);  
+let data2: Data = {
+  bestBidPrice: '5000',
+  bestAskPrice: '7000',
+  time: new Date().toISOString()
+};
+
+
+let data_array = [data];
+let data_array2 = [data2];
+//program(data_array);  
+set();

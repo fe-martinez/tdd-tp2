@@ -1,4 +1,4 @@
-import { Action, BuyMarketAction, Condition, DataCondition, RuleSet, SellMarketAction, SetVariableAction, Value } from "../evaluator/types";
+import { Action, BuyMarketAction, CallCondition, Condition, ConstantCondition, DataCondition, RuleSet, SellMarketAction, SetVariableAction, Value, VariableCondition } from "../evaluator/types";
 import { ConditionType } from "../evaluator/conditionTypeEnum";
 import { getOperation } from "../evaluator/operations";
 
@@ -16,32 +16,20 @@ export class ConditionEvaluator {
         ruleSet.rules.forEach(rule => {
             const compiledCondition = this.compileCondition(rule.condition);
             this.compiledConditions[rule.name] = compiledCondition;
-            this.ruleMap[rule.name] = { condition: compiledCondition, actions: rule.action }; // Add this line
+            this.ruleMap[rule.name] = { condition: compiledCondition, actions: rule.action };
         })
     }
 
     private compileCondition(condition: Condition): Function {
         switch (condition.type) {
             case ConditionType.CONSTANT:
-                return () => condition.value;
+                return () => this.compileConstantCondition(condition);
             case ConditionType.VARIABLE:
-                return () => {
-                    const value = this.variables[condition.name];
-                    if (value === undefined) {
-                        throw new Error(`Variable '${condition.name}' is not defined.`);
-                    }
-                    return value;
-                };
+                return () => this.compileVariableCondition(condition);
             case ConditionType.WALLET:
                 return () => this.evaluateWallet(condition.symbol);
             case ConditionType.CALL:
-                const args = Array.isArray(condition.arguments) ? condition.arguments : [condition.arguments];
-                const compiledArgs = args.map(arg => this.compileCondition(arg));
-                const operation = getOperation(condition.name);
-                return () => {
-                    const args = compiledArgs.map(fn => fn());
-                    return operation(args);
-                }
+                return () => this.compileCallCondition(condition);
             case ConditionType.DATA:
                 return () => this.evaluateDataCondition(condition);
             default:
@@ -49,11 +37,34 @@ export class ConditionEvaluator {
         }
     }
 
+    private compileConstantCondition(condition: ConstantCondition): Function {
+        return () => condition.value;
+    }
+
+    private compileVariableCondition(condition: VariableCondition): Function {
+        return () => {
+            const value = this.variables[condition.name];
+            if (value === undefined) {
+                throw new Error(`Variable '${condition.name}' is not defined.`);
+            }
+            return value;
+        };
+    }
+
+    private compileCallCondition(condition: CallCondition): Function {
+        const args = Array.isArray(condition.arguments) ? condition.arguments : [condition.arguments];
+        const compiledArgs = args.map(arg => this.compileCondition(arg));
+        const operation = getOperation(condition.name);
+        return () => {
+            const args = compiledArgs.map(fn => fn());
+            return operation(args);
+        }
+    }
+
     private evaluateDataCondition(condition: DataCondition): Value[] {
-        const { symbol, since, until, default: defaultValues } = condition;
-        const historicalData = this.getHistoricalData(symbol, since, until);
-        if (historicalData.length === 0 && defaultValues) {
-            return defaultValues.map(value => this.compileCondition(value)());
+        const historicalData = this.getHistoricalData(condition.symbol, condition.since, condition.until);
+        if (historicalData.length === 0 && condition.default) {
+            return condition.default.map(value => this.compileCondition(value)());
         } else if (historicalData.length === 0) {
             throw new Error('No historical data available and no default value provided.');
         }

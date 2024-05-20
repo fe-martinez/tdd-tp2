@@ -16,7 +16,7 @@ function getPairsFromFile(filePath: string): any {
     console.log(pairs);
     return { pairs, ruleSet };
   }
-let { pairs, ruleSet } = getPairsFromFile('/Users/paulabruck/Desktop/FIUBA/Tecnicas_De_Diseño/tdd-tp2/src/evaluator/rules.json');
+let { pairs, ruleSet } = getPairsFromFile('src/rules.json');
 
 
 //let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];

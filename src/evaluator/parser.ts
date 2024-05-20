@@ -26,8 +26,6 @@ export function extractExchangePairs(rule: Rule): string[] {
 export function traverse(condition: Condition, pairs: string[]) {
     if (condition.type === ConditionType.CALL) {
         handleCallCondition(condition as CallCondition, pairs);
-    }else {
-        throw new Error(`Unknown condition type: ${condition.type}`);
     }
 }
 

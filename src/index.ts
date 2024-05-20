@@ -6,25 +6,35 @@ import { ConditionEvaluator } from './dynamic-evaluator/conditionEvaluator';
 import { executeRuleSet } from './dynamic-evaluator/rulesEvaluator';
 
 
-let ruleSet: RuleSet = parseRules('src/rules.json');
-let pairs = collectPairsFromRuleSet(ruleSet);
+ let ruleSet: RuleSet = parseRules('src/rules.json');
+ let pairs = collectPairsFromRuleSet(ruleSet);
 
-const compiledRules = new ConditionEvaluator(ruleSet);
-const binanceData: BinanceListener = new BinanceListener(pairs);
+ const compiledRules = new ConditionEvaluator(ruleSet);
+ const binanceData: BinanceListener = new BinanceListener(pairs);
 
-binanceData.on('error', (error) => {
-  console.error('WebSocket error:', error);
-});
+ binanceData.on('error', (error) => {
+   console.error('WebSocket error:', error);
+ });
 
-binanceData.on('connected', () => {
-  console.log('WebSocket connected');
-});
+ binanceData.on('connected', () => {
+   console.log('WebSocket connected');
+ });
 
-binanceData.on('disconnected', ({ code, reason }) => {
-  console.log(`WebSocket disconnected (${code}): ${reason}`);
-});
+ binanceData.on('disconnected', ({ code, reason }) => {
+   console.log(`WebSocket disconnected (${code}): ${reason}`);
+ });
 
-binanceData.on('update', (data) => {
-  console.log('Update from binance:', data);
-  evaluateRules(ruleSet);
-});
+ binanceData.on('update', (data) => {
+   console.log('Update from binance:', data);
+   evaluateRules(ruleSet);
+ });
+
+// var date = new Date();
+// console.log(date);
+// console.log(date.getDay());
+// console.log(date.getFullYear());
+// console.log(date.getHours());
+// console.log(date.getMinutes());
+// console.log(date.getMilliseconds());
+// console.log(date.getMonth());
+// console.log(date.getSeconds());

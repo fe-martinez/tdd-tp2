@@ -24,8 +24,8 @@ export class BinanceListener extends EventEmitter {
       const orderBook = getOrderBook(jsonString);
       const lastSavedValue = getLastPairValue(orderBook.symbol);
       if (isImportantChange(orderBook, lastSavedValue)) {
-        addHistoricalData(orderBook.symbol, { bestBidPrice: orderBook.bestBidPrice, bestAskPrice: orderBook.bestAskPrice, time: new Date().toISOString() });
-        this.emit('update', { symbol: orderBook.symbol, bestBidPrice: orderBook.bestBidPrice, bestAskPrice: orderBook.bestAskPrice, time: new Date().toISOString() });
+        addHistoricalData(orderBook.symbol, { bestBidPrice: orderBook.bestBidPrice, bestAskPrice: orderBook.bestAskPrice, time: new Date() });
+        this.emit('update', { symbol: orderBook.symbol, bestBidPrice: orderBook.bestBidPrice, bestAskPrice: orderBook.bestAskPrice, time: new Date() });
       }
     });
 

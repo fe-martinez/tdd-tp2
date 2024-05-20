@@ -3,7 +3,7 @@ import { Value } from "../model/types";
 export interface Data {
     bestBidPrice: string;
     bestAskPrice: string;
-    time: string;
+    time: Date;
 }  
 
 const historicalData: { [symbol: string]: Data[] } = {};

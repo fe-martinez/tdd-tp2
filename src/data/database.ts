@@ -8,9 +8,23 @@ export interface Data {
 
 const historicalData: { [symbol: string]: Data[] } = {};
 
+const TO_HOUR = 1000;
+
+
+function calculateDateOffset(hours: number): Date {
+    const now = new Date();
+    return new Date(now.getTime() - hours * TO_HOUR);
+  }
+  
+function filterDataByDateRange(data: Data[], sinceDate: Date, untilDate: Date): Data[] {
+    return data.filter(d => d.time >= sinceDate && d.time <= untilDate);
+}
+  
 export function getHistoricalData(symbol: string, since: number, until: number): Data[] {
+    const sinceDate = calculateDateOffset(since);
+    const untilDate = calculateDateOffset(until);
     const data = historicalData[symbol] || [];
-    return data;
+    return filterDataByDateRange(data, sinceDate, untilDate);
 }
 
 export function getHistoricalPairValues(symbol: string, since: number, until: number): Value[] {

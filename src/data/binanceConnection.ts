@@ -3,27 +3,27 @@ import { getEndpointURI, getOrderBook, parsePairs } from './binanceParser';
 import { addHistoricalData, getLastPairValue } from './database';
 import { EventEmitter } from 'events';
 
-const IMPORTANT_VARIATION = 0.0001;
+const IMPORTANT_VARIATION = 0.001;
 
 export class BinanceListener extends EventEmitter {
   private binanceWs: WebSocket;
+  private textDecoder: TextDecoder;
 
   constructor(pairs: string[]) {
     super();
     this.binanceWs = (connectToBinanceWebSocket(getUri(pairs)));
     this.setupListener();
+    this.textDecoder = new TextDecoder();
   }
 
   private setupListener() {
     this.binanceWs.on('message', (data: Buffer) => {
-      const textDecoder = new TextDecoder();
       const arrayBuffer = Uint8Array.from(data).buffer;
-      const jsonString = textDecoder.decode(arrayBuffer);
+      const jsonString = this.textDecoder.decode(arrayBuffer);
 
       const orderBook = getOrderBook(jsonString);
-      const lastValue = getLastPairValue(orderBook.symbol);
-      const bands = [lastValue * (1 - IMPORTANT_VARIATION), lastValue * (1 + IMPORTANT_VARIATION)];
-      if (parseFloat(orderBook.bestBidPrice) < bands[0] || parseFloat(orderBook.bestBidPrice) > bands[1]) {
+      const lastSavedValue = getLastPairValue(orderBook.symbol);
+      if (isImportantChange(orderBook, lastSavedValue)) {
         addHistoricalData(orderBook.symbol, { bestBidPrice: orderBook.bestBidPrice, bestAskPrice: orderBook.bestAskPrice, time: new Date().toISOString() });
         this.emit('update', { symbol: orderBook.symbol, bestBidPrice: orderBook.bestBidPrice, bestAskPrice: orderBook.bestAskPrice, time: new Date().toISOString() });
       }
@@ -48,4 +48,9 @@ export function connectToBinanceWebSocket(URI: string): WebSocket {
 export function getUri(pairs: string[]): string {
     const parsedPairs = parsePairs(pairs);
     return getEndpointURI(parsedPairs);
+}
+
+function isImportantChange(orderBook: any, lastValue: number): boolean {
+  const bands = [lastValue * (1 - IMPORTANT_VARIATION), lastValue * (1 + IMPORTANT_VARIATION)];
+  return parseFloat(orderBook.bestBidPrice) < bands[0] || parseFloat(orderBook.bestBidPrice) > bands[1];
 }

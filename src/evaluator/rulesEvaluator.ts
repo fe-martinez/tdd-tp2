@@ -3,11 +3,8 @@ import { Action, RuleSet, Value } from "../model/types";
 
 export function evaluateRules(ruleSet: RuleSet) {
   for (const rule of ruleSet.rules) {
-    let evaluation = evaluateCondition(rule.condition, ruleSet.variables);
-    console.log("Evaluación de la regla: " + evaluation);
-    if (evaluation) {
+    if (evaluateCondition(rule.condition, ruleSet.variables)) {
       for (const action of rule.action) {
-        console.log("Ejecutando acción: " + action.type);
         executeAction(action, ruleSet.variables);
       }
     }

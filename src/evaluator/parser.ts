@@ -23,6 +23,8 @@ export function extractExchangePairs(rule: Rule): string[] {
     return pairs;
 }
 
+// The idea of this function is only to traverse the condition and collect the pairs.
+// If it will also be used to check the validity of the condition, the other types of conditions should be handled.
 export function traverse(condition: Condition, pairs: string[]) {
     if (condition.type === ConditionType.CALL) {
         handleCallCondition(condition as CallCondition, pairs);

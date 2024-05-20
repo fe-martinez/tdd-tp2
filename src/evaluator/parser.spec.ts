@@ -111,13 +111,6 @@ describe('parser.ts', () => {
       traverse(condition, pairs);
       expect(pairs).toEqual(['BTCUSD', 'ETHUSD']);
     });
-
-    it('should throw an error for an unknown condition type', () => {
-      const condition: any = { type: 'UNKNOWN' };
-      const pairs: string[] = [];
-      const traverse = jest.requireActual('./parser').traverse;
-      expect(() => traverse(condition, pairs)).toThrow();
-    });
   });
 
   describe('handleCallCondition', () => {

@@ -31,8 +31,6 @@ export class ConditionEvaluator {
                 return this.evaluateWallet(condition.symbol);
             case ConditionType.CALL:
                 return this.compileCallCondition(condition);
-            case ConditionType.DATA:
-                return this.evaluateDataCondition(condition);
             default:
                 throw new Error(`Unsupported condition type: ${condition}`);
         }
@@ -59,17 +57,22 @@ export class ConditionEvaluator {
 
     private compileCallCondition(condition: CallCondition): Function {
         const args = Array.isArray(condition.arguments) ? condition.arguments : [condition.arguments];
-        const compiledArgs = args.map(arg => this.compileCondition(arg));
         const operation = getOperation(condition.name);
-        return () => {
-            const args = compiledArgs.map(fn => fn());
-            console.log(args);
-            console.log(operation)
-            return operation(args);
+        if (args.length === 0) {
+            throw new Error('Invalid number of arguments');
+        } else if (args.length === 1 && args[0].type === ConditionType.DATA) {
+            return this.evaluateDataCondition(args[0] as DataCondition, operation);
+        } else {
+            const compiledArgs = args.map(arg => this.compileCondition(arg));
+            const operation = getOperation(condition.name);
+            return () => {
+                const args = compiledArgs.map(fn => fn());
+                return operation(args);
+            }
         }
     }
 
-    private evaluateDataCondition(condition: DataCondition): Function {
+    private evaluateDataCondition(condition: DataCondition, operation: Function): Function {
         return () => {
             const historicalData = this.getHistoricalData(condition.symbol, condition.since, condition.until);
             if (historicalData.length === 0 && condition.default) {
@@ -77,7 +80,7 @@ export class ConditionEvaluator {
             } else if (historicalData.length === 0) {
                 throw new Error('No historical data available and no default value provided.');
             }
-            return historicalData;
+            return operation(historicalData);
         }
     }
 

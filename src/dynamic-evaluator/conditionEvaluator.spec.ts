@@ -97,6 +97,98 @@ const ruleSet2: RuleSet = {
     ]
 };
 
+// Create an interesting rule set with multiple rules involving different currencies and conditions
+const ruleSet3: RuleSet = {
+    variables: {
+        "LIMIT_VALUE_BTC/USDT": 65000,
+        "LIMIT_VALUE_ETH/USDT": 3000
+    },
+    rules: [
+        {
+            name: "Rule1",
+            condition: {
+                type: ConditionType.CALL,
+                name: "<",
+                arguments: [
+                    {
+                        type: ConditionType.CALL,
+                        name: "-",
+                        arguments: [
+                            {
+                                type: ConditionType.CONSTANT,
+                                value: 107000
+                            },
+                            {
+                                type: ConditionType.CONSTANT,
+                                value: 40000
+                            }
+                        ]
+                    },
+                    {
+                        type: ConditionType.VARIABLE,
+                        name: "LIMIT_VALUE_BTC/USDT"
+                    }
+                ]
+            },
+            action: [
+                {
+                    type: "SET_VARIABLE",
+                    name: "LIMIT_VALUE_BTC/USDT",
+                    value: {
+                        type: ConditionType.CONSTANT,
+                        value: 70000
+                    }
+                }
+            ]
+        },
+        {
+            name: "Rule2Data",
+            condition: {
+                type: ConditionType.CALL,
+                name: "<",
+                arguments: [
+                    {
+                        type: ConditionType.CALL,
+                        name: "MAX",
+                        arguments: [
+                            {
+                                type: ConditionType.DATA,
+                                symbol: "ETH/USDT",
+                                since: 3600,
+                                until: 0
+                            }
+                        ]
+                    },
+                    {
+                        type: ConditionType.VARIABLE,
+                        name: "LIMIT_VALUE_ETH/USDT"
+                    }
+                ]
+            },
+            action: [
+                {
+                    type: "SELL_MARKET",
+                    symbol: "ETH/USDT",
+                    amount: {
+                        type: ConditionType.CONSTANT,
+                        value: 1
+                    }
+                },
+                {
+                    type: "SET_VARIABLE",
+                    name: "LIMIT_VALUE_ETH/USDT",
+                    value: {
+                        type: ConditionType.CONSTANT,
+                        value: 8000
+                    }
+                }
+            ]
+        }
+    ]
+};
+
+
+
 jest.mock('fs', () => ({
     readFileSync: jest.fn((filePath) => {
         switch (filePath) {
@@ -105,6 +197,13 @@ jest.mock('fs', () => ({
             default:
                 return null;
         }
+    }),
+}));
+
+// Mock the getHistoricalData function
+jest.mock('../data/database', () => ({
+    getHistoricalPairValues: jest.fn((symbol, since, until) => {
+        return [1000, 2000, 3000, 4000, 5000, 6000, 7000];
     }),
 }));
 
@@ -130,10 +229,23 @@ describe('ConditionEvaluator', () => {
         executeRuleSet(conditionEvaluator);
         let variableValue = conditionEvaluator.getVariable('LIMIT_VALUE_BTC/USDT');
         expect(variableValue).toBe(70000);
-
         result = conditionEvaluator.evaluateCondition('Escape');
         expect(result).toBe(false);
     });
+
+    it('should evaluate a condition with historical data', () => {
+        const { ConditionEvaluator } = require('./conditionEvaluator');
+        const ruleSet: RuleSet = ruleSet3;
+        console.log(ruleSet);
+        const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
+        const result = conditionEvaluator.evaluateCondition("Rule2Data");
+        expect(result).toBe(true);
+        executeRuleSet(conditionEvaluator);
+        let variableValue = conditionEvaluator.getVariable('LIMIT_VALUE_ETH/USDT');
+        expect(variableValue).toBe(8000);
+    });
+
+
 
 });
 

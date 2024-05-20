@@ -1,23 +1,30 @@
 import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
-import { connectToBinanceWebSocket, getUri } from './data/binanceConnection';
-
-//Esto no sé por qué no funciona, es lo que debería permitirnos obtener las reglas del archivo rules.json
-// function getPairsFromFile(filePath: string): any {
-//   let ruleSet = parseRules('/home/claram97/tdd/tdd-tp2/src/evaluator/rules.json');
-//   console.log(ruleSet)
-//   let pairs = collectPairsFromRuleSet(ruleSet);
-//   console.log(pairs)
-// }
-// creo q asi deberia funcionar
-function getPairsFromFile(filePath: string): any {
-    let ruleSet = parseRules(filePath);
-    console.log(ruleSet);
-    let pairs = collectPairsFromRuleSet(ruleSet);
-    console.log(pairs);
-    return { pairs, ruleSet };
-  }
-let { pairs, ruleSet } = getPairsFromFile('src/rules.json');
+import { RuleSet } from './model/types';
+import { BinanceListener } from './data/binanceConnection';
+import { evaluateRules } from './evaluator/rulesEvaluator';
+import { ConditionEvaluator } from './dynamic-evaluator/conditionEvaluator';
+import { executeRuleSet } from './dynamic-evaluator/rulesEvaluator';
 
 
-let URI = getUri(pairs);
-connectToBinanceWebSocket(URI, ruleSet);
+let ruleSet: RuleSet = parseRules('src/rules.json');
+let pairs = collectPairsFromRuleSet(ruleSet);
+
+const compiledRules = new ConditionEvaluator(ruleSet);
+const binanceData: BinanceListener = new BinanceListener(pairs);
+
+binanceData.on('error', (error) => {
+  console.error('WebSocket error:', error);
+});
+
+binanceData.on('connected', () => {
+  console.log('WebSocket connected');
+});
+
+binanceData.on('disconnected', ({ code, reason }) => {
+  console.log(`WebSocket disconnected (${code}): ${reason}`);
+});
+
+binanceData.on('update', (data) => {
+  console.log('Update from binance:', data);
+  evaluateRules(ruleSet);
+});

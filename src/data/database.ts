@@ -1,34 +1,55 @@
-import * as memjs from 'memjs';
-import * as msgpack from '@msgpack/msgpack';
-export const memcachedClient = memjs.Client.create();
+import { Value } from "../model/types";
 
 export interface Data {
     bestBidPrice: string;
     bestAskPrice: string;
-    //time: string;
+    time: Date;
 }  
 
-export async function setCache(key: string, value: Data, expires: number) {
-    const serializedValue = msgpack.encode(value);
-    const received  = await memcachedClient.set(key, Buffer.from(serializedValue), { expires });
-    if (!received) {
-        console.error('Error al establecer el valor en Memcached:');
-    } else {
-        console.log(`Valor establecido en Memcached for key: ${key}`);
+const historicalData: { [symbol: string]: Data[] } = {};
+
+const TO_HOUR = 1000;
+
+
+function calculateDateOffset(hours: number): Date {
+    const now = new Date();
+    return new Date(now.getTime() - hours * TO_HOUR);
+  }
+  
+function filterDataByDateRange(data: Data[], sinceDate: Date, untilDate: Date): Data[] {
+    return data.filter(d => d.time >= sinceDate && d.time <= untilDate);
+}
+  
+export function getHistoricalData(symbol: string, since: number, until: number): Data[] {
+    const sinceDate = calculateDateOffset(since);
+    const untilDate = calculateDateOffset(until);
+    const data = historicalData[symbol] || [];
+    return filterDataByDateRange(data, sinceDate, untilDate);
+}
+
+export function getHistoricalPairValues(symbol: string, since: number, until: number): Value[] {
+    const data = getHistoricalData(symbol, since, until);
+    return data.map(d => (d.bestBidPrice));
+}
+
+export function getLastPairValue(symbol: string): number {
+    const data = historicalData[symbol] || [];
+    return data.length > 0 ? parseFloat(data[data.length - 1].bestBidPrice) : 0;
+}
+
+export function addHistoricalData(symbol: string, data: Data): void {
+    historicalData[symbol] = [...(historicalData[symbol] || []), data];
+    console.log(historicalData[symbol].length)
+    // clearHistoricalData();
+}
+
+export function clearHistoricalData(): void {
+    const now = new Date().getTime();
+    for (const symbol in historicalData) {
+        historicalData[symbol] = historicalData[symbol].filter(d => now - new Date(d.time).getTime() <= 3600000);
     }
 }
 
-export async function getCache(key: string) : Promise<Data> {
-    const  value  = await memcachedClient.get(key);
-    if (value.value != null) {
-        let data : Data = msgpack.decode(value.value) as Data;
-        console.log('Received data is: ', data);
-        return data;
-    } else {
-        throw new Error(`Valor no encontrado en Memcached para la clave: ${key}`);
-    }
-}
-
-export async function desconnectCache() {
-    await memcachedClient.quit();
+export function getData(symbol: string, since: number, until: number): Data[] {
+    return getHistoricalData(symbol, since, until);
 }

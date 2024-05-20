@@ -14,7 +14,7 @@ export function collectPairsFromRuleSet(ruleSet: RuleSet): string[] {
         const rulePairs = extractExchangePairs(rule);
         pairs.push(...rulePairs);
     });
-    return pairs;
+    return [...new Set(pairs)];
 }
 
 export function extractExchangePairs(rule: Rule): string[] {

@@ -31,13 +31,19 @@ let { pairs, ruleSet } = getPairsFromFile('/Users/paulabruck/Desktop/FIUBA/Tecni
 console.log('Pairs from file:', pairs);
 //let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
 let URI = (0, binanceConnection_1.getUri)(pairs);
+console.log('WebSocket URI:', URI);
 (0, binanceConnection_1.connectToBinanceWebSocket)(URI, ruleSet);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log('Placing buy order...');
         const buyOrder = yield (0, binanceApi_1.placeOrder)('BTCUSDT', 'BUY', 0.01);
         console.log('Buy Order:', buyOrder);
+        console.log('Placing sell order...');
         const sellOrder = yield (0, binanceApi_1.placeOrder)('BTCUSDT', 'SELL', 0.01);
         console.log('Sell Order:', sellOrder);
+        console.log('Fetching order history...');
+        const orderHistory = yield (0, binanceApi_1.getOrderHistory)('BTCUSDT');
+        console.log('Order History:', orderHistory);
     }
     catch (error) {
         console.error('Error in placing orders:', error);

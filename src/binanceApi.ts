@@ -34,3 +34,23 @@ export async function placeOrder(symbol: string, side: 'BUY' | 'SELL', quantity:
     throw error;
   }
 }
+
+export async function getOrderHistory(symbol: string): Promise<any> {
+    const timestamp = Date.now();
+    const queryString = `symbol=${symbol}&timestamp=${timestamp}`;
+    const signature = getSignature(queryString);
+  
+    const url = `${BASE_URL}/v3/allOrders?${queryString}&signature=${signature}`;
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          'X-MBX-APIKEY': API_KEY,
+        },
+      });
+      return response.data;
+    } catch (error) {
+        console.error('Error placing order:');
+      throw error;
+    }
+  }
+  

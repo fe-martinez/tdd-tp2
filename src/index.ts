@@ -18,5 +18,6 @@ function getPairsFromFile(filePath: string): any {
   }
 let { pairs, ruleSet } = getPairsFromFile('src/rules.json');
 
+
 let URI = getUri(pairs);
 connectToBinanceWebSocket(URI, ruleSet);

@@ -26,7 +26,7 @@ function getBinanceApiURLForPlaceOrder(queryString: string, signature: string) :
   return url;
 }
 
-async function getResponse(url : string) {
+async function getResponseForPlaceOrder(url : string) {
   try {
     const response = await axios.post(url, null, {
     headers: {
@@ -44,55 +44,46 @@ export async function placeOrder(symbol: string, side: 'BUY' | 'SELL', quantity:
   const signature = getSignature(queryString);
   const url = getBinanceApiURLForPlaceOrder(queryString, signature); 
   try {
-    const response = await getResponse(url);
+    const response = await getResponseForPlaceOrder(url);
     return response;
   } catch (error) {
     throw error;
   }
 }
 
-export async function getOrderHistory(symbol: string): Promise<any> {
-    const timestamp = Date.now();
-    const queryString = `symbol=${symbol}&timestamp=${timestamp}`;
-    const signature = getSignature(queryString);
-  
-    const url = `${BASE_URL}/v3/allOrders?${queryString}&signature=${signature}`;
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          'X-MBX-APIKEY': API_KEY,
-        },
-      });
-      return response.data;
-    } catch (error) {
-        console.error('Error placing order:');
-      throw error;
-    }
+async function getResponseForOrderHistory(url : string) {
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        'X-MBX-APIKEY': API_KEY,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
   }
-
+}
   
-// function getQueryStringForOrderHistory(symbol: string) : string {
-//   const timestamp = Date.now();
-//   const queryString = `symbol=${symbol}&timestamp=${timestamp}`;
-//   return queryString
-// }
+function getQueryStringForOrderHistory(symbol: string) : string {
+  const timestamp = Date.now();
+  const queryString = `symbol=${symbol}&timestamp=${timestamp}`;
+  return queryString
+}
 
 
-// function getBinanceApiURLForOrderHistory(queryString: string, signature: string) : string {
-//   const url = `${BASE_URL}/v3/allOrders?${queryString}&signature=${signature}`;
-//   return url;
-// }
+function getBinanceApiURLForOrderHistory(queryString: string, signature: string) : string {
+  const url = `${BASE_URL}/v3/allOrders?${queryString}&signature=${signature}`;
+  return url;
+}
 
-// export async function getOrderHistory(symbol: string): Promise<any> {
-//   const queryString = getQueryStringForOrderHistory(symbol);  
-//   const signature = getSignature(queryString);
-//   const url = getBinanceApiURLForOrderHistory(queryString, signature);
-//   try {
-//     const response = await getResponse(url);
-//     return response
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-  
-  
+export async function getOrderHistory(symbol: string): Promise<any> {
+  const queryString = getQueryStringForOrderHistory(symbol);  
+  const signature = getSignature(queryString);
+  const url = getBinanceApiURLForOrderHistory(queryString, signature);
+  try {
+    const response = await getResponseForOrderHistory(url);
+    return response
+  } catch (error) {
+    throw error;
+  }
+}  

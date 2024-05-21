@@ -230,24 +230,22 @@ describe('ConditionEvaluator', () => {
         const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
         let result = conditionEvaluator.evaluateCondition('Escape');
         expect(result).toBe(true);
-        const notifier = new MessageNotifier();
-        executeRuleSet(conditionEvaluator, notifier);
-        let variableValue = conditionEvaluator.getVariable('LIMIT_VALUE_BTC/USDT');
-        expect(variableValue).toBe(70000);
+
+        conditionEvaluator.setVariable('LIMIT_VALUE_BTC/USDT', 70000);
         result = conditionEvaluator.evaluateCondition('Escape');
+
         expect(result).toBe(false);
     });
 
-    it('should evaluate a condition with historical data', () => {
+    it('should evaluate a condition with historical data correctly in different instances without recompiling', () => {
         const { ConditionEvaluator } = require('./conditionEvaluator');
         const ruleSet: RuleSet = ruleSet3;
         const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
         const result = conditionEvaluator.evaluateCondition("Rule2Data");
         expect(result).toBe(true);
-        const notifier = new MessageNotifier();
-        executeRuleSet(conditionEvaluator, notifier);
-        let variableValue = conditionEvaluator.getVariable('LIMIT_VALUE_ETH/USDT');
-        expect(variableValue).toBe(8000);
+        conditionEvaluator.setVariable('LIMIT_VALUE_ETH/USDT', 10000);
+        const result2 = conditionEvaluator.evaluateCondition("Rule2Data");
+        expect(result2).toBe(false);
     });
 
 

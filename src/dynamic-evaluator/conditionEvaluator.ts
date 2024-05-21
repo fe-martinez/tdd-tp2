@@ -1,6 +1,6 @@
 import { Action, BuyMarketAction, CallCondition, Condition, ConstantCondition, DataCondition, RuleSet, SellMarketAction, SetVariableAction, Value, VariableCondition } from "../model/types";
 import { ConditionType } from "../model/conditionTypeEnum";
-import { getOperation } from "../evaluator/operations";
+import { getOperation } from "./operations";
 import { getHistoricalPairValues } from "../data/database";
 
 export class ConditionEvaluator {
@@ -68,8 +68,6 @@ export class ConditionEvaluator {
             const operation = getOperation(condition.name);
             return () => {
                 const args = compiledArgs.map(fn => fn());
-                console.log(operation);
-                console.log(args);
                 return operation(args);
             }
         }
@@ -83,8 +81,8 @@ export class ConditionEvaluator {
             } else if (historicalData.length === 0) {
                 throw new Error('No historical data available and no default value provided.');
             }
-            console.log(historicalData);
-            return operation(historicalData);
+            const result = operation(historicalData);
+            return result;
         }
     }
 

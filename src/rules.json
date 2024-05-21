@@ -66,22 +66,22 @@
                     ]
                 },
                 {
-                    "type": "CALL",
-                    "name": "LAST",
-                    "arguments": [
+                  "type": "CALL",
+                  "name": "LAST",
+                  "arguments": [
+                    {
+                      "type": "DATA",
+                      "symbol": "BTC/USDT",
+                      "since": 3600,
+                      "until": 0,
+                      "default": [
                         {
-                            "type": "DATA",
-                            "symbol": "BTC/USDT",
-                            "from": 3600,
-                            "until": 0,
-                            "default": [
-                                {
-                                    "type": "VARIABLE",
-                                    "name": "LAST_SELL_VALUE_BTC/USDT"
-                                }
-                            ]
+                          "type": "VARIABLE",
+                          "name": "LAST_SELL_VALUE_BTC/USDT"
                         }
-                    ]
+                      ]
+                    }
+                  ]
                 }
             ]
         },

@@ -1,11 +1,9 @@
-import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
+import { collectPairsFromRuleSet, parseRules } from './parser/parser';
 import { RuleSet } from './model/types';
 import { BinanceListener } from './data/binanceConnection';
-import { evaluateRules } from './evaluator/rulesEvaluator';
 import { ConditionEvaluator } from './dynamic-evaluator/conditionEvaluator';
 import { executeRuleSet } from './dynamic-evaluator/rulesEvaluator';
 import { MessageNotifier, DiscordNotifier, SlackNotifier } from './notifier/notificationSender';
-import { placeOrder } from './data/binanceApi';
 
 let ruleSet: RuleSet = parseRules('src/rules.json');
 let pairs = collectPairsFromRuleSet(ruleSet);
@@ -15,8 +13,6 @@ const discordNotifier = new DiscordNotifier(notifier);
 discordNotifier.start();
 const slackNotifier = new SlackNotifier(notifier);
 slackNotifier.start();
-//Ejemplo para probar que el notifier funciona:
-//notifier.sendNotification('Hello world!');
 
 const binanceData: BinanceListener = new BinanceListener(pairs);
 

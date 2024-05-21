@@ -1,6 +1,7 @@
 {
     "variables": {
-      "LIMIT_VALUE_BTC/USDT": 65000
+      "LIMIT_VALUE_BTC/USDT": 65000,
+      "LAST_SELL_VALUE_BTC/USDT": 71000
     },
     "rules": [
       {

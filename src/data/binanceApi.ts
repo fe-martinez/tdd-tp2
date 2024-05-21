@@ -8,8 +8,8 @@ const BASE_URL = 'https://testnet.binance.vision/api';
 const API_KEY = process.env.BINANCE_API_KEY!;
 const API_SECRET = process.env.BINANCE_API_SECRET!;
 
-console.log('API_KEY:', API_KEY);
-console.log('API_SECRET:', API_SECRET);
+// console.log('API_KEY:', API_KEY);
+// console.log('API_SECRET:', API_SECRET);
 
 function getSignature(queryString: string): string {
   return crypto.createHmac('sha256', API_SECRET).update(queryString).digest('hex');
@@ -42,7 +42,7 @@ async function getResponseForPlaceOrder(url : string) {
 export async function placeOrder(symbol: string, side: 'BUY' | 'SELL', quantity: number): Promise<any> {
   const queryString = getQueryStringForPlaceOrder(symbol, side, quantity);
   const signature = getSignature(queryString);
-  const url = getBinanceApiURLForPlaceOrder(queryString, signature); 
+  const url = getBinanceApiURLForPlaceOrder(queryString, signature);
   try {
     const response = await getResponseForPlaceOrder(url);
     return response;

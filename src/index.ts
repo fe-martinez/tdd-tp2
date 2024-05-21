@@ -4,7 +4,7 @@ import { BinanceListener } from './data/binanceConnection';
 import { evaluateRules } from './evaluator/rulesEvaluator';
 import { ConditionEvaluator } from './dynamic-evaluator/conditionEvaluator';
 import { executeRuleSet } from './dynamic-evaluator/rulesEvaluator';
-
+import { placeOrder } from './data/binanceApi';
 
 let ruleSet: RuleSet = parseRules('src/rules.json');
 let pairs = collectPairsFromRuleSet(ruleSet);

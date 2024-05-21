@@ -1,6 +1,6 @@
 import { Action, BuyMarketAction, CallCondition, Condition, ConstantCondition, DataCondition, RuleSet, SellMarketAction, SetVariableAction, Value, VariableCondition } from "../model/types";
 import { ConditionType } from "../model/conditionTypeEnum";
-import { getOperation } from "../evaluator/operations";
+import { getOperation } from "./operations";
 import { getHistoricalPairValues } from "../data/database";
 
 export class ConditionEvaluator {
@@ -31,6 +31,8 @@ export class ConditionEvaluator {
                 return this.evaluateWallet(condition.symbol);
             case ConditionType.CALL:
                 return this.compileCallCondition(condition);
+            case ConditionType.DATA:
+                throw new Error('Data condition must always be inside a call condition.');
             default:
                 throw new Error(`Unsupported condition type: ${condition}`);
         }
@@ -53,7 +55,6 @@ export class ConditionEvaluator {
     private evaluateWallet(symbol: string): Function {
         return () => 0;
     }
-    
 
     private compileCallCondition(condition: CallCondition): Function {
         const args = Array.isArray(condition.arguments) ? condition.arguments : [condition.arguments];
@@ -80,7 +81,8 @@ export class ConditionEvaluator {
             } else if (historicalData.length === 0) {
                 throw new Error('No historical data available and no default value provided.');
             }
-            return operation(historicalData);
+            const result = operation(historicalData);
+            return result;
         }
     }
 

@@ -1,6 +1,7 @@
 import { collectPairsFromRuleSet, parseRules } from './evaluator/parser';
 import { connectToBinanceWebSocket, getUri } from './data/binanceConnection';
 import { placeOrder , getOrderHistory} from './data/binanceApi';
+import { sendMessage } from './notifier/notificationSender';
 
 // creo q asi deberia funcionar
 // function getPairsFromFile(filePath: string): any {
@@ -28,21 +29,21 @@ import { placeOrder , getOrderHistory} from './data/binanceApi';
 //   }
 // let { pairs, ruleSet } = getPairsFromFile('src/rules.json');
 
-(async () => {
-    try {
-      //  console.log('Placing buy order...');
-      //  const buyOrder = await placeOrder('BTCUSDT', 'BUY', 0.01);
-      //  console.log('Buy Order:', buyOrder);
+// (async () => {
+//     try {
+//       //  console.log('Placing buy order...');
+//       //  const buyOrder = await placeOrder('BTCUSDT', 'BUY', 0.01);
+//       //  console.log('Buy Order:', buyOrder);
   
-      //  console.log('Placing sell order...');
-      //  const sellOrder = await placeOrder('BTCUSDT', 'SELL', 0.01);
-      //  console.log('Sell Order:', sellOrder);
+//       //  console.log('Placing sell order...');
+//       //  const sellOrder = await placeOrder('BTCUSDT', 'SELL', 0.01);
+//       //  console.log('Sell Order:', sellOrder);
       
-       console.log('Fetching order history...');
-       const orderHistory = await getOrderHistory('BTCUSDT');
-       console.log('Order History:', orderHistory);
-    } catch (error) {
-      console.error('Error in placing orders:', error);
-    }
-})();
-  
+//        console.log('Fetching order history...');
+//        const orderHistory = await getOrderHistory('BTCUSDT');
+//        console.log('Order History:', orderHistory);
+//     } catch (error) {
+//       console.error('Error in placing orders:', error);
+//     }
+// })();
+//sendMessage("Hola bebetos, tengo logo, estoy liste para informar las alertas de Binance, soy un bot NO BINARIE")

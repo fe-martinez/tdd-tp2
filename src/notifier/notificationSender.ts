@@ -10,7 +10,7 @@ export function sendMessage(message: string) {
     webhookClient.send({
         content: message,
         username: 'Messirve Binance',
-        avatarURL: 'https://i.imgur.com/AfFp7pu.png',
+        avatarURL: 'https://i.imgur.com/t4lccrE.png',
         //embeds: [embed],
     });
 }

@@ -15,22 +15,22 @@ const sum = (args: Value[]): number =>
   ? (args as number[]).reduce((acc, val) => acc + val, 0)
   : (() => { throw new Error('Invalid number of arguments') })();
 
-const greaterThan = (args: Value[]): boolean =>
+const lessThan = (args: Value[]): boolean =>
   args.length > 0
   ? args.every((value, i, arr) => i === 0 || (value as number) > (arr[i - 1] as number))
   : (() => { throw new Error('Invalid number of arguments') })();
 
-const lessThan = (args: Value[]): boolean =>
+const greaterThan = (args: Value[]): boolean =>
   args.length > 0
   ? args.every((value, i, arr) => i === 0 || (value as number) < (arr[i - 1] as number))
   : (() => { throw new Error('Invalid number of arguments') })();
 
-const greaterOrEqualThan = (args: Value[]): boolean =>
+const lessOrEqualThan = (args: Value[]): boolean =>
   args.length > 0
   ? args.every((value, i, arr) => i === 0 || (value as number) >= (arr[i - 1] as number))
   : (() => { throw new Error('Invalid number of arguments') })();
 
-const lessOrEqualThan = (args: Value[]): boolean =>
+const greaterOrEqualThan = (args: Value[]): boolean =>
   args.length > 0
   ? args.every((value, i, arr) => i === 0 || (value as number) <= (arr[i - 1] as number))
   : (() => { throw new Error('Invalid number of arguments') })();

@@ -27,9 +27,12 @@ export function getHistoricalData(symbol: string, since: number, until: number):
     return filterDataByDateRange(data, sinceDate, untilDate);
 }
 
-export function getHistoricalPairValues(symbol: string, since: number, until: number): Value[] {
+export function getHistoricalPairValues(symbol: string, since: number, until: number): number[] {
+    if(symbol.includes("/")) {
+        symbol = symbol.replace("/", "");
+    }
     const data = getHistoricalData(symbol, since, until);
-    return data.map(d => (d.bestBidPrice));
+    return data.map(d => parseFloat(d.bestBidPrice));
 }
 
 export function getLastPairValue(symbol: string): number {
@@ -43,13 +46,10 @@ export function addHistoricalData(symbol: string, data: Data): void {
     // clearHistoricalData();
 }
 
-export function clearHistoricalData(): void {
+
+function clearHistoricalData(): void {
     const now = new Date().getTime();
     for (const symbol in historicalData) {
         historicalData[symbol] = historicalData[symbol].filter(d => now - new Date(d.time).getTime() <= 3600000);
     }
-}
-
-export function getData(symbol: string, since: number, until: number): Data[] {
-    return getHistoricalData(symbol, since, until);
 }

@@ -5,6 +5,7 @@ import { evaluateRules } from './evaluator/rulesEvaluator';
 import { ConditionEvaluator } from './dynamic-evaluator/conditionEvaluator';
 import { executeRuleSet } from './dynamic-evaluator/rulesEvaluator';
 import { MessageNotifier, DiscordNotifier, SlackNotifier } from './notifier/notificationSender';
+import { placeOrder } from './data/binanceApi';
 
 let ruleSet: RuleSet = parseRules('src/rules.json');
 let pairs = collectPairsFromRuleSet(ruleSet);
@@ -37,3 +38,16 @@ binanceData.on('update', (data) => {
   }
   console.log('Update from binance:', data);
 });
+
+//Para probar que la wallet siga funcionando
+// async function order() {
+//   try {
+//     var order = await placeOrder('BTCUSDT', 'BUY', 0.001);
+//     console.log(order);
+//   }
+//   catch (error) {
+//     console.error('Error al enviar la orden:', error);
+//   }
+// }
+
+// order();

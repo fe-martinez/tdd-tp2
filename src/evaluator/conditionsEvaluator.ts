@@ -1,6 +1,7 @@
 import { Condition, DataCondition, Value } from "../model/types";
 import { getOperation } from "./operations"
 import { ConditionType } from "../model/conditionTypeEnum";
+import { getHistoricalPairValues } from "../data/database";
 
 
 export function evaluateCondition(condition: Condition, variables: { [name: string]: Value }): Value {
@@ -48,22 +49,20 @@ function evaluateCall(name: string, conditions: Condition[], variables: { [name:
 }
 
 function handleDataCondition(name: string, condition: DataCondition, variables: { [name: string]: Value }): Value {
-    const { symbol, since, until, default: defaultValues } = condition;
-  
-    const historicalData = getHistoricalData(symbol, since, until);
+    // Parse the symbol to get the / out
+    let symbol = condition.symbol.replace('/', '');
+    const historicalData = getHistoricalData(symbol, condition.since, condition.until);
     const operation = getOperation(name)
 
-    if (historicalData.length === 0 && defaultValues) {
-      return operation(defaultValues.map(value => evaluateCondition(value, variables)));
+    if (historicalData.length === 0 && condition.default) {
+      return operation(condition.default.map(value => evaluateCondition(value, variables)));
     } else if (historicalData.length === 0) {
-      throw new Error('No historical data available and no default value provided.');
+      throw new Error(`No historical data available for pair ${symbol} and no default value provided.`);
     }
   
     return operation(historicalData);
 }
 
-function getHistoricalData(symbol: string, since: Number, until: Number): Value[] {
-    // Placeholder
-    // Maybe this will go in another module
-    return [65000];
+function getHistoricalData(symbol: string, since: number, until: number): Value[] {
+    return getHistoricalPairValues(symbol, since, until);
 }

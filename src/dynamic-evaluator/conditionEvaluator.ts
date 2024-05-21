@@ -1,6 +1,7 @@
 import { Action, BuyMarketAction, CallCondition, Condition, ConstantCondition, DataCondition, RuleSet, SellMarketAction, SetVariableAction, Value, VariableCondition } from "../model/types";
 import { ConditionType } from "../model/conditionTypeEnum";
 import { getOperation } from "../evaluator/operations";
+import { getHistoricalPairValues } from "../data/database";
 
 export class ConditionEvaluator {
     private compiledConditions: { [name: string]: Function } = {};
@@ -81,7 +82,7 @@ export class ConditionEvaluator {
     }
 
     private getHistoricalData(symbol: string, since: number, until: number): Value[] {
-        return [80000];
+        return getHistoricalPairValues(symbol, since, until);
     }
 
     public evaluateCondition(ruleName: string): boolean {

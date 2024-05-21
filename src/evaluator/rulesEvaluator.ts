@@ -30,6 +30,7 @@ export async function executeAction(action: Action, variables: { [name: string]:
       break;
     case 'SET_VARIABLE':
       const newValue = evaluateCondition(action.value, variables);
+      console.log("Set " + action.name + " to " + newValue)
       variables[action.name] = newValue;
       break;
     default:

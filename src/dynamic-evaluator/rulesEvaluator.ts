@@ -4,12 +4,15 @@ import { ConditionEvaluator } from "./conditionEvaluator";
 function executeAction(action: Action, conditionEvaluator: ConditionEvaluator): void {
     switch (action.type) {
         case 'BUY_MARKET':
+            console.log(action)
             executeBuyMarketAction(action as BuyMarketAction, conditionEvaluator);
             break;
         case 'SELL_MARKET':
+            console.log(action)
             executeSellMarketAction(action as SellMarketAction, conditionEvaluator);
             break;
         case 'SET_VARIABLE':
+            console.log(action)
             executeSetVariableAction(action as SetVariableAction, conditionEvaluator);
             break;
         default:

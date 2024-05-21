@@ -1,20 +1,37 @@
 import { EmbedBuilder, WebhookClient } from "discord.js";
+import { EventEmitter } from 'events';
 
-const webhookClient = new WebhookClient({ url: 'https://discord.com/api/webhooks/1241441022748135454/0VIYKTE0O5FSSMTV5oFbFpQdU7EOLfMSghjscvxiXeiaJjTqrIJR1hpfcGKvDm9yfz_r' });
+const webHookUrl = 'https://discord.com/api/webhooks/1241441022748135454/0VIYKTE0O5FSSMTV5oFbFpQdU7EOLfMSghjscvxiXeiaJjTqrIJR1hpfcGKvDm9yfz_r'
 
-const embed = new EmbedBuilder()
-	.setTitle('Some Title')
-	.setColor(0x00FFFF);
-
-export function sendMessage(message: string) {
-    webhookClient.send({
-        content: message,
-        username: 'Messirve Binance',
-        avatarURL: 'https://i.imgur.com/t4lccrE.png',
-        //embeds: [embed],
-    });
+export class MessageNotifier extends EventEmitter {
+    public constructor() {
+        super();
+    }
+    public sendNotification(message: string) {
+        this.emit('message', message);
+    }
 }
 
-export function hola() {
+export class DiscordNotifier {
+    private webhookClient: WebhookClient;
+    private notifier : MessageNotifier;
+
+    public constructor(notifier : MessageNotifier) {
+        this.webhookClient = new WebhookClient({ url: webHookUrl });
+        this.notifier = notifier;
+    }
+  
+    public start() {
+        this.notifier.on('message', (message) => {
+            this.sendNotification(message);
+        });
+    }
     
+    sendNotification(message: string) {
+        this.webhookClient.send({
+            content: message,
+            username: 'Messirve Binance',
+            avatarURL: 'https://i.imgur.com/t4lccrE.png',
+        });
+    }
 }

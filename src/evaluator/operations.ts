@@ -1,4 +1,4 @@
-import { Value } from './types';
+import { Value } from '../model/types';
 
 const equal = (args: Value[]): boolean =>
   args.length > 0

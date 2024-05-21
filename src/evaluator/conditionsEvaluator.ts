@@ -1,6 +1,6 @@
-import { Condition, DataCondition, Value } from "./types";
+import { Condition, DataCondition, Value } from "../model/types";
 import { getOperation } from "./operations"
-import { ConditionType } from "./conditionTypeEnum";
+import { ConditionType } from "../model/conditionTypeEnum";
 
 
 export function evaluateCondition(condition: Condition, variables: { [name: string]: Value }): Value {
@@ -35,14 +35,16 @@ function evaluateWallet(symbol: string): Value {
     return false;
 }
 
-function evaluateCall(name: string, conditions: Condition[] | DataCondition, variables: { [name: string]: Value }): Value {
-    if (Array.isArray(conditions)) {
-        const args = conditions.map(arg => evaluateCondition(arg, variables));
-        const operation = getOperation(name);
-        return operation(args);
-    } else {
-        return handleDataCondition(name, conditions, variables);
-    }
+function evaluateCall(name: string, conditions: Condition[], variables: { [name: string]: Value }): Value {
+    const args = conditions.map(arg => {
+        if (arg.type === ConditionType.DATA) {
+            return handleDataCondition(name, arg, variables);
+        } else {
+            return evaluateCondition(arg, variables);
+        }
+    });
+    const operation = getOperation(name);
+    return operation(args);
 }
 
 function handleDataCondition(name: string, condition: DataCondition, variables: { [name: string]: Value }): Value {
@@ -63,5 +65,5 @@ function handleDataCondition(name: string, condition: DataCondition, variables: 
 function getHistoricalData(symbol: string, since: Number, until: Number): Value[] {
     // Placeholder
     // Maybe this will go in another module
-    return [];
+    return [65000];
 }

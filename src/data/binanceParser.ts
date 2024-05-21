@@ -1,4 +1,5 @@
 const BINANCE_ENDPOINT = 'wss://stream.binance.com:9443/ws/';
+
 interface OrderBook {
     updateID: number;
     symbol: string;

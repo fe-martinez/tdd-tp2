@@ -14,6 +14,9 @@ export function getHistoricalData(symbol: string, since: number, until: number):
 }
 
 export function getHistoricalPairValues(symbol: string, since: number, until: number): number[] {
+    if(symbol.includes("/")) {
+        symbol = symbol.replace("/", "");
+    }
     const data = getHistoricalData(symbol, since, until);
     return data.map(d => parseFloat(d.bestBidPrice));
 }

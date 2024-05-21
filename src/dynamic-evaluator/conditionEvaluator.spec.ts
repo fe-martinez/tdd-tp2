@@ -12,7 +12,7 @@ const ruleSet1: RuleSet = {
             name: "Escape",
             condition: {
                 type: ConditionType.CALL,
-                name: "<",
+                name: ">",
                 arguments: [
                     {
                         type: ConditionType.CALL,
@@ -57,7 +57,7 @@ const ruleSet2: RuleSet = {
             name: "Escape",
             condition: {
                 type: ConditionType.CALL,
-                name: "<",
+                name: ">",
                 arguments: [
                     {
                         type: ConditionType.CALL,
@@ -108,7 +108,7 @@ const ruleSet3: RuleSet = {
             name: "Rule1",
             condition: {
                 type: ConditionType.CALL,
-                name: "<",
+                name: ">",
                 arguments: [
                     {
                         type: ConditionType.CALL,
@@ -145,7 +145,7 @@ const ruleSet3: RuleSet = {
             name: "Rule2Data",
             condition: {
                 type: ConditionType.CALL,
-                name: "<",
+                name: ">",
                 arguments: [
                     {
                         type: ConditionType.CALL,
@@ -213,7 +213,6 @@ describe('ConditionEvaluator', () => {
     it('should evaluate a simple condition', () => {
         const { ConditionEvaluator } = require('./conditionEvaluator');
         const ruleSet: RuleSet = ruleSet1;
-        console.log(ruleSet);
         const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
         const result = conditionEvaluator.evaluateCondition('Escape');
         expect(result).toBe(false);
@@ -222,7 +221,6 @@ describe('ConditionEvaluator', () => {
     it('should evaluate true the first time and false the second time', () => {
         const { ConditionEvaluator } = require('./conditionEvaluator');
         const ruleSet: RuleSet = ruleSet2;
-        console.log(ruleSet);
         const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
         let result = conditionEvaluator.evaluateCondition('Escape');
         expect(result).toBe(true);
@@ -236,7 +234,6 @@ describe('ConditionEvaluator', () => {
     it('should evaluate a condition with historical data', () => {
         const { ConditionEvaluator } = require('./conditionEvaluator');
         const ruleSet: RuleSet = ruleSet3;
-        console.log(ruleSet);
         const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
         const result = conditionEvaluator.evaluateCondition("Rule2Data");
         expect(result).toBe(true);

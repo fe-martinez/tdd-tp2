@@ -9,21 +9,21 @@ import { placeOrder , getOrderHistory} from './binanceApi';
 //   console.log(pairs)
 // }
 // creo q asi deberia funcionar
-function getPairsFromFile(filePath: string): any {
-    let ruleSet = parseRules(filePath);
-    console.log(ruleSet);
-    let pairs = collectPairsFromRuleSet(ruleSet);
-    console.log(pairs);
-    return { pairs, ruleSet };
-  }
-let { pairs, ruleSet } = getPairsFromFile('/Users/paulabruck/Desktop/FIUBA/Tecnicas_De_Diseño/tdd-tp2/src/evaluator/rules.json');
-console.log('Pairs from file:', pairs);
+// function getPairsFromFile(filePath: string): any {
+//     let ruleSet = parseRules(filePath);
+//     console.log(ruleSet);
+//     let pairs = collectPairsFromRuleSet(ruleSet);
+//     console.log(pairs);
+//     return { pairs, ruleSet };
+//   }
+// let { pairs, ruleSet } = getPairsFromFile('/Users/paulabruck/Desktop/FIUBA/Tecnicas_De_Diseño/tdd-tp2/src/evaluator/rules.json');
+// console.log('Pairs from file:', pairs);
 
-//let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
+// //let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
 
-let URI = getUri(pairs);
-console.log('WebSocket URI:', URI);
-connectToBinanceWebSocket(URI, ruleSet);
+// let URI = getUri(pairs);
+// console.log('WebSocket URI:', URI);
+// connectToBinanceWebSocket(URI, ruleSet);
 
 (async () => {
     try {
@@ -34,10 +34,11 @@ connectToBinanceWebSocket(URI, ruleSet);
       console.log('Placing sell order...');
       const sellOrder = await placeOrder('BTCUSDT', 'SELL', 0.01);
       console.log('Sell Order:', sellOrder);
+      
   
-      console.log('Fetching order history...');
-      const orderHistory = await getOrderHistory('BTCUSDT');
-      console.log('Order History:', orderHistory);
+      // console.log('Fetching order history...');
+      // const orderHistory = await getOrderHistory('BTCUSDT');
+      // console.log('Order History:', orderHistory);
     } catch (error) {
       console.error('Error in placing orders:', error);
     }

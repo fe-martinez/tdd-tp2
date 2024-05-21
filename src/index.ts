@@ -24,8 +24,9 @@ binanceData.on('disconnected', ({ code, reason }) => {
   console.log(`WebSocket disconnected (${code}): ${reason}`);
 });
 
-//ExecuteRuleSet es asíncrona, hay que ver si funciona porque no puedo llamarla con await :/
 binanceData.on('update', (data) => {
+  async () => {
+    await executeRuleSet(compiledRules);
+  }
   console.log('Update from binance:', data);
-  executeRuleSet(compiledRules);
 });

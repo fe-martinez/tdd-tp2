@@ -25,5 +25,5 @@ binanceData.on('disconnected', ({ code, reason }) => {
 
 binanceData.on('update', (data) => {
   console.log('Update from binance:', data);
-  evaluateRules(ruleSet);
+  executeRuleSet(compiledRules);
 });

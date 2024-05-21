@@ -1,6 +1,7 @@
 {
     "variables": {
-      "LIMIT_VALUE_BTC/USDT": 65000
+      "LIMIT_VALUE_BTC/USDT": 65000,
+      "LAST_SELL_VALUE_BTC/USDT": 65000
     },
     "rules": [
       {
@@ -48,7 +49,7 @@
         "name": "Vender si sube 15%",
         "condition": {
             "type": "CALL",
-            "name": ">",
+            "name": "<",
             "arguments": [
                 {
                     "type": "CALL",
@@ -72,7 +73,13 @@
                             "type": "DATA",
                             "symbol": "BTC/USDT",
                             "from": 3600,
-                            "until": 0
+                            "until": 0,
+                            "default": [
+                                {
+                                    "type": "VARIABLE",
+                                    "name": "LAST_SELL_VALUE_BTC/USDT"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -97,8 +104,14 @@
                         {
                             "type": "DATA",
                             "symbol": "BTC/USDT",
-                            "from": 3600,
-                            "until": 0
+                            "since": 3600,
+                            "until": 0,
+                            "default": [
+                                {
+                                    "type": "VARIABLE",
+                                    "name": "LAST_SELL_VALUE_BTC/USDT"
+                                }
+                            ]
                         }
                     ]
                 }

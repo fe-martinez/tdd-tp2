@@ -42,7 +42,7 @@ function executeSetVariableAction(action: SetVariableAction, conditionEvaluator:
     console.log(`Setting variable ${action.name} to ${value}`);
 }
 
-export function executeRuleSet(compiledRules: ConditionEvaluator) {
+export async function executeRuleSet(compiledRules: ConditionEvaluator) {
     const rules = compiledRules.ruleMap;
     Object.keys(rules).forEach(ruleName => {
         const rule = rules[ruleName];

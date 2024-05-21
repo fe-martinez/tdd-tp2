@@ -3,11 +3,11 @@ import { Action, RuleSet, Value } from "../model/types";
 import { placeOrder } from "../data/binanceApi";
 import { sendMessage } from "../notifier/notificationSender";
 
-export function evaluateRules(ruleSet: RuleSet) {
+export async function evaluateRules(ruleSet: RuleSet) {
   for (const rule of ruleSet.rules) {
     if (evaluateCondition(rule.condition, ruleSet.variables)) {
       for (const action of rule.action) {
-        executeAction(action, ruleSet.variables);
+        await executeAction(action, ruleSet.variables);
       }
     }
   }

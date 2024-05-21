@@ -46,7 +46,9 @@ export async function executeRuleSet(compiledRules: ConditionEvaluator, notifier
     const rules = compiledRules.ruleMap;
     Object.keys(rules).forEach(ruleName => {
         const rule = rules[ruleName];
+        console.log(`Evaluating rule ${ruleName}`);
         if (rule.condition()) {
+            console.log(`Executing rule ${ruleName}`);
             rule.actions.forEach(action => executeAction(action, compiledRules, notifier));
         }
     });

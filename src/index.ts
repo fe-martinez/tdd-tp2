@@ -33,10 +33,13 @@ binanceData.on('disconnected', ({ code, reason }) => {
 });
 
 binanceData.on('update', (data) => {
-  async () => {
-    await executeRuleSet(compiledRules, notifier);
-  }
-  console.log('Update from binance:', data);
+  executeRuleSet(compiledRules, notifier)
+    .then(() => {
+      console.log('Update from binance:', data);
+    })
+    .catch((error) => {
+      console.error('Error executing rule set:', error);
+    });
 });
 
 //Para probar que la wallet siga funcionando

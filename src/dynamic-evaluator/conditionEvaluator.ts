@@ -31,6 +31,8 @@ export class ConditionEvaluator {
                 return this.evaluateWallet(condition.symbol);
             case ConditionType.CALL:
                 return this.compileCallCondition(condition);
+            case ConditionType.DATA:
+                throw new Error('Data condition must always be inside a call condition.');
             default:
                 throw new Error(`Unsupported condition type: ${condition}`);
         }
@@ -53,7 +55,6 @@ export class ConditionEvaluator {
     private evaluateWallet(symbol: string): Function {
         return () => 0;
     }
-    
 
     private compileCallCondition(condition: CallCondition): Function {
         const args = Array.isArray(condition.arguments) ? condition.arguments : [condition.arguments];
@@ -67,6 +68,8 @@ export class ConditionEvaluator {
             const operation = getOperation(condition.name);
             return () => {
                 const args = compiledArgs.map(fn => fn());
+                console.log(operation);
+                console.log(args);
                 return operation(args);
             }
         }
@@ -80,6 +83,7 @@ export class ConditionEvaluator {
             } else if (historicalData.length === 0) {
                 throw new Error('No historical data available and no default value provided.');
             }
+            console.log(historicalData);
             return operation(historicalData);
         }
     }

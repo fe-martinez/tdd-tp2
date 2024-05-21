@@ -1,17 +1,18 @@
 import axios from 'axios';
 import * as crypto from 'crypto';
-import * as dotenv from 'dotenv';
 
-dotenv.config();
+require('dotenv').config();
 
 const BASE_URL = 'https://testnet.binance.vision/api';
-const API_KEY = process.env.BINANCE_API_KEY!;
-const API_SECRET = process.env.BINANCE_API_SECRET!;
+const API_KEY = process.env.BINANCE_API_KEY;
+const API_SECRET = process.env.BINANCE_API_SECRET;
 
 // console.log('API_KEY:', API_KEY);
 // console.log('API_SECRET:', API_SECRET);
 
 function getSignature(queryString: string): string {
+  if(!API_SECRET) throw new Error('API_SECRET is not defined');
+
   return crypto.createHmac('sha256', API_SECRET).update(queryString).digest('hex');
 }
 

@@ -207,8 +207,14 @@ jest.mock('../data/database', () => ({
     }),
 }));
 
+jest.mock('../notifier/notificationSender', () => {
+    return jest.fn().mockImplementation(() => {
+        return {notify: jest.fn()};
+    });
+});
 
 describe('ConditionEvaluator', () => {
+    const MessageNotifier = require('../notifier/notificationSender');
 
     it('should evaluate a simple condition', () => {
         const { ConditionEvaluator } = require('./conditionEvaluator');
@@ -224,7 +230,8 @@ describe('ConditionEvaluator', () => {
         const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
         let result = conditionEvaluator.evaluateCondition('Escape');
         expect(result).toBe(true);
-        executeRuleSet(conditionEvaluator);
+        const notifier = new MessageNotifier();
+        executeRuleSet(conditionEvaluator, notifier);
         let variableValue = conditionEvaluator.getVariable('LIMIT_VALUE_BTC/USDT');
         expect(variableValue).toBe(70000);
         result = conditionEvaluator.evaluateCondition('Escape');
@@ -237,7 +244,8 @@ describe('ConditionEvaluator', () => {
         const conditionEvaluator: ConditionEvaluator = new ConditionEvaluator(ruleSet);
         const result = conditionEvaluator.evaluateCondition("Rule2Data");
         expect(result).toBe(true);
-        executeRuleSet(conditionEvaluator);
+        const notifier = new MessageNotifier();
+        executeRuleSet(conditionEvaluator, notifier);
         let variableValue = conditionEvaluator.getVariable('LIMIT_VALUE_ETH/USDT');
         expect(variableValue).toBe(8000);
     });

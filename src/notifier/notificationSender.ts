@@ -14,3 +14,7 @@ export function sendMessage(message: string) {
         //embeds: [embed],
     });
 }
+
+export function hola() {
+    
+}

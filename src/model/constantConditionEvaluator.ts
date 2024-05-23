@@ -1,11 +1,11 @@
-type ConstantConditionEvaluatorType = number | boolean | string;
+import { ConditionEvaluator, ConditionEvaluatorType, ConditionEvaluatorVariables } from "./conditionEvaluator";
 
-export default class ConstantConditionEvaluator {
-    private value: ConstantConditionEvaluatorType;
-    constructor(value: ConstantConditionEvaluatorType) {
+export default class ConstantConditionEvaluator implements ConditionEvaluator {
+    private value: ConditionEvaluatorType;
+    constructor(value: ConditionEvaluatorType) {
         this.value = value;
     }
-    evaluate() {
+    evaluate(variables: ConditionEvaluatorVariables): ConditionEvaluatorType {
         return this.value;
     }
 }

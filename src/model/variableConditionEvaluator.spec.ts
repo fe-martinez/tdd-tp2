@@ -1,3 +1,4 @@
+import { InexistentVariableError } from './conditionEvaluator';
 import VariableConditionEvaluator from './variableConditionEvaluator';
 
 describe('VariableConditionEvaluator', () => {
@@ -22,5 +23,10 @@ describe('VariableConditionEvaluator', () => {
         expect(constantValueConditionEvaluator.evaluate(variables)).toBe(5000);
         updateVariable(variables, "MY_VARIABLE_NAME", 10000);
         expect(constantValueConditionEvaluator.evaluate(variables)).toBe(10000);
+    });
+
+    it('should throw error if variable not found', () => {
+        const variableValueConditionEvaluator = new VariableConditionEvaluator("MY_INEXISTENT_VARIABLE_NAME");
+        expect(() => variableValueConditionEvaluator.evaluate(variables)).toThrow(InexistentVariableError);
     });
 });

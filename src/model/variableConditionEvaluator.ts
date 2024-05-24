@@ -1,4 +1,4 @@
-import { ConditionEvaluator, ConditionEvaluatorType, ConditionEvaluatorVariables } from "./conditionEvaluator";
+import { ConditionEvaluator, ConditionEvaluatorType, ConditionEvaluatorVariables, InexistentVariableError } from "./conditionEvaluator";
 
 export default class VariableConditionEvaluator implements ConditionEvaluator {
     private variableName: string;
@@ -6,6 +6,10 @@ export default class VariableConditionEvaluator implements ConditionEvaluator {
         this.variableName = variableName;
     }
     evaluate(variables: ConditionEvaluatorVariables): ConditionEvaluatorType {
-        return variables.get(this.variableName);
+        const value = variables.get(this.variableName);
+        if (!value) {
+            throw new InexistentVariableError(`Variable ${this.variableName} not found`);
+        }
+        return value;
     }
 }

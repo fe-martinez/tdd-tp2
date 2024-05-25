@@ -1,4 +1,4 @@
-import { getOperation } from "../dynamic-evaluator/operations";
+import { getOperation } from "../../dynamic-evaluator/operations";
 import { ConditionEvaluator, ConditionEvaluatorType, ConditionEvaluatorVariables } from "./conditionEvaluator";
 
 

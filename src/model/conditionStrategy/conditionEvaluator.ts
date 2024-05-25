@@ -1,5 +1,5 @@
-export type ConditionEvaluatorVariables = Map<string, number>;
 export type ConditionEvaluatorType = number | boolean | string;
+export type ConditionEvaluatorVariables = Map<string, ConditionEvaluatorType>;
 
 export class InexistentVariableError extends Error {
     constructor(variableName: string) {

@@ -8,7 +8,7 @@ export default class TestMarketDataApi implements MarketDataApi {
         this.wallet = new Map<string, number>();
     }
 
-    async setWallet(symbol: string, amount: number) { // only for testing
+    async _setWallet(symbol: string, amount: number) { // only for testing
         this.wallet.set(symbol, amount);
     }
 
@@ -26,7 +26,15 @@ export default class TestMarketDataApi implements MarketDataApi {
         this.wallet.set(base, baseAmount + amount);
         this.wallet.set(quote, quoteAmount - amount);
     }
-    // async sellMarket(symbol, amount) {
-    //     this.wallet[symbol] = (this.wallet[symbol] || 0) - amount;
-    // }
+    async sellMarket(symbol: string, amount: number) {
+        const [base, quote] = symbol.split('/');
+        const baseAmount = await this.getWallet(base);
+        const quoteAmount = await this.getWallet(quote);
+        if (baseAmount < amount) {
+            return Promise.reject(new InsufficientFundsError(`Insufficient funds of ${base} to sell market`));
+        }
+        // for test purposes, we don't check cotization
+        this.wallet.set(base, baseAmount - amount);
+        this.wallet.set(quote, quoteAmount + amount);
+    }
 }

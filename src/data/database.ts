@@ -42,14 +42,24 @@ export function getLastPairValue(symbol: string): number {
 
 export function addHistoricalData(symbol: string, data: Data): void {
     historicalData[symbol] = [...(historicalData[symbol] || []), data];
-    console.log(historicalData[symbol].length)
-    // clearHistoricalData();
+    //console.log(historicalData[symbol].length)
+    console.log(`Datos históricos actualizados para el símbolo ${symbol}:`, historicalData[symbol]);
+
+     //clearHistoricalData();
 }
 
 
-function clearHistoricalData(): void {
+export function clearHistoricalData(): void {
     const now = new Date().getTime();
     for (const symbol in historicalData) {
         historicalData[symbol] = historicalData[symbol].filter(d => now - new Date(d.time).getTime() <= 3600000);
     }
+    console.log(`AAAA`);
+}
+
+export function clearAllHistoricalData(): void {
+    for (const symbol in historicalData) {
+        delete historicalData[symbol];
+    }
+    console.log('All historical data cleared');
 }

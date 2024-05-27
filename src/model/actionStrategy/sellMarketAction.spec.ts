@@ -4,7 +4,7 @@ import { InvalidAmountError } from "../MarketDataApi/marketDataApi";
 import TestMarketDataApi from "../MarketDataApi/testMarketDataApi";
 import { SellMarketAction } from "./sellMarketAction";
 
-describe('BuyMarketAction', () => {
+describe('SellMarketAction', () => {
     const marketDataApi = new TestMarketDataApi();
     const variables = new Map<string, ConditionEvaluatorType>();
     beforeEach(() => {

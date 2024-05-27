@@ -13,7 +13,7 @@ export class BuyMarketAction implements Action {
         this.amount = amount;
     }
     async execute(variables: ConditionEvaluatorVariables) {
-        const amount = this.amount.evaluate(variables);
+        const amount = await this.amount.evaluate(variables);
         if (typeof amount !== 'number') {
             return Promise.reject(new InvalidAmountError(`Amount must be a number, but it is ${amount}`));
         }

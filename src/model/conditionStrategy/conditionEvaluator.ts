@@ -12,5 +12,5 @@ export class InexistentVariableError extends Error {
 }
 
 export interface ConditionEvaluator {
-    evaluate(variables: ConditionEvaluatorVariables): ConditionEvaluatorType;
+    evaluate(variables: ConditionEvaluatorVariables): Promise<ConditionEvaluatorType>;
 }

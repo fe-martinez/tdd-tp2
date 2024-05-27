@@ -24,8 +24,12 @@ export default class CallConditionEvaluator implements ConditionEvaluator {
         return new CallConditionEvaluator(json.name, args);
     }
 
-    evaluate(variables: ConditionEvaluatorVariables): ConditionEvaluatorType {
-        const args = this.args.map(arg => arg.evaluate(variables));
-        return this.operation(args);
+    async evaluate(variables: ConditionEvaluatorVariables): Promise<ConditionEvaluatorType> {
+        try {
+            const args = await Promise.all(this.args.map(arg => arg.evaluate(variables)));
+            return Promise.resolve(this.operation(args));
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 }

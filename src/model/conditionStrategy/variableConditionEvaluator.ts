@@ -15,11 +15,11 @@ export default class VariableConditionEvaluator implements ConditionEvaluator {
         return new VariableConditionEvaluator(json.name);
     }
 
-    evaluate(variables: ConditionEvaluatorVariables): ConditionEvaluatorType {
+    evaluate(variables: ConditionEvaluatorVariables): Promise<ConditionEvaluatorType> {
         const value = variables.get(this.variableName);
         if (!value) {
             throw new InexistentVariableError(`Variable ${this.variableName} not found`);
         }
-        return value;
+        return Promise.resolve(value);
     }
 }

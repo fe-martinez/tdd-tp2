@@ -15,7 +15,7 @@ export default class ConstantConditionEvaluator implements ConditionEvaluator {
         return new ConstantConditionEvaluator(json.value);
     }
 
-    evaluate(variables: ConditionEvaluatorVariables): ConditionEvaluatorType {
-        return this.value;
+    evaluate(variables: ConditionEvaluatorVariables): Promise<ConditionEvaluatorType> {
+        return Promise.resolve(this.value);
     }
 }

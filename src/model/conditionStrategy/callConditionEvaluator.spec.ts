@@ -4,35 +4,35 @@ import VariableConditionEvaluator from "./variableConditionEvaluator";
 
 describe('ConstatConditionEvaluator', () => {
     const variables = new Map<string, number>();
-    it('should evaluate arguments and execute operation', () => {
+    it('should evaluate arguments and execute operation', async () => {
         const args = [new ConstantConditionEvaluator(5000), new ConstantConditionEvaluator(5000)];
         const evaluator = new CallConditionEvaluator('==', args);
-        expect(evaluator.evaluate(variables)).toBe(true);
+        expect(await evaluator.evaluate(variables)).toBe(true);
     });
 
-    it('should evaluate variable arguments and execute operation', () => {
+    it('should evaluate variable arguments and execute operation', async () => {
         const variableName = "MY_VARIABLE_NAME";
         variables.set(variableName, 10000);
         const args = [new ConstantConditionEvaluator(5000), new VariableConditionEvaluator(variableName)];
         const evaluator = new CallConditionEvaluator('>', args);
-        expect(evaluator.evaluate(variables)).toBe(false);
+        expect(await evaluator.evaluate(variables)).toBe(false);
     });
 
-    it('should evaluate recursive call arguments and execute operation', () => {
+    it('should evaluate recursive call arguments and execute operation', async () => {
         const variableName = "MY_VARIABLE_NAME";
         variables.set(variableName, 10000);
         const args = [new ConstantConditionEvaluator(5000), new VariableConditionEvaluator(variableName)];
         const evaluator = new CallConditionEvaluator('>', args);
         
         const args2 = [evaluator, new ConstantConditionEvaluator(false)];
-        const constantValueConditionEvaluator2 = new CallConditionEvaluator('AND', args2);
-        expect(constantValueConditionEvaluator2.evaluate(variables)).toBe(false);
+        const evaluator2 = new CallConditionEvaluator('AND', args2);
+        expect(await evaluator2.evaluate(variables)).toBe(false);
     });
 
-    it('should throw error if operation not found', () => {
+    it('should throw error if operation not found', async () => {
         const args = [new ConstantConditionEvaluator(5000), new ConstantConditionEvaluator(5000)];
         const evaluator = new CallConditionEvaluator('==:', args);
-        expect(() => evaluator.evaluate(variables)).toThrow(Error);
+        expect(() => evaluator.evaluate(variables)).rejects.toThrow(Error);
     });
 
     it('should throw error if json has not "name" property', () => {

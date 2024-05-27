@@ -1,6 +1,7 @@
 import CallConditionEvaluator from "./callConditionEvaluator";
 import ConditionEvaluatorFactory from "./conditionEvaluatorFactory";
 import ConstantConditionEvaluator from "./constantConditionEvaluator";
+import DataConditionEvaluator from "./dataConditionEvaluator";
 import VariableConditionEvaluator from "./variableConditionEvaluator";
 import WalletCondition from "./walletConditionEvaluator";
 
@@ -50,6 +51,24 @@ describe('conditionEvaluatorFactory', () => {
         });
         const evaluator = factory.create();
         expect(evaluator).toBeInstanceOf(WalletCondition);
+    });
+
+    it('should create a data condition evaluator', () => {
+        const factory = new ConditionEvaluatorFactory({
+            type: "DATA",
+            symbol: "TDD/USDT",
+            from: 7200,
+            until: 3600,
+            default: [{
+                type: "CONSTANT",
+                value: 2000
+            }, {
+                type: "CONSTANT",
+                value: 2001
+            }]
+        });
+        const evaluator = factory.create();
+        expect(evaluator).toBeInstanceOf(DataConditionEvaluator);
     });
 
     it('should throw an error if the json is invalid', () => {

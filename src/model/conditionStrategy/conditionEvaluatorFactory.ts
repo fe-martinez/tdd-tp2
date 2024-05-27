@@ -3,6 +3,7 @@ import TestMarketDataApi from "../MarketDataApi/testMarketDataApi";
 import CallConditionEvaluator from "./callConditionEvaluator";
 import { ConditionEvaluator } from "./conditionEvaluator";
 import ConstantConditionEvaluator from "./constantConditionEvaluator";
+import DataConditionEvaluator from "./dataConditionEvaluator";
 import VariableConditionEvaluator from "./variableConditionEvaluator";
 import WalletCondition from "./walletConditionEvaluator";
 
@@ -25,7 +26,8 @@ export default class ConditionEvaluatorFactory {
                 if (process.env.ENVIROMENT === 'test')
                     return WalletCondition.fromJson(new TestMarketDataApi(), this.json);
                 return WalletCondition.fromJson(new BinanceApi(), this.json);
-                    
+            case "DATA":
+                return DataConditionEvaluator.fromJson(this.json);
             default:
                 throw new Error(`Unknown condition evaluator type ${type}`);
         }

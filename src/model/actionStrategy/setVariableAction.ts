@@ -1,7 +1,7 @@
 import { ConditionEvaluatorType, ConditionEvaluatorVariables } from "../conditionStrategy/conditionEvaluator";
 import { Action } from "./action";
 
-export class SetVariableAction implements Action {
+export default class SetVariableAction implements Action {
     private variableName: string;
     private value: ConditionEvaluatorType;
 

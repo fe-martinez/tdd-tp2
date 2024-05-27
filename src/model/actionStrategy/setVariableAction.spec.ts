@@ -1,4 +1,4 @@
-import { SetVariableAction } from "./setVariableAction";
+import SetVariableAction from "./setVariableAction";
 
 describe('SetVariableAction', () => {
     const variables = new Map<string, number>();

@@ -2,7 +2,7 @@ import { ConditionEvaluator, ConditionEvaluatorVariables } from "../conditionStr
 import { InvalidAmountError, MarketDataApi } from "../MarketDataApi/marketDataApi";
 import { Action } from "./action";
 
-export class BuyMarketAction implements Action {
+export default class BuyMarketAction implements Action {
     private symbol: string;
     private amount: ConditionEvaluator;
     private marketDataApi: MarketDataApi;

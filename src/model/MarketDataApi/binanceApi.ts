@@ -1,6 +1,6 @@
 import { MarketDataApi } from "./marketDataApi";
 
-export class BinanceApi implements MarketDataApi {
+export default class BinanceApi implements MarketDataApi {
     async getWallet(symbol: string) {
         return 0
     }

@@ -1,4 +1,4 @@
-import { BinanceApi } from "../MarketDataApi/binanceApi";
+import BinanceApi from "../MarketDataApi/binanceApi";
 import TestMarketDataApi from "../MarketDataApi/testMarketDataApi";
 import CallConditionEvaluator from "./callConditionEvaluator";
 import { ConditionEvaluator } from "./conditionEvaluator";

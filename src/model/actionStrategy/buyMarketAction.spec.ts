@@ -2,7 +2,7 @@ import { ConditionEvaluatorType } from "../conditionStrategy/conditionEvaluator"
 import ConstantConditionEvaluator from "../conditionStrategy/constantConditionEvaluator";
 import { InvalidAmountError } from "../MarketDataApi/marketDataApi";
 import TestMarketDataApi from "../MarketDataApi/testMarketDataApi";
-import { BuyMarketAction } from "./buyMarketAction";
+import BuyMarketAction from "./buyMarketAction";
 
 describe('BuyMarketAction', () => {
     const marketDataApi = new TestMarketDataApi();

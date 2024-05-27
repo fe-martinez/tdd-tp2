@@ -23,4 +23,12 @@ describe('ConstatConditionEvaluator', () => {
         const evaluator = new ConstantConditionEvaluator('Hello World');
         expect(evaluator.evaluate(variables)).toBe('Hello World');
     });
+
+    it('should throw an error if the json does not have "value" property', () => {
+        expect(() => ConstantConditionEvaluator.fromJson({})).toThrow(Error);
+    });
+
+    it('should throw an error if the json "value" property has an invalid type', () => {
+        expect(() => ConstantConditionEvaluator.fromJson({ value: [] })).toThrow(Error);
+    });
 });

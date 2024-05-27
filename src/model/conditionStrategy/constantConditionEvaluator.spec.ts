@@ -31,4 +31,12 @@ describe('ConstatConditionEvaluator', () => {
     it('should throw an error if the json "value" property has an invalid type', () => {
         expect(() => ConstantConditionEvaluator.fromJson({ value: [] })).toThrow(Error);
     });
+
+    it('should create a constant condition evaluator from json', () => {
+        const json = {
+            value: 5000
+        };
+        const evaluator = ConstantConditionEvaluator.fromJson(json);
+        expect(evaluator.evaluate(variables)).toBe(5000);
+    });
 });

@@ -29,4 +29,20 @@ describe('VariableConditionEvaluator', () => {
         const evaluator = new VariableConditionEvaluator("MY_INEXISTENT_VARIABLE_NAME");
         expect(() => evaluator.evaluate(variables)).toThrow(InexistentVariableError);
     });
+
+    it('should throw error if json does not have "name" property', () => {
+        expect(() => VariableConditionEvaluator.fromJson({})).toThrow(Error);
+    });
+
+    it('should throw error if json "name" property is not string', () => {
+        expect(() => VariableConditionEvaluator.fromJson({ name: 1 })).toThrow(Error);
+    });
+
+    it('should create a variable condition evaluator from json', () => {
+        const json = {
+            name: "MY_VARIABLE_NAME"
+        };
+        const evaluator = VariableConditionEvaluator.fromJson(json);
+        expect(evaluator.evaluate(variables)).toBe(10000);
+    });
 });

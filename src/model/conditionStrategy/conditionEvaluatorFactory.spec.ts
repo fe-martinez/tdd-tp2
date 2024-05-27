@@ -2,6 +2,7 @@ import CallConditionEvaluator from "./callConditionEvaluator";
 import ConditionEvaluatorFactory from "./conditionEvaluatorFactory";
 import ConstantConditionEvaluator from "./constantConditionEvaluator";
 import VariableConditionEvaluator from "./variableConditionEvaluator";
+import WalletCondition from "./walletCondition";
 
 describe('conditionEvaluatorFactory', () => {
     it('should create a call condition evaluator', () => {
@@ -40,6 +41,15 @@ describe('conditionEvaluatorFactory', () => {
         });
         const evaluator = factory.create();
         expect(evaluator).toBeInstanceOf(VariableConditionEvaluator);
+    });
+
+    it('should create a wallet condition evaluator', () => {
+        const factory = new ConditionEvaluatorFactory({
+            type: "WALLET",
+            symbol: "BTC"
+        });
+        const evaluator = factory.create();
+        expect(evaluator).toBeInstanceOf(WalletCondition);
     });
 
     it('should throw an error if the json is invalid', () => {

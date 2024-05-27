@@ -23,4 +23,16 @@ describe('WalletCondition', () => {
         expect(await evaluator.evaluate(variables)).toBe(20);
     });
 
+    it('should throw error if json "symbol" property is not string', () => {
+        expect(() => walletCondition.fromJson(marketDataApi, { symbol: 1 })).toThrow(Error);
+    });
+
+    it('should create a wallet condition evaluator from json', async () => {
+        const json = {
+            symbol: "BTC"
+        };
+        const evaluator = walletCondition.fromJson(marketDataApi, json);
+        expect(evaluator).toBeInstanceOf(walletCondition);
+    });
+
 });

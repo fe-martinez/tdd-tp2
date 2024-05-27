@@ -3,7 +3,7 @@ import ConditionEvaluatorFactory from "./conditionEvaluatorFactory";
 import ConstantConditionEvaluator from "./constantConditionEvaluator";
 import DataConditionEvaluator from "./dataConditionEvaluator";
 import VariableConditionEvaluator from "./variableConditionEvaluator";
-import WalletCondition from "./walletConditionEvaluator";
+import WalletConditionEvaluator from "./walletConditionEvaluator";
 
 describe('conditionEvaluatorFactory', () => {
     it('should create a call condition evaluator', () => {
@@ -50,7 +50,7 @@ describe('conditionEvaluatorFactory', () => {
             symbol: "BTC"
         });
         const evaluator = factory.create();
-        expect(evaluator).toBeInstanceOf(WalletCondition);
+        expect(evaluator).toBeInstanceOf(WalletConditionEvaluator);
     });
 
     it('should create a data condition evaluator', () => {

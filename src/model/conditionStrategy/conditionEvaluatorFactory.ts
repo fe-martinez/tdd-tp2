@@ -5,7 +5,7 @@ import { ConditionEvaluator } from "./conditionEvaluator";
 import ConstantConditionEvaluator from "./constantConditionEvaluator";
 import DataConditionEvaluator from "./dataConditionEvaluator";
 import VariableConditionEvaluator from "./variableConditionEvaluator";
-import WalletCondition from "./walletConditionEvaluator";
+import WalletConditionEvaluator from "./walletConditionEvaluator";
 
 export default class ConditionEvaluatorFactory {
     private json: any;
@@ -24,8 +24,8 @@ export default class ConditionEvaluatorFactory {
                 return CallConditionEvaluator.fromJson(this.json);
             case "WALLET":
                 if (process.env.ENVIROMENT === 'test')
-                    return WalletCondition.fromJson(new TestMarketDataApi(), this.json);
-                return WalletCondition.fromJson(new BinanceApi(), this.json);
+                    return WalletConditionEvaluator.fromJson(new TestMarketDataApi(), this.json);
+                return WalletConditionEvaluator.fromJson(new BinanceApi(), this.json);
             case "DATA":
                 return DataConditionEvaluator.fromJson(this.json);
             default:

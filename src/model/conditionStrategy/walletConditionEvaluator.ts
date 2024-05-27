@@ -1,7 +1,7 @@
 import { MarketDataApi } from "../MarketDataApi/marketDataApi";
 import { ConditionEvaluator, ConditionEvaluatorType, ConditionEvaluatorVariables } from "./conditionEvaluator";
 
-export default class WalletCondition  implements ConditionEvaluator {
+export default class WalletConditionEvaluator  implements ConditionEvaluator {
     private marketDataApi: MarketDataApi;
     private symbol: string;
     constructor(marketDataApi: MarketDataApi, symbol: string) {
@@ -14,7 +14,7 @@ export default class WalletCondition  implements ConditionEvaluator {
             throw new Error("Wallet condition evaluator must have a symbol");
         if (typeof json.symbol !== 'string')
             throw new Error("Wallet condition evaluator symbol must be a string");
-        return new WalletCondition(marketDataApi, json.symbol);
+        return new WalletConditionEvaluator(marketDataApi, json.symbol);
     
     }
 

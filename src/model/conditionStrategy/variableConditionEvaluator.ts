@@ -5,6 +5,16 @@ export default class VariableConditionEvaluator implements ConditionEvaluator {
     constructor(variableName: string) {
         this.variableName = variableName;
     }
+
+    static fromJson(json: any): VariableConditionEvaluator {
+        if (!json.hasOwnProperty("name"))
+            throw new Error("Variable condition evaluator must have a name");
+        if (typeof json.name !== 'string')
+            throw new Error("Variable condition evaluator name must be a string");
+
+        return new VariableConditionEvaluator(json.name);
+    }
+
     evaluate(variables: ConditionEvaluatorVariables): ConditionEvaluatorType {
         const value = variables.get(this.variableName);
         if (!value) {

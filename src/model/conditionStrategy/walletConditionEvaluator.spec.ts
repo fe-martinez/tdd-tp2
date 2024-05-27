@@ -1,5 +1,5 @@
 import TestMarketDataApi from "../MarketDataApi/testMarketDataApi";
-import walletCondition from "./walletCondition";
+import walletCondition from "./walletConditionEvaluator";
 
 describe('WalletCondition', () => {
     const marketDataApi = new TestMarketDataApi();

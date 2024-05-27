@@ -4,7 +4,7 @@ import CallConditionEvaluator from "./callConditionEvaluator";
 import { ConditionEvaluator } from "./conditionEvaluator";
 import ConstantConditionEvaluator from "./constantConditionEvaluator";
 import VariableConditionEvaluator from "./variableConditionEvaluator";
-import WalletCondition from "./walletCondition";
+import WalletCondition from "./walletConditionEvaluator";
 
 export default class ConditionEvaluatorFactory {
     private json: any;

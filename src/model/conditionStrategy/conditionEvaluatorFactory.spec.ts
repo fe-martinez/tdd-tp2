@@ -2,7 +2,7 @@ import CallConditionEvaluator from "./callConditionEvaluator";
 import ConditionEvaluatorFactory from "./conditionEvaluatorFactory";
 import ConstantConditionEvaluator from "./constantConditionEvaluator";
 import VariableConditionEvaluator from "./variableConditionEvaluator";
-import WalletCondition from "./walletCondition";
+import WalletCondition from "./walletConditionEvaluator";
 
 describe('conditionEvaluatorFactory', () => {
     it('should create a call condition evaluator', () => {

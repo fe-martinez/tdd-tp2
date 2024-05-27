@@ -8,7 +8,7 @@ export default class TestMarketDataApi implements MarketDataApi {
         this.wallet = new Map<string, number>();
     }
 
-    async _setWallet(symbol: string, amount: number) { // only for testing
+    _setWallet(symbol: string, amount: number) { // only for testing
         this.wallet.set(symbol, amount);
     }
 

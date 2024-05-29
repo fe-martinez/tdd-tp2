@@ -2,7 +2,7 @@ import DataConditionEvaluator from "./dataConditionEvaluator";
 import { getHistoricalPairValues } from "../../data/database";
 
 jest.mock("../../data/database", () => ({
-    getHistoricalPairValues: jest.fn().mockReturnValueOnce([1, 2, 3, 4, 5, 6, 7, 8, 9]).mockReturnValueOnce([]).mockReturnValueOnce([1, 2, 3, 4, 5, 6, 7, 8, 9]).mockReturnValue([10, 20, 30, 40, 50, 60, 70, 80, 90])
+    getHistoricalPairValues: jest.fn()
 }));
 
 
@@ -57,6 +57,8 @@ describe('DataConditionEvaluator', () => {
             until: 2,
             default: []
         };
+
+        (getHistoricalPairValues as jest.Mock).mockReturnValueOnce([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         const evaluator = DataConditionEvaluator.fromJson(json, "+");
         expect(await evaluator.evaluate(new Map())).toBe(45);
     });
@@ -76,6 +78,7 @@ describe('DataConditionEvaluator', () => {
             
         };
 
+        (getHistoricalPairValues as jest.Mock).mockReturnValueOnce([]);
         const evaluator = DataConditionEvaluator.fromJson(json, "+");
         expect(await evaluator.evaluate(new Map())).toBe(4001);
     });
@@ -96,7 +99,9 @@ describe('DataConditionEvaluator', () => {
         };
 
         const evaluator = DataConditionEvaluator.fromJson(json, "+");
+        (getHistoricalPairValues as jest.Mock).mockReturnValueOnce([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         expect(await evaluator.evaluate(new Map())).toBe(45);
+        (getHistoricalPairValues as jest.Mock).mockReturnValueOnce([10, 20, 30, 40, 50, 60, 70, 80, 90]);
         expect(await evaluator.evaluate(new Map())).toBe(450);
     });
 

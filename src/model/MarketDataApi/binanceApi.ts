@@ -6,7 +6,6 @@ export default class BinanceApi implements MarketDataApi {
         return getWalletBalance(symbol);
     }
     async buyMarket(symbol: string, amount: number) {
-        
     }
     async sellMarket(symbol: string, amount: number) {
     }

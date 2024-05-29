@@ -26,31 +26,31 @@ if (slackConfigurationExists()) {
 
 notifier.sendNotification("App is now running");
 //notifier.startTimer("Acá iría el mensaje que se envía cada vez que pasó un tiempo, descomentar esto cuando esté listo")
-notifier.startTimer("Probando si envía mensajes con el timer integrado");
+//notifier.startTimer("Probando si envía mensajes con el timer integrado");
 
-// const binanceData: BinanceListener = new BinanceListener(pairs);
+const binanceData: BinanceListener = new BinanceListener(pairs);
 
-// binanceData.on('error', (error) => {
-//   console.error('WebSocket error:', error);
-// });
+binanceData.on('error', (error) => {
+  console.error('WebSocket error:', error);
+});
 
-// binanceData.on('connected', () => {
-//  console.log('WebSocket connected');
-// });
+binanceData.on('connected', () => {
+ console.log('WebSocket connected');
+});
 
-// binanceData.on('disconnected', ({ code, reason }) => {
-//   console.log(`WebSocket disconnected (${code}): ${reason}`);
-// });
+binanceData.on('disconnected', ({ code, reason }) => {
+  console.log(`WebSocket disconnected (${code}): ${reason}`);
+});
 
-// binanceData.on('update', (data) => {
-//   executeRuleSet(compiledRules, notifier)
-//     .then(() => {
-//       console.log('Update from binance:', data);
-//     })
-//     .catch((error) => {
-//       console.error('Error executing rule set:', error);
-//     });
-// });
+binanceData.on('update', (data) => {
+  executeRuleSet(compiledRules, notifier)
+    .then(() => {
+      console.log('Update from binance:', data);
+    })
+    .catch((error) => {
+      console.error('Error executing rule set:', error);
+    });
+});
 
 //Para probar el timer
 // function getHour() {

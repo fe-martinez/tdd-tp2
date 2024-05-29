@@ -17,7 +17,7 @@ export default class ActionFactory {
             case 'BUY_MARKET':
                 return BuyMarketAction.fromJson(new BinanceApi(), this.json);
             case 'SELL_MARKET':
-                // return SellMarketAction.fromJson(this.json);
+                return SellMarketAction.fromJson(new BinanceApi(), this.json);
             case 'SET_VARIABLE':
                 // return SetVariableAction.fromJson(this.json);
             default:

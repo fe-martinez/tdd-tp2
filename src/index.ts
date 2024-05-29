@@ -3,16 +3,24 @@ import { RuleSet } from './model/types';
 import { BinanceListener } from './data/binanceConnection';
 import { ConditionEvaluator } from './dynamic-evaluator/conditionEvaluator';
 import { executeRuleSet } from './dynamic-evaluator/rulesEvaluator';
-import { MessageNotifier, DiscordNotifier, SlackNotifier } from './notifier/notificationSender';
+import { MessageNotifier } from './notifier/notificationSender';
+import { DiscordNotifier, discordConfigurationExists } from './notifier/discordNotifier';
+import { SlackNotifier, slackConfigurationExists } from './notifier/slackNotifier';
 
 let ruleSet: RuleSet = parseRules('src/rules.json');
 let pairs = collectPairsFromRuleSet(ruleSet);
 const compiledRules = new ConditionEvaluator(ruleSet);
 const notifier = new MessageNotifier();
-const discordNotifier = new DiscordNotifier(notifier);
-discordNotifier.start();
-const slackNotifier = new SlackNotifier(notifier);
-slackNotifier.start();
+
+if (discordConfigurationExists()) {
+  const discordNotifier = new DiscordNotifier(notifier);
+  discordNotifier.start();
+}
+
+if (slackConfigurationExists()) {
+  const slackNotifier = new SlackNotifier(notifier);
+  slackNotifier.start();
+}
 
 const binanceData: BinanceListener = new BinanceListener(pairs);
 

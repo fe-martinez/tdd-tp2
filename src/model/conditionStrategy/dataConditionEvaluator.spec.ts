@@ -3,6 +3,12 @@ import DataConditionEvaluator from "./dataConditionEvaluator";
 // Mock getHistoricalPairValues
 jest.mock("../../data/database", () => ({
     getHistoricalPairValues: jest.fn((symbol, since, until) => {
+        if (symbol === "BTCUSDT") {
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        } else if (symbol === "TDDUSDT") {
+            return [];
+        }
+
         return [1, 2, 3, 4, 5, 6, 7, 8, 9];
     })
 }));
@@ -63,14 +69,8 @@ describe('DataConditionEvaluator', () => {
     });
 
     it('should return a correct value when evaluating with defaults', async () => {
-        jest.mock("../../data/database", () => ({
-            getHistoricalPairValues: jest.fn((symbol, since, until) => {
-                return [];
-            })
-        }));
-
         const json = {
-            symbol: "BTCUSDT",
+            symbol: "TDDUSDT",
             from: 4,
             until: 2,
             default: [{
@@ -86,5 +86,41 @@ describe('DataConditionEvaluator', () => {
         const evaluator = DataConditionEvaluator.fromJson(json, "<");
         expect(await evaluator.evaluate(new Map())).toBe(true);
     });
+    
+
+    // it('should evaluate data correctly in different scenarios without rebuiliding the object', async () => {
+    //     jest.mock("../../data/database", () => ({
+    //         getHistoricalPairValues: jest.fn((symbol, since, until) => {
+    //             return [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    //         })
+    //     }));
+
+    //     jest.mock("../../data/database", () => ({
+    //         getHistoricalPairValues: jest.fn((symbol, since, until) => {
+    //             return [10, 20, 30, 40, 50, 60, 70, 80, 90];
+    //         })
+    //     }));
+
+    //     const json = {
+    //         symbol: "BTCUSDT",
+    //         from: 4,
+    //         until: 2,
+    //         default: [{
+    //             type: "CONSTANT",
+    //             value: 2000
+    //         },{
+    //             type: "CONSTANT",
+    //             value: 2001
+    //         }]
+    //     };
+
+
+    //     const evaluator = DataConditionEvaluator.fromJson(json, "+");
+    //     expect(await evaluator.evaluate(new Map())).toBe(45);
+
+
+
+    //     expect(await evaluator.evaluate(new Map())).toBe(450);
+    // });
 
 });

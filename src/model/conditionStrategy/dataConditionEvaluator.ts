@@ -1,6 +1,7 @@
 import { getHistoricalPairValues } from "../../data/database";
 import { getOperation } from "../../dynamic-evaluator/operations";
 import { ConditionEvaluator, ConditionEvaluatorType, ConditionEvaluatorVariables } from "./conditionEvaluator";
+import ConditionEvaluatorFactory from "./conditionEvaluatorFactory";
 
 export default class DataConditionEvaluator implements ConditionEvaluator {
     private symbol: string;
@@ -12,7 +13,7 @@ export default class DataConditionEvaluator implements ConditionEvaluator {
         this.symbol = symbol;
         this.from = from;
         this.until = until;
-        this.defaults = defaults;
+        this.defaults = defaults
         this.operation = getOperation(functionName);
     }
 
@@ -34,13 +35,16 @@ export default class DataConditionEvaluator implements ConditionEvaluator {
         if (!Array.isArray(json.default))
             throw new Error("Data condition evaluator defaults must be an array");
 
-        return new DataConditionEvaluator(json.symbol, json.from, json.until, json.defaults, functionName);
+
+        const defaults = json.default.map((def: any) => new ConditionEvaluatorFactory(def).create());
+        return new DataConditionEvaluator(json.symbol, json.from, json.until, defaults, functionName);
     }
 
     async evaluate(variables: ConditionEvaluatorVariables): Promise<ConditionEvaluatorType> {
         var data = getHistoricalPairValues(this.symbol, this.from, this.until);
         if (data.length === 0) {
-            return this.operation(this.defaults);
+            const defaultData = await Promise.all(this.defaults.map(def => def.evaluate(variables)));
+            return this.operation(defaultData);
         }
         return this.operation(data);
     }

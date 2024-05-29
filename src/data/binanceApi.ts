@@ -87,4 +87,25 @@ export async function getOrderHistory(symbol: string): Promise<any> {
   } catch (error) {
     throw error;
   }
-}  
+}
+
+export async function getWalletBalance(asset: string): Promise<number> {
+  const timestamp = Date.now();
+  const queryString = `timestamp=${timestamp}`;
+  const signature = getSignature(queryString);
+  const url = `${BASE_URL}/v3/account?${queryString}&signature=${signature}`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        'X-MBX-APIKEY': API_KEY,
+      },
+    });
+    
+    const balances = response.data.balances;
+    const assetBalance = balances.find((balance: any) => balance.asset === asset);
+    
+    return assetBalance ? parseFloat(assetBalance.free) : 0;
+  } catch (error) {
+    throw error;
+  }
+}

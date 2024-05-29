@@ -23,6 +23,9 @@ export default class ConditionEvaluatorFactory {
             case "CALL":
                 const dataArg = this.json.arguments.find((arg: any) => arg.type?.toUpperCase() === "DATA");
                 if (dataArg) {
+                    if (this.json.arguments.length > 1) {
+                        throw new Error("CALL conditions with a DATA argument must have a single argument");
+                    }
                     const functionName = this.json.name;
                     return DataConditionEvaluator.fromJson(dataArg, functionName);
                 }

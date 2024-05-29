@@ -1,17 +1,10 @@
 import DataConditionEvaluator from "./dataConditionEvaluator";
+import { getHistoricalPairValues } from "../../data/database";
 
-// Mock getHistoricalPairValues
 jest.mock("../../data/database", () => ({
-    getHistoricalPairValues: jest.fn((symbol, since, until) => {
-        if (symbol === "BTCUSDT") {
-            return [1, 2, 3, 4, 5, 6, 7, 8, 9];
-        } else if (symbol === "TDDUSDT") {
-            return [];
-        }
-
-        return [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    })
+    getHistoricalPairValues: jest.fn().mockReturnValueOnce([1, 2, 3, 4, 5, 6, 7, 8, 9]).mockReturnValueOnce([]).mockReturnValueOnce([1, 2, 3, 4, 5, 6, 7, 8, 9]).mockReturnValue([10, 20, 30, 40, 50, 60, 70, 80, 90])
 }));
+
 
 describe('DataConditionEvaluator', () => {
     it('should throw error if json has not "symbol" property', () => {
@@ -83,44 +76,28 @@ describe('DataConditionEvaluator', () => {
             
         };
 
-        const evaluator = DataConditionEvaluator.fromJson(json, "<");
-        expect(await evaluator.evaluate(new Map())).toBe(true);
+        const evaluator = DataConditionEvaluator.fromJson(json, "+");
+        expect(await evaluator.evaluate(new Map())).toBe(4001);
     });
     
 
-    // it('should evaluate data correctly in different scenarios without rebuiliding the object', async () => {
-    //     jest.mock("../../data/database", () => ({
-    //         getHistoricalPairValues: jest.fn((symbol, since, until) => {
-    //             return [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    //         })
-    //     }));
+    it('should evaluate data correctly in different scenarios without rebuiliding the object', async () => {
+        const json = {
+            symbol: "BTCUSDT",
+            from: 4,
+            until: 2,
+            default: [{
+                type: "CONSTANT",
+                value: 2000
+            },{
+                type: "CONSTANT",
+                value: 2001
+            }]
+        };
 
-    //     jest.mock("../../data/database", () => ({
-    //         getHistoricalPairValues: jest.fn((symbol, since, until) => {
-    //             return [10, 20, 30, 40, 50, 60, 70, 80, 90];
-    //         })
-    //     }));
-
-    //     const json = {
-    //         symbol: "BTCUSDT",
-    //         from: 4,
-    //         until: 2,
-    //         default: [{
-    //             type: "CONSTANT",
-    //             value: 2000
-    //         },{
-    //             type: "CONSTANT",
-    //             value: 2001
-    //         }]
-    //     };
-
-
-    //     const evaluator = DataConditionEvaluator.fromJson(json, "+");
-    //     expect(await evaluator.evaluate(new Map())).toBe(45);
-
-
-
-    //     expect(await evaluator.evaluate(new Map())).toBe(450);
-    // });
+        const evaluator = DataConditionEvaluator.fromJson(json, "+");
+        expect(await evaluator.evaluate(new Map())).toBe(45);
+        expect(await evaluator.evaluate(new Map())).toBe(450);
+    });
 
 });

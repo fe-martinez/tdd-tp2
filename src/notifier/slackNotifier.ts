@@ -1,5 +1,6 @@
 import axios from "axios";
 import { MessageNotifier } from "./notificationSender";
+import {channelId, slackWebHookUrl } from "../config/notifiersConfig";
 
 export class SlackNotifier {
     private notifier : MessageNotifier;
@@ -8,7 +9,7 @@ export class SlackNotifier {
         this.notifier = notifier;
     }
   
-    public start() {
+    public listen() {
         this.notifier.on('message', (message) => {
             this.sendNotification(message);
         });
@@ -30,5 +31,5 @@ export class SlackNotifier {
 
 
 export function slackConfigurationExists() {
-    return dcWebHookUrl != null;
+    return ((channelId != null) && (slackWebHookUrl != null));
 }

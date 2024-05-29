@@ -1,5 +1,6 @@
 import { WebhookClient } from "discord.js";
 import { MessageNotifier } from "./notificationSender";
+import { dcWebHookUrl } from "../config/notifiersConfig";
 
 export class DiscordNotifier {
     private webhookClient: WebhookClient;
@@ -9,8 +10,8 @@ export class DiscordNotifier {
         this.webhookClient = new WebhookClient({ url: dcWebHookUrl });
         this.notifier = notifier;
     }
-  
-    public start() {
+
+    public listen() {
         this.notifier.on('message', (message) => {
             this.sendNotification(message);
         });

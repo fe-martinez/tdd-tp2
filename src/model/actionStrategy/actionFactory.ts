@@ -19,7 +19,7 @@ export default class ActionFactory {
             case 'SELL_MARKET':
                 return SellMarketAction.fromJson(new BinanceApi(), this.json);
             case 'SET_VARIABLE':
-                // return SetVariableAction.fromJson(this.json);
+                return SetVariableAction.fromJson(this.json);
             default:
                 throw new Error(`Unknown action type ${type}`);
         }

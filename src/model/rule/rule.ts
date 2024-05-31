@@ -30,7 +30,7 @@ export default class Rule {
         const name = json.name;
         const conditionEvaluator = new ConditionEvaluatorFactory(json.condition).create();
         
-        const action = json.action.map((action: any) => new ActionFactory(action).create)
+        const action = json.action.map((action: any) => new ActionFactory(action).create());
 
         return new Rule(name, conditionEvaluator, action);
     }
@@ -49,9 +49,10 @@ export default class Rule {
             return false;
         }
 
-        this.actions.forEach(action => {
-            action.execute(variables)
-        })
+        for (const action of this.actions) {
+            await action.execute(variables);
+        }
+
         return true;
     }
 }

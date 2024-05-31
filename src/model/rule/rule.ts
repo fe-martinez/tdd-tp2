@@ -28,7 +28,6 @@ export default class Rule {
             throw new Error('Rule must have an action');
         }
         const name = json.name;
-        console.log(json.condition);
         const conditionEvaluator = new ConditionEvaluatorFactory(json.condition).create();
         const action = new ActionFactory(json.action).create();
         return new Rule(name, conditionEvaluator, action);

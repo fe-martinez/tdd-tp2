@@ -1,4 +1,3 @@
-import Rule from '../rule/rule';
 import RulesEvaluator from './rulesEvaluator';
 
 describe('RulesEvaluator', () => {

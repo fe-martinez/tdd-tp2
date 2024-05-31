@@ -1,3 +1,5 @@
+import ConstantConditionEvaluator from "../conditionStrategy/constantConditionEvaluator";
+import VariableConditionEvaluator from "../conditionStrategy/variableConditionEvaluator";
 import SetVariableAction from "./setVariableAction";
 
 describe('SetVariableAction', () => {
@@ -6,18 +8,20 @@ describe('SetVariableAction', () => {
     variables.set(variableName, 10);
 
     it('setVariableAction sets existent variable', async () => {
-        const setVariableAction = new SetVariableAction(variableName, 20);
+        const constantConditionEvaluator = new ConstantConditionEvaluator(20);
+        const setVariableAction = new SetVariableAction(variableName, constantConditionEvaluator);
 
-        setVariableAction.execute(variables);
+        await setVariableAction.execute(variables);
         const value = variables.get(variableName);
         expect(value).toBe(20);
     });
 
     it('setVariableAction sets new variable by creating it', async () => {
         const newVariableName = 'newVariable';
-        const setVariableAction = new SetVariableAction(newVariableName, "20");
+        const constantConditionEvaluator = new ConstantConditionEvaluator("20");
+        const setVariableAction = new SetVariableAction(newVariableName, constantConditionEvaluator);
 
-        setVariableAction.execute(variables);
+        await setVariableAction.execute(variables);
         const value = variables.get(newVariableName);
         expect(value).toBe("20");
     });

@@ -26,4 +26,36 @@ describe('SetVariableAction', () => {
         expect(value).toBe("20");
     });
 
+    it('should throw an error if json does not have a variable name', () => {
+        const json = { value: 1 };
+        expect(() => SetVariableAction.fromJson(json)).toThrow(Error);
+    });
+
+    it('should throw an error if json variable name is not a string', () => {
+        const json = { name: 1, value: 1 };
+        expect(() => SetVariableAction.fromJson(json)).toThrow(Error);
+    });
+
+    it('should throw an error if json does not have a value', () => {
+        const json = { name: 'testVariable' };
+        expect(() => SetVariableAction.fromJson(json)).toThrow(Error);
+    });
+
+    it('should throw an error if json value is not correct', () => {
+        const json = { name: 'testVariable', value: { value: true } };
+        expect(() => SetVariableAction.fromJson(json)).toThrow(Error);
+    });
+
+    it('should create a SetVariableAction from json', () => {
+        const json = {
+            type: "SET_VARIABLE",
+            name: "ValorMinimoTDD",
+            value: {
+                type: "CONSTANT",
+                value: "12"
+            }
+        };
+        const setVariableAction = SetVariableAction.fromJson(json);
+        expect(setVariableAction).toBeInstanceOf(SetVariableAction);
+    });
 });

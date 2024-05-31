@@ -2,6 +2,7 @@ import BinanceApi from "../MarketDataApi/binanceApi";
 import TestMarketDataApi from "../MarketDataApi/testMarketDataApi";
 import CallConditionEvaluator from "./callConditionEvaluator";
 import { ConditionEvaluator } from "./conditionEvaluator";
+import { ConditionEvaluatorFactoryError } from "./conditionEvaluatorFactoryError";
 import ConstantConditionEvaluator from "./constantConditionEvaluator";
 import DataConditionEvaluator from "./dataConditionEvaluator";
 import VariableConditionEvaluator from "./variableConditionEvaluator";
@@ -13,8 +14,7 @@ export default class ConditionEvaluatorFactory {
         this.json = json;
     };
 
-    public create(): ConditionEvaluator {
-        const type = this.json.type?.toUpperCase();
+    private createWithType(type: string): ConditionEvaluator {
         switch (type) {
             case "CONSTANT":
                 return ConstantConditionEvaluator.fromJson(this.json);
@@ -39,6 +39,16 @@ export default class ConditionEvaluatorFactory {
                 throw new Error(`DATA condition evaluator must be handled inside a CALL condition evaluator`);
             default:
                 throw new Error(`Unknown condition evaluator type ${type}`);
+        }
+    }
+
+
+    public create(): ConditionEvaluator {
+        const type = this.json.type?.toUpperCase();
+        try {
+            return this.createWithType(type);
+        } catch (error) {
+            throw new ConditionEvaluatorFactoryError(`Error in factory creating condition evaluator: ${error}`);
         }
     }
 }

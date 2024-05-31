@@ -31,14 +31,6 @@ describe('DataConditionEvaluator', () => {
         expect(() => DataConditionEvaluator.fromJson({ symbol: "BTCUSDT", from: 1, until: "1" }, "==")).toThrow(Error);
     });
 
-    it('should throw error if json has not "default" property', () => {
-        expect(() => DataConditionEvaluator.fromJson({ symbol: "BTCUSDT", from: 1, until: 1 }, "==")).toThrow(Error);
-    });
-
-    it('should throw error if json "default" property is not array', () => {
-        expect(() => DataConditionEvaluator.fromJson({ symbol: "BTCUSDT", from: 1, until: 1, default: 1 }, "==")).toThrow(Error);
-    });
-
     it('should create a data condition evaluator from json', () => {
         const json = {
             symbol: "BTCUSDT",

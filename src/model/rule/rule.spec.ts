@@ -15,7 +15,7 @@ describe('Rule', () => {
         const name = 'Buy always';
         const conditionEvaluator = new ConstantConditionEvaluator(true);
         const action = new SetVariableAction('buy', conditionEvaluator);
-        const rule = new Rule(name, conditionEvaluator, action);
+        const rule = new Rule(name, conditionEvaluator, [action]);
         expect(rule).toBeInstanceOf(Rule);
     });
 
@@ -24,8 +24,8 @@ describe('Rule', () => {
         const name2 = 'Buy always';
         const conditionEvaluator = new ConstantConditionEvaluator(true);
         const action = new SetVariableAction('buy', conditionEvaluator);
-        const rule1 = new Rule(name1, conditionEvaluator, action);
-        const rule2 = new Rule(name2, conditionEvaluator, action);
+        const rule1 = new Rule(name1, conditionEvaluator, [action]);
+        const rule2 = new Rule(name2, conditionEvaluator, [action]);
         expect(rule1.getName()).toBe(name1);
         expect(rule2.getName()).toBe(name2);
     });
@@ -34,7 +34,7 @@ describe('Rule', () => {
         const name = 'Buy always';
         const conditionEvaluator = new ConstantConditionEvaluator(true);
         const action = new SetVariableAction('buy', conditionEvaluator);
-        const rule = new Rule(name, conditionEvaluator, action);
+        const rule = new Rule(name, conditionEvaluator, [action]);
 
         expect(variables.get('buy')).toBe(false);
         await rule.evaluateConditionAndExecuteActionIfTrue(variables);
@@ -45,7 +45,7 @@ describe('Rule', () => {
         const name = 'Buy always';
         const conditionEvaluator = new ConstantConditionEvaluator(false);
         const action = new SetVariableAction('buy', conditionEvaluator);
-        const rule = new Rule(name, conditionEvaluator, action);
+        const rule = new Rule(name, conditionEvaluator, [action]);
 
         expect(variables.get('buy')).toBe(false);
         await rule.evaluateConditionAndExecuteActionIfTrue(variables);
@@ -56,7 +56,7 @@ describe('Rule', () => {
         const name = 'Buy always';
         const conditionEvaluator = new ConstantConditionEvaluator(1);
         const action = new SetVariableAction('buy', conditionEvaluator);
-        const rule = new Rule(name, conditionEvaluator, action);
+        const rule = new Rule(name, conditionEvaluator, [action]);
 
         expect(variables.get('buy')).toBe(false);
         await expect(rule.evaluateConditionAndExecuteActionIfTrue(variables)).rejects.toThrow(ConditionResultNotBooleanError);
@@ -114,7 +114,7 @@ describe('Rule', () => {
         const json = {
             name: 'Buy always',
             condition: { type: "CONSTANT", value: true },
-            action: { type: "SET_VARIABLE", name: 'buy', value: { type: "CONSTANT", value: true } }
+            action: [{ type: "SET_VARIABLE", name: 'buy', value: { type: "CONSTANT", value: true } }]
         };
         const rule = Rule.fromJson(json);
         expect(rule).toBeInstanceOf(Rule);

@@ -21,8 +21,12 @@ export default class SetVariableAction implements Action {
         if (!json.hasOwnProperty('value')) {
             throw new Error('Set variable action must have a value');
         }
-        const value = new ConditionEvaluatorFactory(json.value).create();
-        return new SetVariableAction(json.name, value);
+        try {
+            const value = new ConditionEvaluatorFactory(json.value).create();
+            return new SetVariableAction(json.name, value);
+        } catch (error) {
+            throw new Error(`Set variable action value must be a valid condition evaluator. Error: ${error}`);
+        }
     }
 
     async execute(variables: ConditionEvaluatorVariables): Promise<void> {

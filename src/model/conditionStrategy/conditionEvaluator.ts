@@ -11,6 +11,12 @@ export class InexistentVariableError extends Error {
     }
 }
 
+export class ConditionResultNotBooleanError extends Error {
+    constructor(result: ConditionEvaluatorType) {
+        super(`Condition result is not a boolean: ${result}`);
+    }
+}
+
 export interface ConditionEvaluator {
     evaluate(variables: ConditionEvaluatorVariables): Promise<ConditionEvaluatorType>;
 }

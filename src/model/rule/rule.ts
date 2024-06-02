@@ -6,12 +6,12 @@ import ConditionEvaluatorFactory from "../conditionStrategy/conditionEvaluatorFa
 export default class Rule {
     private name: string;
     private conditionEvaluator: ConditionEvaluator;
-    private action: Action;
+    private actions: Action[];
     
-    constructor(name: string, conditionEvaluator: ConditionEvaluator, action: Action) {
+    constructor(name: string, conditionEvaluator: ConditionEvaluator, actions: Action[]) {
         this.name = name;
         this.conditionEvaluator = conditionEvaluator;
-        this.action = action;
+        this.actions = actions;
     }
 
     static fromJson(json: any): Rule {
@@ -29,7 +29,9 @@ export default class Rule {
         }
         const name = json.name;
         const conditionEvaluator = new ConditionEvaluatorFactory(json.condition).create();
-        const action = new ActionFactory(json.action).create();
+        
+        const action = json.action.map((action: any) => new ActionFactory(action).create());
+
         return new Rule(name, conditionEvaluator, action);
     }
     
@@ -47,7 +49,10 @@ export default class Rule {
             return false;
         }
 
-        await this.action.execute(variables);
+        for (const action of this.actions) {
+            await action.execute(variables);
+        }
+
         return true;
     }
 }

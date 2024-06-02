@@ -20,7 +20,7 @@ describe('RulesEvaluator', () => {
         const ruleJson = {
             name: 'Buy always',
             condition: { type: "CONSTANT", value: true },
-            action: { type: "SET_VARIABLE", name: 'buy', value: { type: "CONSTANT", value: true } }
+            action: [{ type: "SET_VARIABLE", name: 'buy', value: { type: "CONSTANT", value: true } }]
         };
         const rules = [ruleJson];
         const json = { rules, variables: {} };

@@ -30,13 +30,8 @@ export default class DataConditionEvaluator implements ConditionEvaluator {
             throw new Error("Data condition evaluator must have a until");
         if (typeof json.until !== 'number')
             throw new Error("Data condition evaluator until must be a number");
-        if (!json.hasOwnProperty("default"))
-            throw new Error("Data condition evaluator must have a default");
-        if (!Array.isArray(json.default))
-            throw new Error("Data condition evaluator defaults must be an array");
 
-
-        const defaults = json.default.map((def: any) => new ConditionEvaluatorFactory(def).create());
+        const defaults = json.hasOwnProperty("default") ? json.default.map((def: any) => new ConditionEvaluatorFactory(def).create()) : [];
         return new DataConditionEvaluator(json.symbol, json.from, json.until, defaults, functionName);
     }
 

@@ -117,6 +117,11 @@ describe('Database', () => {
   });
 
   describe('clearAllHistoricalData', () => {
+
+    beforeEach(() => {
+      clearAllHistoricalData();
+    });
+
     it('should clear all historical data after one hour old', () => {
       const symbol = 'BTCUSDT';
       const times = [

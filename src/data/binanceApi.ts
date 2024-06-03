@@ -51,7 +51,7 @@ export async function placeOrder(symbol: string, side: 'BUY' | 'SELL', quantity:
   try {
     const response = await getResponseForPlaceOrder(url);
     console.log(response);
-    return response.data;
+    return response;
   } catch (error) {
     throw error;
   }

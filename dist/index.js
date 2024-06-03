@@ -1,51 +1,45 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const parser_1 = require("./evaluator/parser");
-const binanceConnection_1 = require("./evaluator/binanceConnection");
-const binanceApi_1 = require("./binanceApi");
-//Esto no sé por qué no funciona, es lo que debería permitirnos obtener las reglas del archivo rules.json
-// function getPairsFromFile(filePath: string): any {
-//   let ruleSet = parseRules('/home/claram97/tdd/tdd-tp2/src/evaluator/rules.json');
-//   console.log(ruleSet)
-//   let pairs = collectPairsFromRuleSet(ruleSet);
-//   console.log(pairs)
+const parser_1 = require("./parser/parser");
+const binanceConnection_1 = require("./data/binanceConnection");
+const notificationSender_1 = require("./notifier/notificationSender");
+const rulesEvaluator_1 = __importDefault(require("./model/ruleEvaluator/rulesEvaluator"));
+const fs_1 = require("fs");
+let ruleSet = (0, parser_1.parseRules)('src/rules.json');
+let pairs = (0, parser_1.collectPairsFromRuleSet)(ruleSet);
+const notifier = new notificationSender_1.MessageNotifier();
+const discordNotifier = new notificationSender_1.DiscordNotifier(notifier);
+discordNotifier.start();
+const slackNotifier = new notificationSender_1.SlackNotifier(notifier);
+slackNotifier.start();
+const binanceData = new binanceConnection_1.BinanceListener(pairs);
+binanceData.on('error', (error) => {
+    console.error('WebSocket error:', error);
+});
+binanceData.on('connected', () => {
+    console.log('WebSocket connected');
+});
+binanceData.on('disconnected', ({ code, reason }) => {
+    console.log(`WebSocket disconnected (${code}): ${reason}`);
+});
+const rulesData = (0, fs_1.readFileSync)('src/rules.json', 'utf8');
+const rulesJson = JSON.parse(rulesData);
+const rulesEvaluator = rulesEvaluator_1.default.fromJson(rulesJson);
+binanceData.on('update', () => {
+    rulesEvaluator.evaluateRules();
+    console.log('WebSocket update');
+});
+//Para probar que la wallet siga funcionando
+// async function order() {
+//   try {
+//     var order = await placeOrder('BTCUSDT', 'BUY', 0.001);
+//     console.log(order);
+//   }
+//   catch (error) {
+//     console.error('Error al enviar la orden:', error);
+//   }
 // }
-// creo q asi deberia funcionar
-function getPairsFromFile(filePath) {
-    let ruleSet = (0, parser_1.parseRules)(filePath);
-    console.log(ruleSet);
-    let pairs = (0, parser_1.collectPairsFromRuleSet)(ruleSet);
-    console.log(pairs);
-    return { pairs, ruleSet };
-}
-let { pairs, ruleSet } = getPairsFromFile('/Users/paulabruck/Desktop/FIUBA/Tecnicas_De_Diseño/tdd-tp2/src/evaluator/rules.json');
-console.log('Pairs from file:', pairs);
-//let pairs = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
-let URI = (0, binanceConnection_1.getUri)(pairs);
-console.log('WebSocket URI:', URI);
-(0, binanceConnection_1.connectToBinanceWebSocket)(URI, ruleSet);
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        console.log('Placing buy order...');
-        const buyOrder = yield (0, binanceApi_1.placeOrder)('BTCUSDT', 'BUY', 0.01);
-        console.log('Buy Order:', buyOrder);
-        console.log('Placing sell order...');
-        const sellOrder = yield (0, binanceApi_1.placeOrder)('BTCUSDT', 'SELL', 0.01);
-        console.log('Sell Order:', sellOrder);
-        console.log('Fetching order history...');
-        const orderHistory = yield (0, binanceApi_1.getOrderHistory)('BTCUSDT');
-        console.log('Order History:', orderHistory);
-    }
-    catch (error) {
-        console.error('Error in placing orders:', error);
-    }
-}))();
+// order();

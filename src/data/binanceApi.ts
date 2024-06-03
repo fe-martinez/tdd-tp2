@@ -31,7 +31,14 @@ async function getResponseForPlaceOrder(url : string) {
     },
     });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response) {
+      console.error('Error en la respuesta de Binance:', error.response.data);
+    } else if (error.request) {
+      console.error('Error de conexión:', error.request);
+    } else {
+      console.error('Error al procesar la solicitud:', error.message);
+    }
     throw error;
   }
 }

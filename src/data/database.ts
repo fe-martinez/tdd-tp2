@@ -1,5 +1,3 @@
-import { Value } from "../model/types";
-
 export interface Data {
     bestBidPrice: string;
     bestAskPrice: string;
@@ -9,7 +7,6 @@ export interface Data {
 const historicalData: { [symbol: string]: Data[] } = {};
 
 const TO_HOUR = 1000;
-
 
 function calculateDateOffset(hours: number): Date {
     const now = new Date();
@@ -28,10 +25,8 @@ export function getHistoricalData(symbol: string, since: number, until: number):
 }
 
 export function getHistoricalPairValues(symbol: string, since: number, until: number): number[] {
-    if (symbol.includes("/")) {
-        symbol = symbol.replace("/", "");
-    }
-    const data = getHistoricalData(symbol, since, until);
+    const parsedSymbol = symbol.replace("/", "");
+    const data = getHistoricalData(parsedSymbol, since, until);
     return data.map(d => parseFloat(d.bestBidPrice));
 }
 
@@ -42,11 +37,9 @@ export function getLastPairValue(symbol: string): number {
 
 export function addHistoricalData(symbol: string, data: Data): void {
     historicalData[symbol] = [...(historicalData[symbol] || []), data];
-    //console.log(historicalData[symbol].length)
     console.log(`Datos históricos actualizados para el símbolo ${symbol}:`, historicalData[symbol]);
     clearHistoricalData();
 }
-
 
 export function clearHistoricalData(): void {
     const now = new Date().getTime();

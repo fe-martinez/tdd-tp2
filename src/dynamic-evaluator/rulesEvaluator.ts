@@ -29,6 +29,8 @@ async function executeBuyMarketAction(action: BuyMarketAction, conditionEvaluato
     notifier.sendNotification("Compré " + amount as string + " " + action.symbol + "!")
 }
 
+
+
 async function executeSellMarketAction(action: SellMarketAction, conditionEvaluator: ConditionEvaluator, notifier : MessageNotifier): Promise<void> {
     const amount = conditionEvaluator.compileActionAmount(action)();
     const symbol = action.symbol.replace('/','');

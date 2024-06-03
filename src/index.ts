@@ -4,6 +4,7 @@ import { BinanceListener } from './data/binanceConnection';
 import { MessageNotifier, DiscordNotifier, SlackNotifier } from './notifier/notificationSender';
 import RulesEvaluator from './model/ruleEvaluator/rulesEvaluator';
 import { readFileSync } from 'fs';
+import { placeOrder } from './data/binanceApi';
 
 let ruleSet: RuleSet = parseRules('src/rules.json');
 let pairs = collectPairsFromRuleSet(ruleSet);
@@ -40,14 +41,14 @@ binanceData.on('update', () => {
 });
 
 //Para probar que la wallet siga funcionando
-// async function order() {
-//   try {
-//     var order = await placeOrder('BTCUSDT', 'BUY', 0.001);
-//     console.log(order);
-//   }
-//   catch (error) {
-//     console.error('Error al enviar la orden:', error);
-//   }
-// }
+async function order() {
+  try {
+    var order = await placeOrder('BTCUSDT', 'BUY', 0.001);
+    console.log(order);
+  }
+  catch (error) {
+    //console.error('Error al enviar la orden:', error);
+  }
+}
 
-// order();
+order();

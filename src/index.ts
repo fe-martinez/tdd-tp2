@@ -1,17 +1,13 @@
 import { collectPairsFromRuleSet, parseRules } from './parser/parser';
 import { RuleSet } from './model/types';
 import { BinanceListener } from './data/binanceConnection';
-import { ConditionEvaluator } from './dynamic-evaluator/conditionEvaluator';
-import { executeRuleSet } from './dynamic-evaluator/rulesEvaluator';
-import { MessageNotifier } from './notifier/notificationSender';
-import { DiscordNotifier, discordConfigurationExists } from './notifier/discordNotifier';
-import { SlackNotifier, slackConfigurationExists } from './notifier/slackNotifier';
-import { Timer } from './timer/timer';
-import { time } from 'console';
+import { MessageNotifier, DiscordNotifier, SlackNotifier } from './notifier/notificationSender';
+import RulesEvaluator from './model/ruleEvaluator/rulesEvaluator';
+import { readFileSync } from 'fs';
 
 let ruleSet: RuleSet = parseRules('src/rules.json');
 let pairs = collectPairsFromRuleSet(ruleSet);
-const compiledRules = new ConditionEvaluator(ruleSet);
+
 const notifier = new MessageNotifier();
 
 if (discordConfigurationExists()) {
@@ -42,38 +38,16 @@ binanceData.on('disconnected', ({ code, reason }) => {
   console.log(`WebSocket disconnected (${code}): ${reason}`);
 });
 
-binanceData.on('update', (data) => {
-  executeRuleSet(compiledRules, notifier)
-    .then(() => {
-      console.log('Update from binance:', data);
-    })
-    .catch((error) => {
-      console.error('Error executing rule set:', error);
-    });
+const rulesData = readFileSync('src/rules.json', 'utf8');
+const rulesJson = JSON.parse(rulesData);
+
+
+const rulesEvaluator: RulesEvaluator = RulesEvaluator.fromJson(rulesJson);
+
+binanceData.on('update', () => {
+  rulesEvaluator.evaluateRules(notifier);
+  console.log('WebSocket update');
 });
-
-//Para probar el timer
-// function getHour() {
-//   const now = new Date();
-//   const hours = now.getHours();
-//   const minutes = now.getMinutes();
-//   const seconds = now.getSeconds();
-
-//   const currentTime = `${hours}:${minutes}:${seconds}`;
-
-//   return currentTime
-// }
-
-// console.log('Inicio del programa');
-// console.log(getHour());
-// let timer = new Timer(5 * 1000); //5 segundos
-// timer.start(() => {
-//   let hour = getHour()
-//   console.log(hour);
-// });
-
-// timer.stop(); //Si llamo a esto inmediatamente después del start no se ejecuta el timer porque lo stopea correctamente
-
 
 //Para probar que la wallet siga funcionando
 // async function order() {

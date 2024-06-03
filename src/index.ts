@@ -35,7 +35,7 @@ const rulesJson = JSON.parse(rulesData);
 const rulesEvaluator: RulesEvaluator = RulesEvaluator.fromJson(rulesJson);
 
 binanceData.on('update', () => {
-  rulesEvaluator.evaluateRules();
+  rulesEvaluator.evaluateRules(notifier);
   console.log('WebSocket update');
 });
 

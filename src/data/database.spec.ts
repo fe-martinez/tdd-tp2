@@ -1,4 +1,4 @@
-import { addHistoricalData, clearAllHistoricalData, getLastPairValue, getHistoricalData, getHistoricalPairValues } from './database';
+import { addHistoricalData, clearAllHistoricalData, getLastPairValue, getHistoricalData, getHistoricalPairValues, clearHistoricalData } from './database';
 
 describe('Database', () => {
   const now = new Date();
@@ -113,6 +113,49 @@ describe('Database', () => {
       expect(historicalPairValues.length).toBe(2);
       expect(historicalPairValues[0]).toBe(parseFloat(data1.bestBidPrice));
       expect(historicalPairValues[1]).toBe(parseFloat(data2.bestBidPrice));
+    });
+  });
+
+  describe('clearAllHistoricalData', () => {
+    it('should clear all historical data after one hour old', () => {
+      const symbol = 'BTCUSDT';
+      const times = [
+        new Date(now.getTime() - 10800000), // 3 hours ago
+        new Date(now.getTime() - 7200000), // 2 hours ago
+        new Date(now.getTime() - 3600000), // 1 hour ago
+        new Date()
+      ];
+      times.forEach(time => {
+        const data = {
+          bestBidPrice: '10000',
+          bestAskPrice: '10010',
+          time
+        };
+        addHistoricalData(symbol, data);
+      });
+      clearHistoricalData();
+      const historicalData = getHistoricalData(symbol, 10800001, 0); // Since 3 hour ago until now
+      expect(historicalData.length).toBe(1);
+    });
+
+    it('should automatically clear all historical data after one hour old when adding new data', () => {
+      const symbol = 'BTCUSDT';
+      const times = [
+        new Date(now.getTime() - 10800000), // 3 hours ago
+        new Date(now.getTime() - 7200000), // 2 hours ago
+        new Date(now.getTime() - 3600000), // 1 hour ago
+        new Date()
+      ];
+      times.forEach(time => {
+        const data = {
+          bestBidPrice: '10000',
+          bestAskPrice: '10010',
+          time
+        };
+        addHistoricalData(symbol, data);
+      });
+      const historicalData = getHistoricalData(symbol, 10800001, 0); // Since 3 hour ago until now
+      expect(historicalData.length).toBe(1);
     });
   });
 });

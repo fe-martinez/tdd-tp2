@@ -1,5 +1,6 @@
 import { ConditionEvaluatorType, ConditionEvaluatorVariables } from "../conditionStrategy/conditionEvaluator";
 import Rule from "../rule/rule";
+import logger from "../../helpers/logger";
 
 export default class RulesEvaluator {
     private variables: ConditionEvaluatorVariables;
@@ -12,6 +13,7 @@ export default class RulesEvaluator {
 
     async evaluateRules(): Promise<void> {
         for (const rule of this.rules) {
+            logger(`Evaluating rule: ${rule.getName()}`);
             await rule.evaluateConditionAndExecuteActionIfTrue(this.variables);
         }
         return Promise.resolve();

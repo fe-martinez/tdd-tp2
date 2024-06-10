@@ -50,7 +50,7 @@ export function getUri(pairs: string[]): string {
     return getEndpointURI(parsedPairs);
 }
 
-function isImportantChange(orderBook: any, lastValue: number): boolean {
+export function isImportantChange(orderBook: any, lastValue: number): boolean {
   const bands = [lastValue * (1 - IMPORTANT_VARIATION), lastValue * (1 + IMPORTANT_VARIATION)];
   return parseFloat(orderBook.bestBidPrice) < bands[0] || parseFloat(orderBook.bestBidPrice) > bands[1];
 }

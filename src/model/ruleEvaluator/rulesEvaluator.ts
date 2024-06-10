@@ -1,6 +1,7 @@
 import { MessageNotifier } from "../../notifier/notificationSender";
 import { ConditionEvaluatorType, ConditionEvaluatorVariables } from "../conditionStrategy/conditionEvaluator";
 import Rule from "../rule/rule";
+import logger from "../../helpers/logger";
 
 export default class RulesEvaluator {
     private variables: ConditionEvaluatorVariables;

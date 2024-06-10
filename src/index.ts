@@ -11,10 +11,20 @@ let ruleSet: RuleSet = parseRules('src/rules.json');
 let pairs = collectPairsFromRuleSet(ruleSet);
 
 const notifier = new MessageNotifier();
-const discordNotifier = new DiscordNotifier(notifier);
-discordNotifier.start();
-const slackNotifier = new SlackNotifier(notifier);
-slackNotifier.start();
+
+if (discordConfigurationExists()) {
+  const discordNotifier = new DiscordNotifier(notifier);
+  discordNotifier.listen();
+}
+
+if (slackConfigurationExists()) {
+  const slackNotifier = new SlackNotifier(notifier);
+  slackNotifier.listen();
+}
+
+notifier.sendNotification("App is now running");
+//notifier.startTimer("Acá iría el mensaje que se envía cada vez que pasó un tiempo, descomentar esto cuando esté listo")
+//notifier.startTimer("Probando si envía mensajes con el timer integrado");
 
 const binanceData: BinanceListener = new BinanceListener(pairs);
 const rulesData = readFileSync('src/rules.json', 'utf8');
@@ -37,7 +47,7 @@ binanceData.on('disconnected', ({ code, reason }) => {
 });
 
 binanceData.on('update', () => {
-  logger('WebSocket update');
+  rulesEvaluator.evaluateRules(notifier);
   console.log('WebSocket update');
   rulesEvaluator.evaluateRules();
 });

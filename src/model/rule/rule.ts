@@ -31,10 +31,10 @@ export default class Rule {
         const name = json.name;
         const conditionEvaluator = new ConditionEvaluatorFactory(json.condition).create();
         
-        const action = json.action.map((action: any) => new ActionFactory(action).create());
+        const actions = json.action.map((action: any) => new ActionFactory(action).create());
 
         logger(`Rule ${name} created with json: ${JSON.stringify(json)}`);
-        return new Rule(name, conditionEvaluator, action);
+        return new Rule(name, conditionEvaluator, actions);
     }
     
     getName(): string {

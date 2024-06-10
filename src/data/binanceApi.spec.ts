@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as binanceApi from './binanceApi';
+import { BinanceOrder } from './binanceApi';
 
 jest.mock('axios'); 
 
@@ -28,26 +29,9 @@ describe('Binance API', () => {
       const mockPlaceOrderResponse = {
         symbol: 'BTCUSDT',
         orderId: 123456,
-        orderListId: -1,
-        clientOrderId: 'myOrder1',
-        transactTime: 1622736148226,
-        price: '0.00000000',
-        origQty: '1.00000000',
-        executedQty: '1.00000000',
-        cummulativeQuoteQty: '50000.00000000',
         status: 'FILLED',
-        timeInForce: 'GTC',
-        type: 'MARKET',
         side: 'BUY',
-        fills: [
-          {
-            price: '50000.00000000',
-            qty: '1.00000000',
-            commission: '0.00075000',
-            commissionAsset: 'BNB',
-            tradeId: 123456,
-          },
-        ],
+
       };
 
       (axios.post as jest.Mock).mockResolvedValueOnce({ data: mockPlaceOrderResponse });
@@ -59,7 +43,7 @@ describe('Binance API', () => {
           'X-MBX-APIKEY': mockApiKey,
         },
       });
-      expect(response).toEqual(mockPlaceOrderResponse);
+      expect(response).toEqual(mockPlaceOrderResponse as BinanceOrder);
     });
 
     it('should throw an error if placing order fails', async () => {

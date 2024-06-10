@@ -2,7 +2,7 @@ import { ConditionEvaluator, ConditionEvaluatorVariables } from "../conditionStr
 import ConditionEvaluatorFactory from "../conditionStrategy/conditionEvaluatorFactory";
 import { InvalidAmountError, MarketDataApi } from "../MarketDataApi/marketDataApi";
 import { Action } from "./action";
-import logger from "../../helpers/logger";
+import { logAndSendNotification } from "../../helpers/logger";
 
 export default class BuyMarketAction implements Action {
     private symbol: string;
@@ -39,7 +39,7 @@ export default class BuyMarketAction implements Action {
         if (typeof amount !== 'number') {
             return Promise.reject(new InvalidAmountError(`Amount must be a number, but it is ${amount}`));
         }
-        logger(`Buying ${amount} of ${this.symbol}`);
+        logAndSendNotification(`Buying ${amount} of ${this.symbol}`);
         return this.marketDataApi.buyMarket(this.symbol, amount);
     }
 }

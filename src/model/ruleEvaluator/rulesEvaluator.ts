@@ -1,7 +1,5 @@
-import { MessageNotifier } from "../../notifier/notificationSender";
 import { ConditionEvaluatorType, ConditionEvaluatorVariables } from "../conditionStrategy/conditionEvaluator";
 import Rule from "../rule/rule";
-import logger from "../../helpers/logger";
 
 export default class RulesEvaluator {
     private variables: ConditionEvaluatorVariables;
@@ -12,12 +10,9 @@ export default class RulesEvaluator {
         this.rules = rules;
     }
 
-    async evaluateRules(notifier?: MessageNotifier): Promise<void> {
+    async evaluateRules(): Promise<void> {
         for (const rule of this.rules) {
-            const result = await rule.evaluateConditionAndExecuteActionIfTrue(this.variables);
-            if (result && notifier) {
-                notifier.sendNotification(`Rule ${rule.getName()} executed`);
-            }
+            await rule.evaluateConditionAndExecuteActionIfTrue(this.variables);
         }
         return Promise.resolve();
     }

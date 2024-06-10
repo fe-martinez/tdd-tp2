@@ -1,7 +1,7 @@
 import { ConditionEvaluator, ConditionEvaluatorVariables } from "../conditionStrategy/conditionEvaluator";
 import ConditionEvaluatorFactory from "../conditionStrategy/conditionEvaluatorFactory";
 import { Action } from "./action";
-import logger from "../../helpers/logger";
+import { logAndSendNotification } from "../../helpers/logger";
 
 export default class SetVariableAction implements Action {
     private variableName: string;
@@ -33,7 +33,7 @@ export default class SetVariableAction implements Action {
     async execute(variables: ConditionEvaluatorVariables): Promise<void> {
         const value = await this.value.evaluate(variables);
         variables.set(this.variableName, value);
-        logger(`Set variable ${this.variableName} to ${value}`);
+        logAndSendNotification(`Set variable ${this.variableName} to ${value}`);
         return Promise.resolve();
     }
 }

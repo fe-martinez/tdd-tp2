@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { collectPairsFromRuleSet, parseRules } from './parser/parser';
 import { RuleSet } from './model/types';
 import { BinanceListener } from './data/binanceConnection';
@@ -9,7 +10,12 @@ import setupNotifiers from './notifier/notifiers';
 
 process.env.NODE_ENV = 'production';
 
-let ruleSet: RuleSet = parseRules('src/rules.json');
+const rulesFilePath = process.argv[2];
+if (!rulesFilePath || !fs.existsSync(rulesFilePath)) {
+  throw new Error('No se especificó el archivo de reglas o no existe');
+}
+
+let ruleSet: RuleSet = parseRules(rulesFilePath);
 let pairs = collectPairsFromRuleSet(ruleSet);
 
 const notifier = MessageNotifier.getInstance();
@@ -19,7 +25,7 @@ notifier.sendNotification("App is now running");
 //notifier.startTimer("Probando si envía mensajes con el timer integrado");
 
 const binanceData: BinanceListener = new BinanceListener(pairs);
-const rulesData = readFileSync('src/rules.json', 'utf8');
+const rulesData = readFileSync(rulesFilePath, 'utf8');
 const rulesJson = JSON.parse(rulesData);
 const rulesEvaluator: RulesEvaluator = RulesEvaluator.fromJson(rulesJson);
 

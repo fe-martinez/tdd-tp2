@@ -1,14 +1,21 @@
-import axios from "axios";
 import { EventEmitter } from 'events';
 import { Timer } from "../timer/timer";
 import { timeToNotify } from "../config/notifiersConfig";
 
 export class MessageNotifier extends EventEmitter {
     private timer: Timer;
+    private static instance?: MessageNotifier;
 
-    public constructor() {
+    private constructor() {
         super();
         this.timer = new Timer(timeToNotify);
+    }
+
+    public static getInstance(): MessageNotifier {
+        if (!this.instance) {
+            this.instance = new MessageNotifier();
+        }
+        return this.instance;
     }
 
     //Acá hay que pasarle lo que se le quiere pasar cuando 

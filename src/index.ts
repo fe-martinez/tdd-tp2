@@ -1,11 +1,12 @@
 import { collectPairsFromRuleSet, parseRules } from './parser/parser';
 import { RuleSet } from './model/types';
 import { BinanceListener } from './data/binanceConnection';
-import { MessageNotifier, DiscordNotifier, SlackNotifier } from './notifier/notificationSender';
+import { MessageNotifier } from './notifier/notificationSender';
 import RulesEvaluator from './model/ruleEvaluator/rulesEvaluator';
 import { readFileSync } from 'fs';
-import { placeOrder } from './data/binanceApi';
 import logger from './helpers/logger';
+import { discordConfigurationExists, DiscordNotifier } from './notifier/discordNotifier';
+import { slackConfigurationExists, SlackNotifier } from './notifier/slackNotifier';
 
 let ruleSet: RuleSet = parseRules('src/rules.json');
 let pairs = collectPairsFromRuleSet(ruleSet);

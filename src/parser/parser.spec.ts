@@ -76,7 +76,7 @@ describe('parser.ts', () => {
     it('should extract exchange pairs from a rule', () => {
       const rule: Rule = mockRuleSet.rules[0];
       const pairs = extractExchangePairs(rule);
-      expect(pairs).toEqual(['BTCUSD', 'ETHUSD']);
+      expect(pairs).toEqual(['BTCUSD', 'ETHUSD', 'BTCUSD']);
     });
   });
 

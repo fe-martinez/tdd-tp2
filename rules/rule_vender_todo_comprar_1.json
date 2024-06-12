@@ -1,0 +1,73 @@
+{
+    "variables": {},
+    "rules": [
+        {
+            "name": "Vender todo si el precio está por debajo de 100000",
+            "condition": {
+                "type": "CALL",
+                "name": "<",
+                "arguments": [
+                    {
+                        "type": "CALL",
+                        "name": "LAST",
+                        "arguments": [
+                            {
+                                "type": "DATA",
+                                "symbol": "BTC/USDT",
+                                "from": 3600,
+                                "until": 0,
+                                "default": [
+                                    {
+                                        "type": "CONSTANT",
+                                        "value": 100000
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "CONSTANT",
+                        "value": 100000
+                    }
+                ]
+            },
+            "action": [
+                {
+                    "type": "SELL_MARKET",
+                    "symbol": "BTC/USDT",
+                    "amount": {
+                        "type": "WALLET",
+                        "symbol": "BTC"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Comprar 1 BTC si tengo menos de 3 BTC",
+            "condition": {
+                "type": "CALL",
+                "name": "<",
+                "arguments": [
+                    {
+                        "type": "WALLET",
+                        "symbol": "BTC"
+                    },
+                    {
+                        "type": "CONSTANT",
+                        "value": 3
+                    }
+                ]
+            },
+            "action": [
+                {
+                    "type": "BUY_MARKET",
+                    "symbol": "BTC/USDT",
+                    "amount": {
+                        "type": "CONSTANT",
+                        "value": 1
+                    }
+                }
+            ]
+        }
+    ]
+}

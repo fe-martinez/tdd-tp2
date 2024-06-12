@@ -1,0 +1,121 @@
+{
+    "variables": {
+        "LAST_BUY_PRICE": 0,
+        "AVERAGE_LAST_HOUR": 0,
+        "MAX_LAST_HOUR": 0
+    },
+    "rules": [
+        {
+            "name": "Actualizar promedio y maximo de ultima hora",
+            "condition": {
+                "type": "CONSTANT",
+                "value": true
+            },
+            "action": [
+                {
+                    "type": "SET_VARIABLE",
+                    "name": "AVERAGE_LAST_HOUR",
+                    "value": {
+                        "type": "CALL",
+                        "name": "AVERAGE",
+                        "arguments": [
+                            {
+                                "type": "DATA",
+                                "symbol": "BTC/USDT",
+                                "from": 3600,
+                                "until": 0,
+                                "default": [
+                                    {
+                                        "type": "CONSTANT",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "SET_VARIABLE",
+                    "name": "MAX_LAST_HOUR",
+                    "value": {
+                        "type": "CALL",
+                        "name": "MAX",
+                        "arguments": [
+                            {
+                                "type": "DATA",
+                                "symbol": "BTC/USDT",
+                                "from": 3600,
+                                "until": 0,
+                                "default": [
+                                    {
+                                        "type": "CONSTANT",
+                                        "value": 1000
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Comprar cuando el promedio > ultimo precio de compra",
+            "condition": {
+                "type": "CALL",
+                "name": ">",
+                "arguments": [
+                    {
+                        "type": "VARIABLE",
+                        "name": "AVERAGE_LAST_HOUR"
+                    },
+                    {
+                        "type": "VARIABLE",
+                        "name": "LAST_BUY_PRICE"
+                    }
+                ]
+            },
+            "action": [
+                {
+                    "type": "BUY_MARKET",
+                    "symbol": "BTC/USDT",
+                    "amount": {
+                        "type": "CALL",
+                        "name": "/",
+                        "arguments": [
+                            {
+                                "type": "VARIABLE",
+                                "name": "AVERAGE_LAST_HOUR"
+                            },
+                            {
+                                "type": "VARIABLE",
+                                "name": "MAX_LAST_HOUR"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "SET_VARIABLE",
+                    "name": "LAST_BUY_PRICE",
+                    "value": {
+                        "type": "CALL",
+                        "name": "LAST",
+                        "arguments": [
+                            {
+                                "type": "DATA",
+                                "symbol": "BTC/USDT",
+                                "from": 3600,
+                                "until": 0,
+                                "default": [
+                                    {
+                                        "type": "VARIABLE",
+                                        "name": "LAST_BUY_PRICE"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

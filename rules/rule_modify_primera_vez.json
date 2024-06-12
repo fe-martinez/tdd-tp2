@@ -1,0 +1,152 @@
+{
+    "variables": {
+        "MODIFY": false,
+        "LAST_SELL_VALUE_BTC/USDT": 0
+    },
+    "rules": [
+        {
+            "name": "Vender si modify es true y sube 15%",
+            "condition": {
+                "type": "CALL",
+                "name": "AND",
+                "arguments": [
+                    {
+                        "type": "CALL",
+                        "name": "==",
+                        "arguments": [
+                            {
+                                "type": "VARIABLE",
+                                "name": "MODIFY"
+                            },
+                            {
+                                "type": "CONSTANT",
+                                "value": true
+                            }
+                        ]
+                    },
+                    {
+                        "type": "CALL",
+                        "name": "<",
+                        "arguments": [
+                            {
+                                "type": "CALL",
+                                "name": "*",
+                                "arguments": [
+                                    {
+                                        "type": "CONSTANT",
+                                        "value": 1.15
+                                    },
+                                    {
+                                        "type": "VARIABLE",
+                                        "name": "LAST_SELL_VALUE_BTC/USDT"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "CALL",
+                                "name": "LAST",
+                                "arguments": [
+                                    {
+                                        "type": "DATA",
+                                        "symbol": "BTC/USDT",
+                                        "from": 3600,
+                                        "until": 0,
+                                        "default": [
+                                            {
+                                                "type": "VARIABLE",
+                                                "name": "LAST_SELL_VALUE_BTC/USDT"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "action": [
+                {
+                    "type": "SELL_MARKET",
+                    "symbol": "BTC/USDT",
+                    "amount": {
+                        "type": "CONSTANT",
+                        "value": 0.1
+                    }
+                },
+                {
+                    "type": "SET_VARIABLE",
+                    "name": "LAST_SELL_VALUE_BTC/USDT",
+                    "value": {
+                        "type": "CALL",
+                        "name": "LAST",
+                        "arguments": [
+                            {
+                                "type": "DATA",
+                                "symbol": "BTC/USDT",
+                                "from": 3600,
+                                "until": 0,
+                                "default": [
+                                    {
+                                        "type": "VARIABLE",
+                                        "name": "LAST_SELL_VALUE_BTC/USDT"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Modify primera vez",
+            "condition": {
+                "type": "CALL",
+                "name": "<",
+                "arguments": [
+                    {
+                        "type": "CALL",
+                        "name": "*",
+                        "arguments": [
+                            {
+                                "type": "CONSTANT",
+                                "value": 1.15
+                            },
+                            {
+                                "type": "VARIABLE",
+                                "name": "LAST_SELL_VALUE_BTC/USDT"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "CALL",
+                        "name": "LAST",
+                        "arguments": [
+                            {
+                                "type": "DATA",
+                                "symbol": "BTC/USDT",
+                                "from": 3600,
+                                "until": 0,
+                                "default": [
+                                    {
+                                        "type": "VARIABLE",
+                                        "name": "LAST_SELL_VALUE_BTC/USDT"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "action": [
+                {
+                    "type": "SET_VARIABLE",
+                    "name": "MODIFY",
+                    "value": {
+                        "type": "CONSTANT",
+                        "value": true
+                    }
+                }
+            ]
+        }
+    ]
+}

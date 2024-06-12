@@ -25,9 +25,9 @@ export default class BuyMarketAction implements Action {
         if (!json.amount.hasOwnProperty("type"))
             throw new Error("Buy market action amount must have a type");
     
-        const validTypes = ['CONSTANT', 'VARIABLE', 'WALLET'];
+        const validTypes = ['CONSTANT', 'VARIABLE', 'WALLET', 'CALL', 'DATA'];
         if (!validTypes.includes(json.amount.type.toUpperCase())) {
-            throw new Error("Buy market action amount must be constant, variable or wallet");
+            throw new Error("Buy market action amount must be constant, variable, wallet, call or data");
         }
 
         const amountEvaluator = new ConditionEvaluatorFactory(json.amount).create();

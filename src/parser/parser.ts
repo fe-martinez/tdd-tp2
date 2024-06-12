@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Condition, Rule, RuleSet, DataCondition, CallCondition, Value } from '../model/types'
+import { Condition, Rule, RuleSet, DataCondition, CallCondition, Value, Action } from '../model/types'
 import { ConditionType } from '../model/conditionTypeEnum';
 
 export function parseRules(filePath: string): RuleSet {
@@ -20,6 +20,9 @@ export function collectPairsFromRuleSet(ruleSet: RuleSet): string[] {
 export function extractExchangePairs(rule: Rule): string[] {
     const pairs: string[] = [];
     traverse(rule.condition, pairs);
+    rule.action.forEach(action => {
+        traverseAction(action, pairs);
+    });
     return pairs;
 }
 
@@ -28,6 +31,18 @@ export function extractExchangePairs(rule: Rule): string[] {
 export function traverse(condition: Condition, pairs: string[]) {
     if (condition.type === ConditionType.CALL) {
         handleCallCondition(condition as CallCondition, pairs);
+    }
+}
+
+function traverseAction(action: Action, pairs: string[]) {
+    if (action.type === "BUY_MARKET" || action.type === "SELL_MARKET") {
+        pairs.push(action.symbol);
+    } else if (action.type === "SET_VARIABLE") {
+        if (action.value.type === "CALL") {
+            handleCallCondition(action.value as CallCondition, pairs);
+        } else if (action.value.type === "DATA") {
+            handleDataCondition(action.value as DataCondition, pairs);
+        }
     }
 }
 

@@ -3,7 +3,8 @@ import { getEndpointURI, getOrderBook, parsePairs } from './binanceParser';
 import { addHistoricalData, getLastPairValue } from './database';
 import { EventEmitter } from 'events';
 
-const IMPORTANT_VARIATION = 0.001;
+require('dotenv').config();
+const IMPORTANT_VARIATION = process.env.IMPORTANT_VARIATION ? parseFloat(process.env.IMPORTANT_VARIATION) : 0.01;
 
 export class BinanceListener extends EventEmitter {
   private binanceWs: WebSocket;

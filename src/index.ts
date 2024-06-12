@@ -8,7 +8,7 @@ import { readFileSync } from 'fs';
 import { logAndSendNotification } from './helpers/logger';
 import setupNotifiers from './notifier/notifiers';
 
-process.env.NODE_ENV = 'production';
+process.env.ENVIROMENT = 'production';
 
 const rulesFilePath = process.argv[2];
 if (!rulesFilePath || !fs.existsSync(rulesFilePath)) {

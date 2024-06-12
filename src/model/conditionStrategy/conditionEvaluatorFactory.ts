@@ -31,7 +31,7 @@ export default class ConditionEvaluatorFactory {
                 }
                 return CallConditionEvaluator.fromJson(this.json);
             case "WALLET":
-                if (process.env.ENVIROMENT === 'test')
+                if (process.env.NODE_ENV === 'test')
                     return WalletConditionEvaluator.fromJson(new TestMarketDataApi(), this.json);
                 return WalletConditionEvaluator.fromJson(new BinanceApi(), this.json);
             case "DATA":

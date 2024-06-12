@@ -37,6 +37,11 @@ export function traverse(condition: Condition, pairs: string[]) {
 function traverseAction(action: Action, pairs: string[]) {
     if (action.type === "BUY_MARKET" || action.type === "SELL_MARKET") {
         pairs.push(action.symbol);
+        if (action.amount.type == "CALL") {
+            handleCallCondition(action.amount as CallCondition, pairs);
+        } else if (action.amount.type == "DATA") {
+            handleDataCondition(action.amount as DataCondition, pairs);
+        }
     } else if (action.type === "SET_VARIABLE") {
         if (action.value.type === "CALL") {
             handleCallCondition(action.value as CallCondition, pairs);

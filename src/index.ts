@@ -23,41 +23,41 @@ setupNotifiers(notifier);
 notifier.sendNotification("App is now running");
 notifier.startTimer("Messirve Binance bot is waiting for meaningful updates");
 
-// const binanceData: BinanceListener = new BinanceListener(pairs);
-// const rulesData = readFileSync(rulesFilePath, 'utf8');
-// const rulesJson = JSON.parse(rulesData);
-// const rulesEvaluator: RulesEvaluator = RulesEvaluator.fromJson(rulesJson);
+const binanceData: BinanceListener = new BinanceListener(pairs);
+const rulesData = readFileSync(rulesFilePath, 'utf8');
+const rulesJson = JSON.parse(rulesData);
+const rulesEvaluator: RulesEvaluator = RulesEvaluator.fromJson(rulesJson);
 
-// binanceData.on('error', (error) => {
-//   logAndSendNotification(`WebSocket error: ${error}`, "error");
-//   console.error('WebSocket error:', error);
-// });
+binanceData.on('error', (error) => {
+  logAndSendNotification(`WebSocket error: ${error}`, "error");
+  console.error('WebSocket error:', error);
+});
 
-// binanceData.on('connected', () => {
-//   logAndSendNotification('WebSocket connected');
-//   console.log('WebSocket connected');
-// });
+binanceData.on('connected', () => {
+  logAndSendNotification('WebSocket connected');
+  console.log('WebSocket connected');
+});
 
-// binanceData.on('disconnected', ({ code, reason }) => {
-//   logAndSendNotification(`WebSocket disconnected (${code}): ${reason}`, "warn");
-//   console.log(`WebSocket disconnected (${code}): ${reason}`);
-// });
+binanceData.on('disconnected', ({ code, reason }) => {
+  logAndSendNotification(`WebSocket disconnected (${code}): ${reason}`, "warn");
+  console.log(`WebSocket disconnected (${code}): ${reason}`);
+});
 
-// let isEvaluating = false;
+let isEvaluating = false;
 
-// binanceData.on('update', async () => {
-//   if (isEvaluating) {
-//     console.log('Previous evaluation still running, skipping this update');
-//     return;
-//   }
+binanceData.on('update', async () => {
+  if (isEvaluating) {
+    console.log('Previous evaluation still running, skipping this update');
+    return;
+  }
 
-//   isEvaluating = true;
-//   try {
-//     await rulesEvaluator.evaluateRules();
-//     console.log('WebSocket update');
-//   } catch (error) {
-//     console.error('Error evaluating rules:', error);
-//   } finally {
-//     isEvaluating = false;
-//   }
-// });
+  isEvaluating = true;
+  try {
+    await rulesEvaluator.evaluateRules();
+    console.log('WebSocket update');
+  } catch (error) {
+    console.error('Error evaluating rules:', error);
+  } finally {
+    isEvaluating = false;
+  }
+});

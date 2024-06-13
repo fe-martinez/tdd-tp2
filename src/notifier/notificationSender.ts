@@ -30,7 +30,5 @@ export class MessageNotifier extends EventEmitter {
     public sendNotification(message: string) {
         this.emit('message', message);
         this.timer.reset(() => {});
-        //Este reset si se llama desde start timer tal vez no tiene tanto sentido pero cuando se llama por ejemplo
-        //porque se compró o se vendió algo sí tiene sentido jeje
     }
 }

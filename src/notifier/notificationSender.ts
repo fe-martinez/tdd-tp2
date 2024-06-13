@@ -18,7 +18,6 @@ export class MessageNotifier extends EventEmitter {
         return this.instance;
     }
 
-    //Acá hay que pasarle lo que se le quiere pasar cuando 
     public startTimer(message: string) {
         this.timer.start(() => {
             var now = new Date();
@@ -29,6 +28,5 @@ export class MessageNotifier extends EventEmitter {
 
     public sendNotification(message: string) {
         this.emit('message', message);
-        this.timer.reset(() => {});
     }
 }

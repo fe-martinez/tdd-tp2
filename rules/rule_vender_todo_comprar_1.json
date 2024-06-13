@@ -2,32 +2,52 @@
     "variables": {},
     "rules": [
         {
-            "name": "Vender todo si el precio está por debajo de 100000",
+            "name": "Vender todo si el precio está por debajo de 100000 y tengo mas de 0.2 BTC",
             "condition": {
                 "type": "CALL",
-                "name": "<",
+                "name": "AND",
                 "arguments": [
                     {
                         "type": "CALL",
-                        "name": "LAST",
+                        "name": "<",
                         "arguments": [
                             {
-                                "type": "DATA",
-                                "symbol": "BTC/USDT",
-                                "from": 3600,
-                                "until": 0,
-                                "default": [
+                                "type": "CALL",
+                                "name": "LAST",
+                                "arguments": [
                                     {
-                                        "type": "CONSTANT",
-                                        "value": 100000
+                                        "type": "DATA",
+                                        "symbol": "BTC/USDT",
+                                        "from": 3600,
+                                        "until": 0,
+                                        "default": [
+                                            {
+                                                "type": "CONSTANT",
+                                                "value": 100000
+                                            }
+                                        ]
                                     }
                                 ]
+                            },
+                            {
+                                "type": "CONSTANT",
+                                "value": 100000
                             }
                         ]
                     },
                     {
-                        "type": "CONSTANT",
-                        "value": 100000
+                        "type": "CALL",
+                        "name": ">",
+                        "arguments": [
+                            {
+                                "type": "WALLET",
+                                "symbol": "BTC"
+                            },
+                            {
+                                "type": "CONSTANT",
+                                "value": 0.2
+                            }
+                        ]
                     }
                 ]
             },

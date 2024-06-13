@@ -44,7 +44,21 @@ binanceData.on('disconnected', ({ code, reason }) => {
   console.log(`WebSocket disconnected (${code}): ${reason}`);
 });
 
-binanceData.on('update', () => {
-  rulesEvaluator.evaluateRules();
-  console.log('WebSocket update');
+let isEvaluating = false;
+
+binanceData.on('update', async () => {
+  if (isEvaluating) {
+    console.log('Previous evaluation still running, skipping this update');
+    return;
+  }
+
+  isEvaluating = true;
+  try {
+    await rulesEvaluator.evaluateRules();
+    console.log('WebSocket update');
+  } catch (error) {
+    console.error('Error evaluating rules:', error);
+  } finally {
+    isEvaluating = false;
+  }
 });

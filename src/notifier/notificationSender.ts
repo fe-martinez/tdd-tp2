@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import  EventEmitter  from 'events';
 import { Timer } from "../timer/timer";
 import { timeToNotify } from "../config/notifiersConfig";
 

@@ -1,0 +1,154 @@
+{
+	"variables": {
+		"last_price": 0,
+		"offset": 0
+	},
+	"rules": [
+		{
+			"name": "Count Changes (Decrease)",
+			"condition": {
+				"type": "CALL",
+				"name": "<",
+				"arguments": [
+					{
+						"type": "CALL",
+						"name": "LAST",
+						"arguments": [{
+							"type": "DATA",
+							"from": 3600,
+							"until": 0,
+							"symbol": "BTC/USDT"
+						}]
+					},
+					{
+						"type": "VARIABLE",
+						"name": "last_price"
+					}
+				]
+			},
+			"action": [
+				{
+					"type": "SET_VARIABLE",
+					"name": "offset",
+					"value": {
+						"type": "CALL",
+						"name": "-",
+						"arguments": [
+							{ "type": "VARIABLE", "name": "offset" },
+							{ "type": "CONSTANT", "value": 1 }
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Count Changes (Increase)",
+			"condition": {
+				"type": "CALL",
+				"name": ">",
+				"arguments": [
+					{
+						"type": "CALL",
+						"name": "LAST",
+						"arguments": [{
+							"type": "DATA",
+							"from": 3600,
+							"until": 0,
+							"symbol": "BTC/USDT"
+						}]
+					},
+					{
+						"type": "VARIABLE",
+						"name": "last_price"
+					}
+				]
+			},
+			"action": [
+				{
+					"type": "SET_VARIABLE",
+					"name": "offset",
+					"value": {
+						"type": "CALL",
+						"name": "+",
+						"arguments": [
+							{ "type": "VARIABLE", "name": "offset" },
+							{ "type": "CONSTANT", "value": 1 }
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Update last price",
+			"condition": { "type": "CONSTANT", "value": true },
+			"action": [
+				{
+					"type": "SET_VARIABLE",
+					"name": "last_price",
+					"value": {
+						"type": "CALL",
+						"name": "LAST",
+						"arguments": [{
+							"type": "DATA",
+							"from": 3600,
+							"until": 0,
+							"symbol": "BTC/USDT"
+						}]
+					}
+				}
+			]
+		},
+		{
+			"name": "If positive changes",
+			"condition": {
+				"type": "CALL",
+				"name": ">=",
+				"arguments": [
+					{ "type": "VARIABLE", "name": "offset" },
+					{ "type": "CONSTANT", "value": 3 }
+				]
+			},
+			"action": [
+				{
+					"type": "SELL_MARKET",
+					"symbol": "BTC/USDT",
+					"amount": {
+						"type": "CONSTANT",
+						"value": 0.1
+					}
+				},
+				{
+					"type": "SET_VARIABLE",
+					"name": "offset",
+					"value": { "type": "CONSTANT", "value": 0 }
+				}
+			]
+		},
+		{
+			"name": "If negative changes",
+			"condition": {
+				"type": "CALL",
+				"name": "<=",
+				"arguments": [
+					{ "type": "VARIABLE", "name": "offset" },
+					{ "type": "CONSTANT", "value": -3 }
+				]
+			},
+			"action": [
+				{
+					"type": "BUY_MARKET",
+					"symbol": "BTC/USDT",
+					"amount": {
+						"type": "CONSTANT",
+						"value": 0.1
+					}
+				},
+				{
+					"type": "SET_VARIABLE",
+					"name": "offset",
+					"value": { "type": "CONSTANT", "value": 0 }
+				}
+			]
+		}
+	]
+}

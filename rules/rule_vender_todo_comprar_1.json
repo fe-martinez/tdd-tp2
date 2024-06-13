@@ -43,7 +43,7 @@
             ]
         },
         {
-            "name": "Comprar 1 BTC si tengo menos de 3 BTC",
+            "name": "Comprar 0.1 BTC si tengo menos de 0.3 BTC",
             "condition": {
                 "type": "CALL",
                 "name": "<",
@@ -54,7 +54,7 @@
                     },
                     {
                         "type": "CONSTANT",
-                        "value": 3
+                        "value": 0.3
                     }
                 ]
             },
@@ -64,7 +64,7 @@
                     "symbol": "BTC/USDT",
                     "amount": {
                         "type": "CONSTANT",
-                        "value": 1
+                        "value": 0.1
                     }
                 }
             ]

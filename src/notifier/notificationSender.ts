@@ -21,7 +21,9 @@ export class MessageNotifier extends EventEmitter {
     //Acá hay que pasarle lo que se le quiere pasar cuando 
     public startTimer(message: string) {
         this.timer.start(() => {
-            this.sendNotification(message)       
+            var now = new Date();
+            var new_message = now.toLocaleTimeString() + " " + message;
+            this.sendNotification(new_message)       
         }); 
     }
 

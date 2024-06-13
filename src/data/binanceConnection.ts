@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import { getEndpointURI, getOrderBook, parsePairs } from './binanceParser';
 import { addHistoricalData, getLastPairValue } from './database';
-import { EventEmitter } from 'events';
+import  EventEmitter  from 'events';
 
 require('dotenv').config();
 const IMPORTANT_VARIATION = process.env.IMPORTANT_VARIATION ? parseFloat(process.env.IMPORTANT_VARIATION) : 0.01;

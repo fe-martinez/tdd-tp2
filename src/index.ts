@@ -18,15 +18,15 @@ if (!rulesFilePath || !fs.existsSync(rulesFilePath)) {
 let ruleSet: RuleSet = parseRules(rulesFilePath);
 let pairs = collectPairsFromRuleSet(ruleSet);
 
-const notifier = MessageNotifier.getInstance();
-setupNotifiers(notifier);
-notifier.sendNotification("App is now running");
-notifier.startTimer("Messirve Binance bot is waiting for meaningful updates");
-
 const binanceData: BinanceListener = new BinanceListener(pairs);
 const rulesData = readFileSync(rulesFilePath, 'utf8');
 const rulesJson = JSON.parse(rulesData);
 const rulesEvaluator: RulesEvaluator = RulesEvaluator.fromJson(rulesJson);
+
+const notifier = MessageNotifier.getInstance();
+setupNotifiers(notifier);
+notifier.sendNotification("App is now running");
+notifier.startTimer("Messirve Binance bot is waiting for meaningful updates");
 
 binanceData.on('error', (error) => {
   logAndSendNotification(`WebSocket error: ${error}`, "error");

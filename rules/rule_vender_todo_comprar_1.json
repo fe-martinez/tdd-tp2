@@ -2,7 +2,7 @@
     "variables": {},
     "rules": [
         {
-            "name": "Vender todo si el precio está por debajo de 100000 y tengo mas de 0.2 BTC",
+            "name": "Vender todo si el precio está por debajo de 100000 y tengo mas de 0.002 BTC",
             "condition": {
                 "type": "CALL",
                 "name": "AND",
@@ -45,7 +45,7 @@
                             },
                             {
                                 "type": "CONSTANT",
-                                "value": 0.2
+                                "value": 0.002
                             }
                         ]
                     }
@@ -84,7 +84,7 @@
                     "symbol": "BTC/USDT",
                     "amount": {
                         "type": "CONSTANT",
-                        "value": 0.1
+                        "value": 0.001
                     }
                 }
             ]

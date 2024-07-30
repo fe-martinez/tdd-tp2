@@ -114,7 +114,7 @@
 					"symbol": "BTC/USDT",
 					"amount": {
 						"type": "CONSTANT",
-						"value": 0.1
+						"value": 0.001
 					}
 				},
 				{
@@ -140,7 +140,7 @@
 					"symbol": "BTC/USDT",
 					"amount": {
 						"type": "CONSTANT",
-						"value": 0.1
+						"value": 0.001
 					}
 				},
 				{
